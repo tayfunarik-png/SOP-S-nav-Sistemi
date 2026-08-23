@@ -456,7 +456,20 @@ const PERSONNEL_SEED = [
   { id:'00007285', name:'MEHMET ÇABUKER', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER TEKNİSYENİ' },
   { id:'00007450', name:'BİRCAN BİLEN', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER TEKNİSYENİ' },
   { id:'00007899', name:'BÜLENT KOYUNCU', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER ELEMANI' },
+  { id:'00010220', name:'CENK GÜNAY', dept:'ELEKTRİK BAKIM', title:'ELEKTRİK BAKIM TEKNİSYENİ' },
+  { id:'00000394', name:'SATILMIŞ GÖK', dept:'ELEKTRİK BAKIM', title:'TEKNİK BAKIM FORMENİ' },
+  { id:'00007049', name:'ORHAN ER', dept:'ELEKTRİK BAKIM', title:'KIDEMLİ ELEKTRİK BAKIM TEKNİSYENİ' },
+  { id:'00008597', name:'İBRAHİM BOZKAN', dept:'ELEKTRİK BAKIM', title:'KIDEMLİ ELEKTRİK BAKIM TEKNİSYENİ' },
+  { id:'00008810', name:'NECDET YILMAZ', dept:'ELEKTRİK BAKIM', title:'KIDEMLİ ELEKTRİK BAKIM TEKNİSYENİ' },
+  { id:'00010068', name:'CÜNEYT PAMUKÇU', dept:'ELEKTRİK BAKIM', title:'KIDEMLİ ELEKTRİK BAKIM TEKNİSYENİ' },
+  { id:'00010089', name:'KADİR CANSARAY', dept:'ELEKTRİK BAKIM', title:'KIDEMLİ ELEKTRİK BAKIM TEKNİSYENİ' },
 ];
+
+/* ---------------- SOP assignment seed (yalnızca ilk kez, atama yoksa uygulanır) ---------------- */
+const SOP_ASSIGNMENT_SEED = {
+  'loto-elektrik': { deadline:'2026-09-22', personnelIds:['00010220','00000394','00007049','00008597','00008810','00010068','00010089'] },
+  'elektrik-pano': { deadline:'2026-09-22', personnelIds:['00010220','00000394','00007049','00008597','00008810','00010068','00010089'] },
+};
 
 /* ---------------- Question banks (statik - API gerektirmez) ----------------
    Her SOP için ~12 soruluk havuz. Sınav oluşturulduğunda bu havuzdan rastgele
@@ -878,6 +891,13 @@ async function boot(){
     if(newP.length){ personnel = personnel.concat(newP); await storSet('personnel', personnel); }
   }
   let sopAssignments = await storGet('sop-assignments'); if(!sopAssignments) sopAssignments = {};
+  // Yalnızca daha önce hiç atama yapılmamış SOP'lara varsayılan atama uygulanır - admin'in
+  // elle yaptığı/değiştirdiği atamaların üzerine asla yazılmaz.
+  let assignmentsChanged = false;
+  Object.entries(SOP_ASSIGNMENT_SEED).forEach(([sopId, seedAssign]) => {
+    if(!sopAssignments[sopId]){ sopAssignments[sopId] = seedAssign; assignmentsChanged = true; }
+  });
+  if(assignmentsChanged) await storSet('sop-assignments', sopAssignments);
 
   state.sops = sops; state.exams = exams; state.results = results;
   state.personnel = personnel; state.sopAssignments = sopAssignments;
