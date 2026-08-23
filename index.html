@@ -125,11 +125,11 @@
   .empty svg{ width:30px;height:30px; margin-bottom:10px; opacity:.5;}
   .empty .t{ color:var(--text-1); font-weight:600; font-size:13.5px; margin-bottom:4px;}
 
-  input[type=text], textarea, select{
+  input[type=text], input[type=password], textarea, select{
     width:100%; background:var(--bg-0); border:1px solid var(--line); color:var(--text-0);
     padding:10px 12px; border-radius:7px; font-size:13px; font-family:inherit; outline:none;
   }
-  input[type=text]:focus, textarea:focus, select:focus{ border-color:var(--amber); box-shadow:0 0 0 3px rgba(245,166,35,.12); }
+  input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus{ border-color:var(--amber); box-shadow:0 0 0 3px rgba(245,166,35,.12); }
   label.field-label{ font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:var(--text-2); margin-bottom:6px; display:block; font-weight:600;}
   .field{ margin-bottom:16px; }
 
@@ -273,7 +273,22 @@
    sessizce atlanır. (Kurulum talimatı sohbette paylaşıldı.) */
 const CONFIG = {
   sheetsWebhookUrl: 'https://script.google.com/macros/s/AKfycbzqPm1B8ey8Nd87Pf21WLBw9MoKYIK7TxuPMWVwe4nk44Go1NTAtiZ_AgCa52nMo-I8Ew/exec',
+  // Yönetici şifresi - yalnızca istemci tarafı bir engel (gerçek güvenlik değil, bkz. sohbet).
+  // Google Apps Script'teki ADMIN_PASSWORD sabitiyle AYNI olmalı (sunucu tarafı gerçek kontrol orada).
+  adminPassword: 'KorozoSOP2026!',
 };
+
+function syncDeleteToSheets(id){
+  if(!CONFIG.sheetsWebhookUrl) return;
+  try{
+    fetch(CONFIG.sheetsWebhookUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'delete', id, password: CONFIG.adminPassword }),
+    }).catch(()=>{});
+  }catch(e){}
+}
 
 function syncResultToSheets(result){
   if(!CONFIG.sheetsWebhookUrl) return;
@@ -620,6 +635,9 @@ const state = {
   // results view
   resultsFilter:'all',
   cloudSyncing:false,
+  isAdmin: (function(){ try{ return sessionStorage.getItem('sop-sinav-admin')==='1'; }catch(e){ return false; } })(),
+  showAdminLogin:false,
+  adminLoginError:null,
 };
 
 function showToast(msg, type){
@@ -722,6 +740,30 @@ function renderSidebar(){
     `).join('')}
     <div class="sidebar-foot">
       ${state.sops.length} SOP &middot; ${state.results.length} sonuç kaydı
+      <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--line-soft);">
+        ${state.isAdmin
+          ? `<span style="color:var(--green);">&#9679;</span> Yönetici modu &middot; <a href="#" data-admin-logout style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Çıkış</a>`
+          : `<a href="#" data-admin-login-open style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Yönetici Girişi</a>`}
+      </div>
+    </div>
+  </div>
+  ${state.showAdminLogin ? renderAdminLoginModal() : ''}`;
+}
+
+function renderAdminLoginModal(){
+  return `
+  <div style="position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:998; display:flex; align-items:center; justify-content:center;" data-admin-modal-backdrop>
+    <div class="panel" style="max-width:320px; width:90%;" onclick="event.stopPropagation()">
+      <div class="panel-title">Yönetici Girişi</div>
+      <div class="panel-sub">Sınav sonuçlarını silmek için yönetici şifresini girin.</div>
+      <div class="field">
+        <input type="password" id="admin-password-input" placeholder="Şifre" autocomplete="off"/>
+      </div>
+      ${state.adminLoginError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.adminLoginError)}</div>` : ''}
+      <div style="display:flex; gap:10px;">
+        <button class="btn primary" data-admin-login-submit>Giriş Yap</button>
+        <button class="btn ghost" data-admin-login-cancel>Vazgeç</button>
+      </div>
     </div>
   </div>`;
 }
@@ -989,7 +1031,7 @@ function renderResults(){
     ${filtered.length===0 ? `<div class="empty">${ICONS.results}<div class="t">Henüz sonuç yok</div>Personel sınavları tamamladıkça burada listelenecek.</div>` : `
     <div class="panel" style="padding:0; overflow-x:auto;">
       <table>
-        <thead><tr><th>Ad Soyad</th><th>Departman</th><th>SOP</th><th>Skor</th><th>Tarih</th></tr></thead>
+        <thead><tr><th>Ad Soyad</th><th>Departman</th><th>SOP</th><th>Skor</th><th>Tarih</th>${state.isAdmin?'<th></th>':''}</tr></thead>
         <tbody>
           ${filtered.slice().reverse().map(r => `
             <tr>
@@ -998,6 +1040,7 @@ function renderResults(){
               <td>${escapeHtml(r.sopTitle)}</td>
               <td class="num"><span class="score-chip ${r.pct>=70?'good':'bad'}">${r.score}/${r.total} · %${r.pct}</span></td>
               <td class="num">${new Date(r.submittedAt).toLocaleString('tr-TR')}</td>
+              ${state.isAdmin?`<td><button class="btn sm danger" data-delete-result="${r.id}">Sil</button></td>`:''}
             </tr>
           `).join('')}
         </tbody>
@@ -1156,7 +1199,7 @@ function bindEvents(){
   };
   const exportCsv = document.querySelector('[data-export-csv]');
   if(exportCsv) exportCsv.onclick = () => {
-    const filtered = state.resultsFilter==='all' ? state.results : state.results.filter(r=>r.examId===state.resultsFilter);
+    const filtered = state.resultsFilter==='all' ? state.results : state.results.filter(r=>r.sopId===state.resultsFilter);
     let csv = 'Ad Soyad,Departman,SOP,Skor,Yuzde,Tarih\n';
     filtered.forEach(r=>{
       csv += `"${(r.name||'').replace(/"/g,'""')}","${(r.dept||'').replace(/"/g,'""')}","${r.sopTitle.replace(/"/g,'""')}",${r.score}/${r.total},${r.pct}%,"${new Date(r.submittedAt).toLocaleString('tr-TR')}"\n`;
@@ -1168,6 +1211,51 @@ function bindEvents(){
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+
+  // admin: giriş/çıkış
+  const adminLoginOpen = document.querySelector('[data-admin-login-open]');
+  if(adminLoginOpen) adminLoginOpen.onclick = (e) => { e.preventDefault(); state.showAdminLogin=true; state.adminLoginError=null; render(); };
+  const adminLoginCancel = document.querySelector('[data-admin-login-cancel]');
+  if(adminLoginCancel) adminLoginCancel.onclick = () => { state.showAdminLogin=false; render(); };
+  const adminModalBackdrop = document.querySelector('[data-admin-modal-backdrop]');
+  if(adminModalBackdrop) adminModalBackdrop.onclick = () => { state.showAdminLogin=false; render(); };
+  const adminLoginSubmit = document.querySelector('[data-admin-login-submit]');
+  const doAdminLogin = () => {
+    const pw = document.getElementById('admin-password-input').value;
+    if(pw === CONFIG.adminPassword){
+      state.isAdmin = true; state.showAdminLogin=false; state.adminLoginError=null;
+      try{ sessionStorage.setItem('sop-sinav-admin','1'); }catch(e){}
+      showToast('Yönetici girişi yapıldı.');
+    }else{
+      state.adminLoginError = 'Şifre yanlış.';
+    }
+    render();
+  };
+  if(adminLoginSubmit) adminLoginSubmit.onclick = doAdminLogin;
+  const adminPwInput = document.getElementById('admin-password-input');
+  if(adminPwInput) adminPwInput.onkeydown = (e) => { if(e.key==='Enter') doAdminLogin(); };
+  const adminLogout = document.querySelector('[data-admin-logout]');
+  if(adminLogout) adminLogout.onclick = (e) => {
+    e.preventDefault();
+    state.isAdmin = false;
+    try{ sessionStorage.removeItem('sop-sinav-admin'); }catch(err){}
+    render();
+  };
+
+  // admin: sonuç silme
+  document.querySelectorAll('[data-delete-result]').forEach(el=>{
+    el.onclick = async () => {
+      const id = el.getAttribute('data-delete-result');
+      const r = state.results.find(x=>x.id===id);
+      if(!r) return;
+      if(!confirm(`${r.name} - ${r.sopTitle} sonucunu silmek istediğinize emin misiniz?`)) return;
+      state.results = state.results.filter(x=>x.id!==id);
+      await storSet('results', state.results);
+      syncDeleteToSheets(id);
+      showToast('Sonuç silindi.');
+      render();
+    };
+  });
 }
 
 boot();
