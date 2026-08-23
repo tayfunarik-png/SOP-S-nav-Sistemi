@@ -823,6 +823,16 @@ async function boot(){
   if(!sops || !sops.length){
     sops = SOP_SEED;
     await storSet('sop-library', sops);
+  }else{
+    // Daha önce kaydedilmiş bir kütüphane varsa, kullanıcının eklediği özel SOP'lar
+    // korunur; SOP_SEED'e sonradan eklenen yeni yerleşik SOP'lar da (id eşleşmesiyle)
+    // otomatik olarak eklenir - böylece güncellemeler her cihazda görünür.
+    const existingIds = new Set(sops.map(s=>s.id));
+    const newOnes = SOP_SEED.filter(s=>!existingIds.has(s.id));
+    if(newOnes.length){
+      sops = sops.concat(newOnes);
+      await storSet('sop-library', sops);
+    }
   }
   let exams = await storGet('exams'); if(!exams) exams = []; // legacy, kullanılmıyor
   let results = await storGet('results'); if(!results) results = [];
