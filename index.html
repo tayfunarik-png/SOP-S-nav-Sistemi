@@ -470,7 +470,7 @@ const MEK = ['00006752','00008364','00009835','00009876','00009907','00010400'];
 const ELK = ['00010220','00000394','00007049','00008597','00008810','00010068','00010089']; // Elektrik Bakım
 const YT  = ['00012747','00011790','00006973','00007285','00007450','00007899']; // Yardımcı Tesisler
 const INS = ['00008625','00008626','00008627']; // İnşaat Proje
-const ASSIGNMENT_SEED_VERSION = 2;
+const ASSIGNMENT_SEED_VERSION = 3;
 const SOP_ASSIGNMENT_SEED = {
   'loto-elektrik': { deadline:'2026-09-22', personnelIds: ELK },
   'elektrik-pano': { deadline:'2026-09-22', personnelIds: ELK },
@@ -479,7 +479,7 @@ const SOP_ASSIGNMENT_SEED = {
   'kapali-alan': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
   'yuksekte-calisma': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT, ...INS] },
   'kaldirma-ekip': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
-  'lel-sensor': { deadline:'2026-09-22', personnelIds: MEK },
+  'lel-sensor': { deadline:'2026-09-22', personnelIds: [...MEK, ...ELK] },
   'xtp601-kalibrasyon': { deadline:'2026-09-22', personnelIds: YT },
   'yangin-dizel': { deadline:'2026-09-22', personnelIds: YT },
   'yangin-jokey': { deadline:'2026-09-22', personnelIds: YT },
