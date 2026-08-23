@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>SOP Eğitim &amp; Sınav Sistemi</title>
+<meta name="theme-color" content="#101316" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="SOP Sınav" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#101316;
+    --bg-1:#181c20;
+    --bg-2:#20252a;
+    --bg-3:#282e34;
+    --line:#343b42;
+    --line-soft:#2a3037;
+    --text-0:#eef1f4;
+    --text-1:#b8c0c9;
+    --text-2:#7c8792;
+    --amber:#f5a623;
+    --amber-dim:#8a5f16;
+    --amber-glow: rgba(245,166,35,0.35);
+    --green:#3ecf8e;
+    --red:#ff5c5c;
+    --blue:#4ea1ff;
+    --font-display:'Oswald', 'Arial Narrow', sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'JetBrains Mono', 'Consolas', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg-0);color:var(--text-0);font-family:var(--font-body);}
+  body{
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(245,166,35,0.06), transparent 45%),
+      radial-gradient(circle at 90% 100%, rgba(78,161,255,0.05), transparent 40%);
+  }
+  ::selection{background:var(--amber);color:#1a1200;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  #app{ min-height:100vh; display:flex; }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    width:230px; flex:0 0 230px; background:var(--bg-1); border-right:1px solid var(--line);
+    display:flex; flex-direction:column; padding:22px 16px; gap:4px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; margin-bottom:26px; padding:0 6px;}
+  .brand .mark{
+    width:34px;height:34px;border-radius:6px;background:linear-gradient(160deg,var(--amber),#c97e0f);
+    display:flex;align-items:center;justify-content:center;font-family:var(--font-display);
+    font-weight:700;color:#181200;font-size:16px; flex:0 0 auto;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.3), 0 0 18px var(--amber-glow);
+  }
+  .brand .txt{ line-height:1.15; }
+  .brand .txt .l1{font-family:var(--font-display);font-weight:600;font-size:14.5px;letter-spacing:.3px;}
+  .brand .txt .l2{font-size:10.5px;color:var(--text-2);letter-spacing:1.2px;text-transform:uppercase;}
+
+  .navgroup-label{ font-size:10px; letter-spacing:1.6px; text-transform:uppercase; color:var(--text-2); margin:16px 10px 6px; }
+  .navitem{
+    display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; cursor:pointer;
+    color:var(--text-1); font-size:13.5px; font-weight:500; border:1px solid transparent; transition:.15s;
+    user-select:none;
+  }
+  .navitem svg{ width:16px;height:16px;flex:0 0 auto; opacity:.85;}
+  .navitem:hover{ background:var(--bg-2); color:var(--text-0); }
+  .navitem.active{ background:rgba(245,166,35,0.10); border-color:rgba(245,166,35,0.35); color:var(--amber); }
+  .navitem.active svg{ opacity:1; }
+
+  .sidebar-foot{ margin-top:auto; padding:12px 10px; border-top:1px solid var(--line-soft); font-size:10.5px; color:var(--text-2); line-height:1.5;}
+
+  /* ---------- Main ---------- */
+  .main{ flex:1; min-width:0; display:flex; flex-direction:column; }
+  .topbar{
+    height:60px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between;
+    padding:0 26px; background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);
+  }
+  .topbar h1{ font-family:var(--font-display); font-size:18px; font-weight:600; margin:0; letter-spacing:.3px;}
+  .topbar .sub{ font-size:11.5px; color:var(--text-2); margin-top:2px;}
+  .content{ flex:1; overflow-y:auto; padding:26px; }
+
+  .pill{ display:inline-flex; align-items:center; gap:6px; font-size:10.5px; font-weight:600; letter-spacing:.6px; text-transform:uppercase;
+         padding:4px 10px; border-radius:100px; border:1px solid var(--line); color:var(--text-2);}
+  .pill.live{ color:var(--green); border-color:rgba(62,207,142,.35); background:rgba(62,207,142,.08);}
+  .pill.closed{ color:var(--text-2); }
+
+  /* ---------- cards / grid ---------- */
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+  .card{
+    background:var(--bg-1); border:1px solid var(--line); border-radius:10px; padding:16px;
+    display:flex; flex-direction:column; gap:10px; position:relative; overflow:hidden;
+  }
+  .card::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--line-soft);}
+  .card.tag-amber::before{ background:var(--amber); }
+  .card.tag-green::before{ background:var(--green); }
+  .card h3{ margin:0; font-family:var(--font-display); font-size:15px; font-weight:600; letter-spacing:.2px; line-height:1.3;}
+  .card p{ margin:0; font-size:12.5px; color:var(--text-1); line-height:1.5; }
+  .card .meta{ display:flex; gap:14px; font-size:11px; color:var(--text-2); font-family:var(--font-mono);}
+  .card .row{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
+    border-radius:7px; border:1px solid var(--line); background:var(--bg-2); color:var(--text-0);
+    padding:9px 14px; font-size:12.5px; font-weight:600; transition:.15s; letter-spacing:.2px;
+  }
+  .btn:hover{ background:var(--bg-3); border-color:#454d55; }
+  .btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .btn.primary{ background:linear-gradient(160deg,var(--amber),#c97e0f); border-color:#c97e0f; color:#181200; }
+  .btn.primary:hover{ filter:brightness(1.08); }
+  .btn.ghost{ background:transparent; }
+  .btn.danger{ border-color:rgba(255,92,92,.4); color:var(--red); background:rgba(255,92,92,.06);}
+  .btn.sm{ padding:6px 10px; font-size:11.5px; }
+  .btn.block{ width:100%; }
+
+  .empty{
+    border:1px dashed var(--line); border-radius:10px; padding:40px 20px; text-align:center; color:var(--text-2);
+  }
+  .empty svg{ width:30px;height:30px; margin-bottom:10px; opacity:.5;}
+  .empty .t{ color:var(--text-1); font-weight:600; font-size:13.5px; margin-bottom:4px;}
+
+  input[type=text], textarea, select{
+    width:100%; background:var(--bg-0); border:1px solid var(--line); color:var(--text-0);
+    padding:10px 12px; border-radius:7px; font-size:13px; font-family:inherit; outline:none;
+  }
+  input[type=text]:focus, textarea:focus, select:focus{ border-color:var(--amber); box-shadow:0 0 0 3px rgba(245,166,35,.12); }
+  label.field-label{ font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:var(--text-2); margin-bottom:6px; display:block; font-weight:600;}
+  .field{ margin-bottom:16px; }
+
+  .panel{ background:var(--bg-1); border:1px solid var(--line); border-radius:12px; padding:22px; }
+  .panel-title{ font-family:var(--font-display); font-size:16px; font-weight:600; margin:0 0 4px; }
+  .panel-sub{ font-size:12px; color:var(--text-2); margin:0 0 18px; }
+
+  .toast{
+    position:fixed; bottom:22px; right:22px; background:var(--bg-3); border:1px solid var(--line);
+    padding:12px 16px; border-radius:8px; font-size:12.5px; color:var(--text-0); box-shadow:0 8px 30px rgba(0,0,0,.4);
+    z-index:999; max-width:320px;
+  }
+  .toast.err{ border-color:rgba(255,92,92,.5); color:#ffb3b3; }
+  .toast.ok{ border-color:rgba(62,207,142,.5); color:#bdf5da; }
+
+  /* ---------- SOP detail steps ---------- */
+  .steplist{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .step{ display:flex; gap:10px; padding:10px 12px; background:var(--bg-0); border:1px solid var(--line-soft); border-radius:8px; }
+  .step .no{ font-family:var(--font-mono); color:var(--amber); font-weight:700; font-size:12px; flex:0 0 22px; }
+  .step .txt{ font-size:12.5px; color:var(--text-1); line-height:1.5; }
+  .step .txt b{ color:var(--text-0); }
+
+  /* ---------- Exam taking ---------- */
+  .exam-wrap{ max-width:720px; margin:0 auto; }
+  .qcounter{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-2); letter-spacing:1px; margin-bottom:10px; }
+  .progressbar{ height:5px; background:var(--bg-2); border-radius:100px; overflow:hidden; margin-bottom:22px; border:1px solid var(--line-soft);}
+  .progressbar .fill{ height:100%; background:linear-gradient(90deg,var(--amber),#ffd27a); transition:width .25s; }
+  .qcard{ background:var(--bg-1); border:1px solid var(--line); border-radius:12px; padding:22px; }
+  .qcard .qtext{ font-size:15.5px; font-weight:600; line-height:1.5; margin-bottom:18px; }
+  .opt{
+    display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    margin-bottom:9px; cursor:pointer; font-size:13px; color:var(--text-1); transition:.12s;
+  }
+  .opt:hover{ border-color:#454d55; background:var(--bg-2); }
+  .opt.selected{ border-color:var(--amber); background:rgba(245,166,35,0.09); color:var(--text-0); }
+  .opt .dot{ width:16px;height:16px;border-radius:50%; border:1.5px solid var(--line); flex:0 0 auto; margin-top:1px; position:relative; }
+  .opt.selected .dot{ border-color:var(--amber); }
+  .opt.selected .dot::after{ content:""; position:absolute; inset:3px; border-radius:50%; background:var(--amber); }
+
+  .exam-nav{ display:flex; justify-content:space-between; align-items:center; margin-top:18px; }
+
+  /* ---------- gauge ---------- */
+  .gauge-wrap{ display:flex; flex-direction:column; align-items:center; gap:14px; padding:20px 0 6px; }
+  .gauge{ width:210px; height:210px; border-radius:50%; position:relative; }
+  .gauge .ring{
+    position:absolute; inset:0; border-radius:50%;
+  }
+  .gauge .inner{
+    position:absolute; inset:20px; border-radius:50%; background:var(--bg-1); border:1px solid var(--line-soft);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    box-shadow: inset 0 2px 14px rgba(0,0,0,.5);
+  }
+  .gauge .needle{
+    position:absolute; left:50%; top:50%; width:3px; height:74px; background:var(--text-0);
+    transform-origin:50% 100%; border-radius:2px; box-shadow:0 0 6px rgba(255,255,255,.5);
+  }
+  .gauge .hub{ position:absolute; left:50%; top:50%; width:10px;height:10px; margin:-5px; border-radius:50%; background:var(--text-0); }
+  .gauge .pct{ font-family:var(--font-display); font-size:34px; font-weight:700; line-height:1; }
+  .gauge .lbl{ font-size:10px; letter-spacing:1.6px; text-transform:uppercase; color:var(--text-2); margin-top:6px; }
+  .verdict{ font-family:var(--font-display); font-size:15px; font-weight:600; letter-spacing:.6px; padding:6px 16px; border-radius:100px; }
+  .verdict.pass{ background:rgba(62,207,142,.12); color:var(--green); border:1px solid rgba(62,207,142,.4); }
+  .verdict.fail{ background:rgba(255,92,92,.12); color:var(--red); border:1px solid rgba(255,92,92,.4); }
+
+  /* ---------- table ---------- */
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  th{ text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.8px; color:var(--text-2); padding:9px 10px; border-bottom:1px solid var(--line); }
+  td{ padding:10px; border-bottom:1px solid var(--line-soft); color:var(--text-1); }
+  tr:hover td{ background:rgba(255,255,255,0.015); }
+  td.num{ font-family:var(--font-mono); }
+  .score-chip{ font-family:var(--font-mono); font-weight:700; padding:2px 8px; border-radius:5px; font-size:11.5px; }
+  .score-chip.good{ background:rgba(62,207,142,.12); color:var(--green); }
+  .score-chip.bad{ background:rgba(255,92,92,.12); color:var(--red); }
+
+  .stat-row{ display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+  .stat{ background:var(--bg-1); border:1px solid var(--line); border-radius:10px; padding:14px 18px; min-width:140px; }
+  .stat .v{ font-family:var(--font-display); font-size:24px; font-weight:700; }
+  .stat .k{ font-size:10.5px; color:var(--text-2); text-transform:uppercase; letter-spacing:.8px; margin-top:2px;}
+
+  .spinner{ width:16px;height:16px; border-radius:50%; border:2px solid rgba(255,255,255,.25); border-top-color:#181200; animation:spin .7s linear infinite; }
+  .spinner.light{ border:2px solid rgba(255,255,255,.15); border-top-color:var(--amber); }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .loading-block{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:60px 20px; color:var(--text-2); }
+  .loading-block .needle-spin{ width:60px;height:60px;border-radius:50%; border:3px solid var(--line); border-top-color:var(--amber); animation:spin 1s linear infinite;}
+
+  code.k{ font-family:var(--font-mono); background:var(--bg-0); border:1px solid var(--line-soft); padding:1px 6px; border-radius:4px; font-size:11.5px; color:var(--amber); }
+
+  .backlink{ display:inline-flex; align-items:center; gap:6px; color:var(--text-2); font-size:12px; cursor:pointer; margin-bottom:14px; }
+  .backlink:hover{ color:var(--text-0); }
+
+  /* ---------- mobile bottom nav ---------- */
+  .bottomnav{
+    display:none; position:fixed; left:0; right:0; bottom:0; z-index:50;
+    background:var(--bg-1); border-top:1px solid var(--line);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+    grid-template-columns:repeat(4,1fr); gap:2px;
+  }
+  .bottomnav .bnitem{
+    display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 2px;
+    color:var(--text-2); font-size:9.5px; font-weight:600; letter-spacing:.2px; border-radius:8px;
+  }
+  .bottomnav .bnitem svg{ width:19px;height:19px; }
+  .bottomnav .bnitem.active{ color:var(--amber); background:rgba(245,166,35,0.08); }
+
+  @media (max-width: 820px){
+    .sidebar{ display:none; }
+    .content{ padding:14px 14px 76px; }
+    .bottomnav{ display:grid; }
+    .topbar{ padding:0 14px; height:54px; }
+    .topbar h1{ font-size:15.5px; }
+    .topbar .sub{ display:none; }
+    .topbar .pill{ display:none; }
+    .grid{ grid-template-columns:1fr; }
+    .stat-row{ gap:8px; }
+    .stat{ min-width:0; flex:1 1 100px; padding:10px 12px; }
+    .stat .v{ font-size:19px; }
+    .gauge{ width:180px; height:180px; }
+  }
+  @media (max-width: 420px){
+    .qcard{ padding:16px; }
+    .panel{ padding:16px; }
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* =========================================================================
+   SOP EĞİTİM & SINAV SİSTEMİ
+   Tek dosyalık uygulama: SOP kütüphanesi + Claude API ile rastgele soru
+   üretimi + online sınav + sonuç kaydı (window.storage ile kalıcı).
+   ========================================================================= */
+
+const ICONS = {
+  library: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+  generate: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M2 12h4M18 12h4M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9"/><circle cx="12" cy="12" r="3"/></svg>`,
+  take: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
+  results: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>`,
+  plus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>`,
+  back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>`,
+  download: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>`,
+  bolt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 11-14h-7l1-6z"/></svg>`,
+};
+
+/* ---------------- SOP seed data ---------------- */
+const SOP_SEED = [
+  { id:'loto-elektrik', title:'LOTO Elektrik SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Elektrikli ekipman/pano üzerinde bakım, onarım veya arıza giderme çalışmaları öncesinde enerjinin güvenli şekilde kesilmesi, kilitlenmesi (lockout) ve etiketlenmesi (tagout).
+Adımlar: 1) Çalışılacak devre/besleme kaynakları tespit edilir (birden fazla kaynak olabilir: şebeke+jeneratör+UPS). 2) Vardiya amirine bilgi verilir. 3) Ekipman normal prosedürle durdurulur. 4) Şalter/kesici OFF konumuna alınır (yük altında ayırıcı açılmaz). 5) Kişisel kilit (padlock) takılır, "ÇALIŞILIYOR-AÇMAYINIZ" etiketi asılır; birden fazla kişi varsa multi-lock hasp kullanılır. 6) Gerilim ölçer ile enerjisiz olduğu test edilir (test cihazı önce bilinen enerjili kaynakta test edilir - test-before-test). 7) Depolanmış enerji (kapasitör vb.) deşarj edilir. 8) Çalışma tamamlanır, alan kontrol edilir. 9) Kilit/etiket yalnızca takan kişi tarafından çıkarılır. 10) Koruma ekipmanları takılır, enerji verilir, normal çalışma teyit edilir.` },
+
+  { id:'loto-mekanik', title:'LOTO Mekanik SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Dönen/hareketli mekanik ekipmanlarda (motor, pompa, konveyör, redüktör) bakım öncesi tüm enerji formlarının (elektrik, basınçlı hava, hidrolik, mekanik/yay, kinetik) izole edilmesi.
+Adımlar: 1) Tüm enerji kaynakları tespit edilir. 2) Ekipman durdurulur, hareketli parçaların durduğu teyit edilir. 3) Elektrik LOTO-Elektrik SOP'una göre izole edilir. 4) Basınçlı hava/hidrolik vanalar kapatılır, kilitlenir, bleed vanası ile artık basınç boşaltılır (manometre sıfır teyidi şart). 5) Yerçekimi/yay etkisiyle hareket edebilecek parçalar mekanik blok/pim ile sabitlenir (sadece silindire güvenilmez). 6) Dönen kütlelerin durduğu teyit edilir, gerekirse mekanik fren uygulanır. 7) Tüm noktalar kilit/etiketle işaretlenir. 8) Sıfır enerji testi (try-out) yapılır - tehlike bölgesinde kimse olmamalı. 9) Bakım yapılır. 10) Alan temizlenir, destekler çıkarılır. 11) Kilitler kaldırılır, enerji sırasıyla (mekanik→basınçlı hava/hidrolik→elektrik) geri verilir.` },
+
+  { id:'sicak-calisma', title:'Sıcak Çalışma İzni SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Kaynak, kesme, taşlama, lehim gibi kıvılcım/alev/yüksek ısı üreten "sıcak çalışma" öncesi izin ve yangın önlemleri.
+Adımlar: 1) Sıcak Çalışma İzin Formu doldurulup onaylanır (yanıcı ortamda gaz ölçümü şart). 2) 10 metre çevredeki yanıcı malzemeler uzaklaştırılır/örtülür. 3) Alt/yan bölgeler de kıvılcım sıçramasına karşı kontrol edilir. 4) Uygun yangın söndürme cihazı hazır bulundurulur. 5) Ortam gaz ölçümü yapılır - %10 LEL üzerinde çalışmaya başlanmaz. 6) Ekipman güvenlik kontrolünden geçirilir (kablo/hortum hasarı, geri tepme valfi, topraklama). 7) Bir gözcü (yangın gözcüsü) görevlendirilir - çalışma boyunca ve bitiminden sonra 30 dk alanda kalır, başka işle görevlendirilmez. 8) Çalışma yapılır, periyodik kontrol edilir. 9) İş bitiminde ekipman kapatılır, alan kontrol edilir. 10) Gözcü 30 dk gizli yanma/kor kontrolü yapar, izin formu kapatılır.` },
+
+  { id:'kapali-alan', title:'Kapalı Alanda Çalışma SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Tank, silo, kuyu, kanal gibi kapalı/sınırlı alanlarda (confined space) çalışma öncesi izin ve güvenlik tedbirleri.
+Adımlar: 1) Kapalı Alanda Çalışma İzin Formu doldurulur. 2) Bağlantılı enerji kaynakları LOTO ile izole edilir; besleme/tahliye hatları kör tapa (blind) ile ayrılır - sadece vana kapatmak yetmez. 3) Alan boşaltılır, temizlenir, havalandırılır. 4) Giriş öncesi atmosfer testi: O2 (%19,5-23,5), LEL, toksik gaz (H2S, CO) ölçülür - O2<%19,5 veya LEL>%10 ise giriş yasak. 5) Sürekli mekanik havalandırma sağlanır, atmosfer sürekli izlenir. 6) Dışarıda gözcü (attendant) görevlendirilir - sürekli iletişimde kalır, acil durumda kendisi girmez, kurtarma ekibini çağırır. 7) Kurtarma ekipmanı (tripod/vinç, iletişim cihazı) hazır bulunur. 8) Uygun KKD ile giriş yapılır, giriş-çıkış saatleri kaydedilir. 9) Çalışma biter, personel/ekipman çıkışı teyit edilir, alan güvenli hale getirilir. 10) İzolasyonlar kaldırılır, izin formu kapatılır.` },
+
+  { id:'yuksekte-calisma', title:'Yüksekte Çalışma SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: 1,8 metre ve üzeri yükseklikte (platform, iskele, merdiven, çatı) çalışma öncesi güvenlik tedbirleri.
+Adımlar: 1) Düşme riski ortadan kaldırılabilir mi değerlendirilir (yerden erişim önceliklendirilir). 2) Ekipman (iskele/platform/merdiven) seçilir, muayene etiketinin güncel olduğu kontrol edilir - süresi geçmiş/hasarlı ekipman kullanılmaz. 3) Alan altı/çevresi bariyer ile çevrilir. 4) İskele/platform yetkili personelce kurulur; stabilite, korkuluk, toe-board kontrol edilir. 5) Korkuluk yoksa düşmeyi durduran sistem (tam vücut emniyet kemeri + enerji sönümleyici halat + sabit ankraj) kullanılır - kanca sadece onaylı ankraj noktasına bağlanır, korkuluk/boru hattına bağlanmaz. 6) Merdiven uygun açıyla (1:4) yerleştirilir, üstten sabitlenir; ağır iş için alet çantası kullanılır (iki el serbest). 7) Hava koşulları (rüzgar, yağış) kontrol edilir. 8) Alet/malzeme düşmesine karşı alet kayışı kullanılır, altta kimse olmadığı teyit edilir. 9) İş biter, ekipman sökülür/güvenli konuma alınır, bariyer kaldırılır.` },
+
+  { id:'elektrik-pano', title:'Elektrik Pano Açma-Kapama SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Enerjili veya enerjisiz elektrik pano/dolaplarının açılması, içinde çalışılması ve kapatılması güvenlik kuralları.
+Adımlar: 1) İşin enerjili (live) mi enerjisiz mi yapılacağı belirlenir - mümkünse enerjisiz tercih edilir. 2) Enerjisiz çalışmada LOTO-Elektrik SOP'una göre besleme kesilir, kilitlenir, gerilim ölçerle teyit edilir. 3) Pano üzerindeki voltaj/arc flash uyarı etiketleri okunur. 4) Yalıtkan zemin paspası kullanılır (özellikle yüksek gerilimde). 5) Enerjili çalışma kaçınılmazsa: arc flash koruyucu KKD (yüz siperi, yanmaz kıyafet, yalıtkan eldiven) giyilir, yalnızca yetkili elektrik personeli yapar - yazılı Enerjili Çalışma İzni gerekir, tek başına çalışılmaz, gözcü bulunur. 6) Yalnızca izoleli el aletleri kullanılır, iki el aynı anda canlı parçaya değmez. 7) İşlem sonrası pano içi kontrol edilir (unutulan alet/malzeme). 8) Kapak kapatılır, sabitlenir. 9) Enerji LOTO prosedürüne göre geri verilir; enerji verilirken kapak kapalı tutulur veya güvenli mesafeden yapılır (arc flash riski).` },
+
+  { id:'kaldirma-ekip', title:'Kaldırma Ekipmanları SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Vinç, forklift, zincirli kaldıraç, sapan gibi kaldırma araçlarının kullanım öncesi güvenlik kontrolü.
+Adımlar: 1) Ekipman belirlenir, yükün ağırlığı/boyutu tespit edilir - ekipman kapasitesi (SWL) yükten fazla olmalı. 2) Periyodik muayene etiketinin güncel olduğu kontrol edilir (yılda en az 1 kez zorunlu). 3) Görsel kontrol: halat/zincir kopma-aşınma, kanca çatlağı, sapan yıpranması - hasarlı ekipman derhal "Kullanıma Uygun Değildir" etiketiyle hizmet dışı bırakılır. 4) Kaldırma alanı bariyerle çevrilir, altında/geçiş güzergahında kimse olmadığı teyit edilir. 5) Yük dengeli bağlanır, ağırlık merkezi kontrol edilir - çapraz/dengesiz bağlanmaz. 6) Test kaldırması yapılır (yerden birkaç cm) - dengesizlik/anormal ses varsa derhal indirilir. 7) Yük güvenli hızda taşınır, görüş kısıtlıysa yönlendirici (signalman) kullanılır. 8) Yük indirilir, sapan/kanca dikkatlice çıkarılır. 9) Ekipman güvenli konuma alınır, enerjisi kesilir.` },
+
+  { id:'yangin-dizel', title:'Yangın Dizel Pompa SOP', category:'Yangın Sistemleri',
+    content:`KAPSAM: Yangın söndürme sistemi dizel pompa grubunun periyodik (haftalık) test çalıştırması.
+Adımlar: 1) Genel görsel kontrol (sızıntı, hasar). 2) Yakıt seviyesi kontrol edilir - kritik seviyenin altına asla düşürülmemeli, pompa her an tam kapasitede çalışabilmeli. 3) Motor yağ ve soğutma suyu seviyesi kontrol edilir. 4) Akü voltajı/şarj durumu kontrol edilir - iki bağımsız akü grubu (Batarya 1 ve 2) ayrı ayrı test edilir, biri arızalıysa pompa start alamayabilir. 5) Panel test moduna alınır veya test start butonuna basılır. 6) Motor start alması, deşarj basıncının programlanan değere ulaşması gözlemlenir - start almazsa/basınç sağlanamazsa derhal arıza kaydı açılır ve alternatif önlem (yangın nöbeti) değerlendirilir. 7) Test süresince (min 30 dk) RPM/sıcaklık/basınç izlenir, kayıt formuna işlenir. 8) Test sonrası pompa üretici prosedürüne göre durdurulur, panel mutlaka AUTO moda alınır - unutulursa gerçek yangında pompa otomatik devreye girmez. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'yangin-jokey', title:'Yangın Jokey Pompa SOP', category:'Yangın Sistemleri',
+    content:`KAPSAM: Yangın sistemi hat basıncını sürekli koruyan jokey pompanın periyodik kontrolü.
+Adımlar: 1) Genel görsel kontrol (sızıntı, titreşim/ses). 2) Hat basıncı manometreden okunur, programlanan start/stop aralığında olduğu kontrol edilir - jokey pompa küçük basınç düşüşlerini kompanse ederek ana yangın pompasının gereksiz devreye girmesini önler; basınç sürekli düşükse sızıntı olabilir. 3) Otomatik start/stop döngüsü gözlemlenir - sık sık kısa aralıklarla devreye girip çıkması sistemde sızıntıya işaret eder, kaynağı araştırılmalı. 4) Motor akım değeri (ampermetre) anma değerlerine uygunluğu kontrol edilir. 5) Salmastra/mekanik keçeden aşırı sızıntı kontrol edilir - hafif damlama normal olabilir, sürekli akış bakım gerektirir. 6) Panel gösterge lambaları (güç/çalışma/arıza) kontrol edilir. 7) Sonuçlar kayıt formuna işlenir, anormallikte bakım talebi açılır.` },
+
+  { id:'sprinkler', title:'Sprinkler/Yağmurlama Sistemi SOP', category:'Yangın Sistemleri',
+    content:`KAPSAM: Yangın söndürme sprinkler/yağmurlama (deluge) sisteminin periyodik görsel kontrol ve fonksiyon testi.
+Adımlar: 1) Ana kontrol vanasının tam açık, mühürlü/kilitli olduğu kontrol edilir - kapalı/kısmen kapalı vana yangında sistemin devreye girmemesine yol açar, en kritik kontrol noktasıdır. 2) Sistem su basıncı manometreden okunur, besleme/sistem tarafı basınçları karşılaştırılır. 3) Sprinkler kafaları görsel kontrol edilir - boyalı/tıkalı/hasarlı/engellenmiş kafa devre dışı sayılır, derhal değiştirilir veya engel kaldırılır. 4) Kafalar etrafında minimum boşluk (45-50 cm) korunduğu kontrol edilir. 5) Su akış anahtarı (flow switch) ve basınç anahtarı fonksiyon testi yapılır (test/drain vanası ile) - yangın paneline sinyal gittiği teyit edilir. 6) Deluge sistemi varsa dedektör hattı ve solenoid valf ayrı test edilir. 7) Tahliye/test vanaları normal konuma getirilir. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'kizgin-yag-kazan', title:'Kızgın Yağ Kazanı SOP', category:'Termal Sistemler',
+    content:`KAPSAM: Kızgın yağ kazanının periyodik kontrolü ile devreye alma (start-up) ve kapatma (shutdown) işlemleri.
+Adımlar: 1) Kazan dairesi genel görsel kontrolü (yabancı madde, sızıntı, yanıcı malzeme yok). 2) Yağ seviyesi genleşme tankından kontrol edilir, min-max aralığında olmalı - düşük seviyede kazan çalıştırılmaz, boş/hava dolu çalışırsa ciddi hasar oluşur. 3) Sirkülasyon pompaları ve vana konumları (proses hattına açık, drenaja kapalı) kontrol edilir. 4) Baca/egzoz açık ve tıkanıklık yok kontrol edilir. 5) Yakıt besleme basıncı ve vana konumları kontrol edilir. 6) Start komutu verilir; ön havalandırma (pre-purge), ateşleme, alev sensörü onayı izlenir - ateşleme başarısız olursa (flame failure) sistem otomatik kilitlenir (lockout), tekrar denemeden önce neden araştırılır. 7) Yağ çıkış sıcaklığı kademeli yükseltilir (ısıtma eğrisine uygun) - ani ısıtma termal şok ve boru hasarına yol açar. 8) Hedef basınç/sıcaklığa ulaşınca sistem normal kontrole devredilir. Kapatmada: 9) Isı talebi durdurulur, yakıt kesilir. 10) Sirkülasyon pompaları sıcaklık güvenli seviyeye düşene kadar çalışır bırakılır - erken durdurma yerel aşırı ısınma (hot spot) yaratır.` },
+
+  { id:'kizgin-yag-pompa', title:'Kızgın Yağ Sirkülasyon Pompaları SOP', category:'Termal Sistemler',
+    content:`KAPSAM: Kızgın yağ sistemi sirkülasyon pompalarının periyodik bakımı ve devreye alma işlemleri.
+Adımlar: 1) Pompa enerjisi LOTO-Elektrik SOP'una göre kesilir, kilitlenir. 2) Pompa gövdesi/bağlantılar görsel kontrol edilir (sızıntı, korozyon, titreşim izleri) - kızgın yağ sisteminde sızıntı ciddi yangın riski oluşturur, en ufak belirti ciddiye alınmalı. 3) Salmastra/mekanik keçe kontrol edilir, aşınma/sızıntıda değiştirilir. 4) Motor-pompa akuplasyonu (kaplin) kontrol edilir, elastomer parçalarda çatlak/aşınma incelenir. 5) Yataklama (bearing) gres/yağlama durumu kontrol edilir, üretici talimatına göre yağlanır. 6) Motor akımı ve yatak sıcaklıkları referans değerlerle karşılaştırılır. 7) Titreşim seviyesi ölçülür, referansın üzerindeyse neden araştırılır. 8) Bakım sonrası LOTO kaldırılır, vana konumları (proses hattına açık) teyit edilir. 9) Pompa çalıştırılır, anormal ses/titreşim/sızıntı yok, basınç/akış normal aralıkta teyit edilir - kuru çalıştırma (yağsız) pompaya ciddi hasar verir, sistemin yağ dolu olduğu mutlaka teyit edilmeli. 10) Sonuçlar kayıt formuna işlenir.` },
+];
+
+/* ---------------- Storage helpers ---------------- */
+async function storGet(key){
+  try{ const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null; }
+  catch(e){ return null; }
+}
+async function storSet(key, val){
+  try{ await window.storage.set(key, JSON.stringify(val), true); return true; }
+  catch(e){ return false; }
+}
+function uid(n){ n = n || 10; const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(let i=0;i<n;i++) s+=c[Math.floor(Math.random()*c.length)]; return s; }
+
+/* ---------------- App state ---------------- */
+const state = {
+  view:'library',
+  sops: [],
+  exams: [],
+  results: [],
+  loaded:false,
+  loading:false,
+  toast:null,
+  // generate view
+  genSopId:null,
+  genLoading:false,
+  genError:null,
+  // library view
+  showAddForm:false,
+  newSop:{title:'', category:'', content:''},
+  openSopId:null,
+  // take flow
+  takeStage:'list', // list | name | quiz | done
+  takeExamId:null,
+  takerName:'',
+  takerDept:'',
+  answers:[],
+  currentQ:0,
+  lastResult:null,
+  // results view
+  resultsFilter:'all',
+};
+
+function showToast(msg, type){
+  state.toast = {msg, type: type||'ok'};
+  render();
+  setTimeout(()=>{ state.toast=null; render(); }, 3200);
+}
+
+async function boot(){
+  state.loading = true; render();
+  let sops = await storGet('sop-library');
+  if(!sops || !sops.length){
+    sops = SOP_SEED;
+    await storSet('sop-library', sops);
+  }
+  let exams = await storGet('exams'); if(!exams) exams = [];
+  let results = await storGet('results'); if(!results) results = [];
+  state.sops = sops; state.exams = exams; state.results = results;
+  state.loading = false; state.loaded = true;
+  render();
+}
+
+/* ---------------- Claude API question generation ---------------- */
+async function generateQuestions(sop){
+  const nonce = uid(6);
+  const prompt = `Aşağıda bir fabrika teknik bakım biriminin SOP (Standart Operasyon Prosedürü) içeriği verilmiştir. Bu içeriğe dayanarak, eğitim alan personelin bilgisini ölçecek 10 adet ÇOKTAN SEÇMELİ soru üret.
+
+Kurallar:
+- Her sorunun tam olarak 4 şıkkı olsun, yalnızca 1 doğru cevap olsun.
+- Sorular SOP içeriğindeki somut adımlara, sıraya, dikkat edilecek hususlara ve güvenlik kurallarına dayansın; genel/alakasız sorular sorma.
+- Sorular birbirinden farklı ve SOP'un farklı bölümlerini kapsayacak şekilde dağıtılsın.
+- Her çalıştırmada soru seti ve şık sırası farklı ve rastgele olsun (oturum kodu: ${nonce}).
+- Şıklar kısa ve net olsun, "yukarıdakilerin hepsi" gibi ifadeler kullanma.
+- Yalnızca JSON döndür, başka hiçbir açıklama, markdown işaretleyici veya metin ekleme.
+
+JSON formatı (kesinlikle bu şema):
+[{"question":"...", "options":["...","...","...","..."], "correctIndex":0}, ...]
+
+SOP Başlığı: ${sop.title}
+SOP İçeriği:
+${sop.content}`;
+
+  const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 3500,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  if(!resp.ok) throw new Error("API isteği başarısız oldu (" + resp.status + ")");
+  const data = await resp.json();
+  const textBlocks = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+  let cleaned = textBlocks.trim();
+  cleaned = cleaned.replace(/^```json/i,'').replace(/^```/,'').replace(/```$/,'').trim();
+  const firstBracket = cleaned.indexOf('[');
+  const lastBracket = cleaned.lastIndexOf(']');
+  if(firstBracket >= 0 && lastBracket > firstBracket){
+    cleaned = cleaned.slice(firstBracket, lastBracket+1);
+  }
+  let questions;
+  try{ questions = JSON.parse(cleaned); }
+  catch(e){ throw new Error("Soru verisi ayrıştırılamadı, tekrar deneyin."); }
+  if(!Array.isArray(questions) || questions.length < 5) throw new Error("Beklenmeyen soru formatı, tekrar deneyin.");
+  questions = questions.slice(0,10).map(q=>({
+    question: String(q.question||'').trim(),
+    options: (q.options||[]).slice(0,4).map(o=>String(o).trim()),
+    correctIndex: Number.isInteger(q.correctIndex) ? q.correctIndex : 0,
+  }));
+  return questions;
+}
+
+/* ---------------- Render: shell ---------------- */
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    ${renderSidebar()}
+    <div class="main">
+      ${renderTopbar()}
+      <div class="content" id="content">${renderView()}</div>
+    </div>
+    ${renderBottomNav()}
+    ${state.toast ? `<div class="toast ${state.toast.type==='err'?'err':'ok'}">${state.toast.msg}</div>` : ''}
+  `;
+  bindEvents();
+}
+
+function renderBottomNav(){
+  const items = [
+    {v:'library', label:'SOP\'lar', icon:ICONS.library},
+    {v:'generate', label:'Sınav Oluştur', icon:ICONS.generate},
+    {v:'take', label:'Sınava Gir', icon:ICONS.take},
+    {v:'results', label:'Sonuçlar', icon:ICONS.results},
+  ];
+  return `
+  <div class="bottomnav">
+    ${items.map(it => `
+      <div class="bnitem ${state.view===it.v?'active':''}" data-nav="${it.v}">
+        ${it.icon}<span>${it.label}</span>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function renderSidebar(){
+  const items = [
+    {v:'library', label:'SOP Kütüphanesi', icon:ICONS.library},
+    {v:'generate', label:'Sınav Oluştur', icon:ICONS.generate},
+    {v:'take', label:'Sınava Gir', icon:ICONS.take},
+    {v:'results', label:'Sonuçlar', icon:ICONS.results},
+  ];
+  return `
+  <div class="sidebar">
+    <div class="brand">
+      <div class="mark">SP</div>
+      <div class="txt">
+        <div class="l1">SOP Sınav Sistemi</div>
+        <div class="l2">Teknik Bakım Eğitimi</div>
+      </div>
+    </div>
+    <div class="navgroup-label">Menü</div>
+    ${items.map(it => `
+      <div class="navitem ${state.view===it.v?'active':''}" data-nav="${it.v}">
+        ${it.icon}<span>${it.label}</span>
+      </div>
+    `).join('')}
+    <div class="sidebar-foot">
+      ${state.sops.length} SOP &middot; ${state.exams.length} sınav &middot; ${state.results.length} sonuç kaydı
+    </div>
+  </div>`;
+}
+
+function viewMeta(){
+  switch(state.view){
+    case 'library': return {h:'SOP Kütüphanesi', s:'Hazırlanan tüm SOP dokümanları burada listelenir.'};
+    case 'generate': return {h:'Sınav Oluştur', s:'Bir SOP seçin, sistem otomatik 10 soruluk sınav üretsin.'};
+    case 'take': return {h:'Sınava Gir', s:'Aktif sınavlardan birini seçip başlayın.'};
+    case 'results': return {h:'Sonuçlar', s:'Tamamlanan tüm sınav sonuçları ve istatistikler.'};
+    default: return {h:'', s:''};
+  }
+}
+
+function renderTopbar(){
+  const m = viewMeta();
+  return `
+  <div class="topbar">
+    <div>
+      <h1>${m.h}</h1>
+      <div class="sub">${m.s}</div>
+    </div>
+    <div class="pill">${new Date().toLocaleDateString('tr-TR', {day:'2-digit', month:'long', year:'numeric'})}</div>
+  </div>`;
+}
+
+function renderView(){
+  if(state.loading && !state.loaded){
+    return `<div class="loading-block"><div class="needle-spin"></div><div>Yükleniyor...</div></div>`;
+  }
+  switch(state.view){
+    case 'library': return renderLibrary();
+    case 'generate': return renderGenerate();
+    case 'take': return renderTake();
+    case 'results': return renderResults();
+    default: return '';
+  }
+}
+
+/* ---------------- Library view ---------------- */
+function renderLibrary(){
+  if(state.openSopId){
+    const sop = state.sops.find(s=>s.id===state.openSopId);
+    if(!sop) { state.openSopId=null; }
+    else{
+      const lines = sop.content.split(/\n(?=Adımlar:|KAPSAM:)/);
+      return `
+        <div class="backlink" data-back-library>${ICONS.back} SOP Kütüphanesine dön</div>
+        <div class="panel" style="max-width:820px;">
+          <span class="pill">${sop.category||'Genel'}</span>
+          <h2 style="font-family:var(--font-display);margin:12px 0 4px;">${escapeHtml(sop.title)}</h2>
+          <div style="white-space:pre-wrap; font-size:13px; color:var(--text-1); line-height:1.7; margin-top:10px;">${escapeHtml(sop.content)}</div>
+          <div style="margin-top:20px; display:flex; gap:10px;">
+            <button class="btn primary" data-goto-generate="${sop.id}">${ICONS.generate} Bu SOP için sınav oluştur</button>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  const cats = {};
+  state.sops.forEach(s => { const c=s.category||'Genel'; (cats[c]=cats[c]||[]).push(s); });
+
+  return `
+    <div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
+      <button class="btn primary" data-toggle-add>${ICONS.plus} Yeni SOP Ekle</button>
+    </div>
+    ${state.showAddForm ? renderAddSopForm() : ''}
+    ${Object.keys(cats).length===0 ? renderEmptyLibrary() : Object.entries(cats).map(([cat, list]) => `
+      <div style="margin-bottom:22px;">
+        <div class="navgroup-label" style="margin-left:2px;">${escapeHtml(cat)}</div>
+        <div class="grid">
+          ${list.map(sop => `
+            <div class="card tag-amber">
+              <h3>${escapeHtml(sop.title)}</h3>
+              <p>${escapeHtml(sop.content.slice(0, 130))}...</p>
+              <div class="row">
+                <button class="btn sm ghost" data-open-sop="${sop.id}">Detay</button>
+                <button class="btn sm primary" data-goto-generate="${sop.id}">${ICONS.generate} Sınav</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderEmptyLibrary(){
+  return `<div class="empty">${ICONS.library}<div class="t">Henüz SOP eklenmedi</div>Yukarıdan yeni bir SOP ekleyerek başlayın.</div>`;
+}
+
+function renderAddSopForm(){
+  return `
+  <div class="panel" style="margin-bottom:20px; max-width:640px;">
+    <div class="panel-title">Yeni SOP Ekle</div>
+    <div class="panel-sub">Başlık, kategori ve SOP içeriğini (kapsam + adımlar) yapıştırın.</div>
+    <div class="field">
+      <label class="field-label">Başlık</label>
+      <input type="text" id="new-sop-title" placeholder="Örn. Kompresör Periyodik Bakım SOP" value="${escapeAttr(state.newSop.title)}"/>
+    </div>
+    <div class="field">
+      <label class="field-label">Kategori</label>
+      <input type="text" id="new-sop-cat" placeholder="Örn. Basınçlı Hava" value="${escapeAttr(state.newSop.category)}"/>
+    </div>
+    <div class="field">
+      <label class="field-label">İçerik (Kapsam + Adımlar)</label>
+      <textarea id="new-sop-content" rows="8" placeholder="KAPSAM: ...&#10;Adımlar: 1) ... 2) ...">${escapeHtml(state.newSop.content)}</textarea>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn primary" data-save-sop>Kaydet</button>
+      <button class="btn ghost" data-cancel-add>Vazgeç</button>
+    </div>
+  </div>`;
+}
+
+/* ---------------- Generate view ---------------- */
+function renderGenerate(){
+  if(state.genLoading){
+    return `<div class="loading-block"><div class="needle-spin"></div><div>Sorular hazırlanıyor... (Claude ile üretiliyor)</div></div>`;
+  }
+  const selected = state.sops.find(s=>s.id===state.genSopId);
+  return `
+    <div class="panel" style="max-width:640px;">
+      <div class="panel-title">SOP Seçin</div>
+      <div class="panel-sub">Seçilen SOP içeriğine göre otomatik 10 soruluk sınav üretilecek.</div>
+      <div class="field">
+        <select id="gen-sop-select">
+          <option value="">— SOP seçin —</option>
+          ${state.sops.map(s=>`<option value="${s.id}" ${s.id===state.genSopId?'selected':''}>${escapeHtml(s.title)}</option>`).join('')}
+        </select>
+      </div>
+      ${state.genError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.genError)}</div>` : ''}
+      <button class="btn primary block" data-gen-start ${!state.genSopId?'disabled':''}>${ICONS.bolt} Sınav Oluştur (10 Soru)</button>
+    </div>
+
+    ${state.exams.length ? `
+    <div style="margin-top:26px;">
+      <div class="panel-title" style="margin-bottom:12px;">Oluşturulan Sınavlar</div>
+      <div class="grid">
+        ${state.exams.slice().reverse().map(ex => `
+          <div class="card ${ex.active?'tag-green':''}">
+            <div class="row">
+              <span class="pill ${ex.active?'live':'closed'}">${ex.active?'Aktif':'Kapalı'}</span>
+              <code class="k">${ex.code}</code>
+            </div>
+            <h3>${escapeHtml(ex.sopTitle)}</h3>
+            <div class="meta">
+              <span>${ex.questions.length} soru</span>
+              <span>${new Date(ex.createdAt).toLocaleString('tr-TR')}</span>
+            </div>
+            <div class="row">
+              <button class="btn sm ghost" data-toggle-exam="${ex.id}">${ex.active?'Kapat':'Aktifleştir'}</button>
+              <button class="btn sm ghost" data-view-exam-results="${ex.id}">Sonuçları Gör</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>` : ''}
+  `;
+}
+
+/* ---------------- Take view ---------------- */
+function renderTake(){
+  if(state.takeStage === 'list'){
+    const active = state.exams.filter(e=>e.active);
+    return `
+      ${active.length===0 ? `<div class="empty">${ICONS.take}<div class="t">Şu anda aktif sınav yok</div>"Sınav Oluştur" bölümünden yeni bir sınav başlatın.</div>` : `
+      <div class="grid">
+        ${active.map(ex => `
+          <div class="card tag-green">
+            <span class="pill live">Aktif</span>
+            <h3>${escapeHtml(ex.sopTitle)}</h3>
+            <div class="meta"><span>${ex.questions.length} soru</span><span>Kod: ${ex.code}</span></div>
+            <button class="btn primary block" data-start-exam="${ex.id}">Sınava Başla</button>
+          </div>
+        `).join('')}
+      </div>`}
+    `;
+  }
+
+  if(state.takeStage === 'name'){
+    const ex = state.exams.find(e=>e.id===state.takeExamId);
+    return `
+      <div class="backlink" data-back-take-list>${ICONS.back} Sınav listesine dön</div>
+      <div class="panel" style="max-width:480px;">
+        <div class="panel-title">${escapeHtml(ex.sopTitle)}</div>
+        <div class="panel-sub">${ex.questions.length} soruluk sınava başlamadan önce bilgilerinizi girin.</div>
+        <div class="field">
+          <label class="field-label">Ad Soyad</label>
+          <input type="text" id="taker-name" placeholder="Adınız Soyadınız" value="${escapeAttr(state.takerName)}"/>
+        </div>
+        <div class="field">
+          <label class="field-label">Departman / Vardiya (opsiyonel)</label>
+          <input type="text" id="taker-dept" placeholder="Örn. Bakım - A Vardiyası" value="${escapeAttr(state.takerDept)}"/>
+        </div>
+        <button class="btn primary block" data-begin-quiz>Sınavı Başlat</button>
+      </div>
+    `;
+  }
+
+  if(state.takeStage === 'quiz'){
+    const ex = state.exams.find(e=>e.id===state.takeExamId);
+    const q = ex.questions[state.currentQ];
+    const total = ex.questions.length;
+    const answered = state.answers[state.currentQ];
+    return `
+      <div class="exam-wrap">
+        <div class="qcounter">SORU ${state.currentQ+1} / ${total} &middot; ${escapeHtml(ex.sopTitle)}</div>
+        <div class="progressbar"><div class="fill" style="width:${((state.currentQ)/total)*100}%"></div></div>
+        <div class="qcard">
+          <div class="qtext">${escapeHtml(q.question)}</div>
+          ${q.options.map((opt, i) => `
+            <div class="opt ${answered===i?'selected':''}" data-select-opt="${i}">
+              <div class="dot"></div><div>${escapeHtml(opt)}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="exam-nav">
+          <button class="btn ghost" data-prev-q ${state.currentQ===0?'disabled':''}>Önceki</button>
+          ${state.currentQ < total-1
+            ? `<button class="btn primary" data-next-q ${answered===undefined?'disabled':''}>Sonraki Soru</button>`
+            : `<button class="btn primary" data-finish-quiz ${answered===undefined?'disabled':''}>Sınavı Bitir</button>`}
+        </div>
+      </div>
+    `;
+  }
+
+  if(state.takeStage === 'done'){
+    const r = state.lastResult;
+    const pct = r.pct;
+    const zone = pct>=85?'good':(pct>=70?'mid':'bad');
+    const needleDeg = -135 + (pct/100)*270;
+    const r1 = 270*0.70, r2 = 270*0.85;
+    return `
+      <div class="exam-wrap" style="text-align:center;">
+        <div class="panel">
+          <div class="panel-title">Sınav Tamamlandı</div>
+          <div class="panel-sub">${escapeHtml(r.sopTitle)} &middot; ${escapeHtml(r.name)}</div>
+          <div class="gauge-wrap">
+            <div class="gauge">
+              <div class="ring" style="background:conic-gradient(from -135deg, var(--red) 0deg, var(--red) ${r1}deg, var(--amber) ${r1}deg, var(--amber) ${r2}deg, var(--green) ${r2}deg, var(--green) 270deg, transparent 270deg, transparent 360deg);"></div>
+              <div class="needle" style="transform:translate(-50%,-100%) rotate(${needleDeg}deg);"></div>
+              <div class="hub"></div>
+              <div class="inner">
+                <div class="pct">%${pct}</div>
+                <div class="lbl">${r.score}/${r.total} DOĞRU</div>
+              </div>
+            </div>
+            <div class="verdict ${pct>=70?'pass':'fail'}">${pct>=70?'BAŞARILI':'BAŞARISIZ'}</div>
+          </div>
+          <div style="margin-top:22px; display:flex; gap:10px; justify-content:center;">
+            <button class="btn primary" data-back-take-list>Sınav Listesine Dön</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  return '';
+}
+
+/* ---------------- Results view ---------------- */
+function renderResults(){
+  const filtered = state.resultsFilter==='all' ? state.results : state.results.filter(r=>r.examId===state.resultsFilter);
+  const avg = filtered.length ? Math.round(filtered.reduce((a,r)=>a+r.pct,0)/filtered.length) : 0;
+  const passCount = filtered.filter(r=>r.pct>=70).length;
+
+  return `
+    <div class="stat-row">
+      <div class="stat"><div class="v">${filtered.length}</div><div class="k">Toplam Kayıt</div></div>
+      <div class="stat"><div class="v">%${avg}</div><div class="k">Ortalama Başarı</div></div>
+      <div class="stat"><div class="v">${passCount}/${filtered.length||0}</div><div class="k">Geçen / Toplam</div></div>
+    </div>
+
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:16px;">
+      <select id="results-filter" style="max-width:280px;">
+        <option value="all" ${state.resultsFilter==='all'?'selected':''}>Tüm Sınavlar</option>
+        ${state.exams.map(ex=>`<option value="${ex.id}" ${state.resultsFilter===ex.id?'selected':''}>${escapeHtml(ex.sopTitle)} (${ex.code})</option>`).join('')}
+      </select>
+      <button class="btn ghost" data-export-csv>${ICONS.download} CSV İndir</button>
+    </div>
+
+    ${filtered.length===0 ? `<div class="empty">${ICONS.results}<div class="t">Henüz sonuç yok</div>Personel sınavları tamamladıkça burada listelenecek.</div>` : `
+    <div class="panel" style="padding:0; overflow-x:auto;">
+      <table>
+        <thead><tr><th>Ad Soyad</th><th>Departman</th><th>SOP</th><th>Skor</th><th>Tarih</th></tr></thead>
+        <tbody>
+          ${filtered.slice().reverse().map(r => `
+            <tr>
+              <td>${escapeHtml(r.name)}</td>
+              <td>${escapeHtml(r.dept||'—')}</td>
+              <td>${escapeHtml(r.sopTitle)}</td>
+              <td class="num"><span class="score-chip ${r.pct>=70?'good':'bad'}">${r.score}/${r.total} · %${r.pct}</span></td>
+              <td class="num">${new Date(r.submittedAt).toLocaleString('tr-TR')}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>`}
+  `;
+}
+
+/* ---------------- utils ---------------- */
+function escapeHtml(str){
+  return String(str||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function escapeAttr(str){ return escapeHtml(str); }
+
+/* ---------------- Events ---------------- */
+function bindEvents(){
+  document.querySelectorAll('[data-nav]').forEach(el=>{
+    el.onclick = () => { state.view = el.getAttribute('data-nav'); state.openSopId=null; render(); };
+  });
+
+  // library
+  const toggleAdd = document.querySelector('[data-toggle-add]');
+  if(toggleAdd) toggleAdd.onclick = () => { state.showAddForm = !state.showAddForm; render(); };
+  const cancelAdd = document.querySelector('[data-cancel-add]');
+  if(cancelAdd) cancelAdd.onclick = () => { state.showAddForm=false; render(); };
+  const saveSop = document.querySelector('[data-save-sop]');
+  if(saveSop) saveSop.onclick = async () => {
+    const title = document.getElementById('new-sop-title').value.trim();
+    const cat = document.getElementById('new-sop-cat').value.trim();
+    const content = document.getElementById('new-sop-content').value.trim();
+    if(!title || !content){ showToast('Başlık ve içerik zorunlu.', 'err'); return; }
+    const sop = { id: 'sop-'+uid(8), title, category: cat||'Genel', content };
+    state.sops.push(sop);
+    await storSet('sop-library', state.sops);
+    state.showAddForm=false; state.newSop={title:'',category:'',content:''};
+    showToast('SOP eklendi.');
+  };
+  document.querySelectorAll('[data-open-sop]').forEach(el=>{
+    el.onclick = () => { state.openSopId = el.getAttribute('data-open-sop'); render(); };
+  });
+  const backLib = document.querySelector('[data-back-library]');
+  if(backLib) backLib.onclick = () => { state.openSopId=null; render(); };
+  document.querySelectorAll('[data-goto-generate]').forEach(el=>{
+    el.onclick = () => { state.genSopId = el.getAttribute('data-goto-generate'); state.view='generate'; state.openSopId=null; render(); };
+  });
+
+  // generate
+  const genSelect = document.getElementById('gen-sop-select');
+  if(genSelect) genSelect.onchange = (e) => { state.genSopId = e.target.value || null; render(); };
+  const genStart = document.querySelector('[data-gen-start]');
+  if(genStart) genStart.onclick = async () => {
+    const sop = state.sops.find(s=>s.id===state.genSopId);
+    if(!sop) return;
+    state.genLoading = true; state.genError=null; render();
+    try{
+      const questions = await generateQuestions(sop);
+      const exam = { id:'exam-'+uid(10), code: uid(6), sopId: sop.id, sopTitle: sop.title, questions, createdAt: Date.now(), active:true };
+      state.exams.push(exam);
+      await storSet('exams', state.exams);
+      state.genLoading=false;
+      showToast('Sınav oluşturuldu: ' + exam.code);
+      state.view='take'; state.takeStage='list';
+      render();
+    }catch(err){
+      state.genLoading=false; state.genError = err.message || 'Sınav oluşturulamadı.';
+      render();
+    }
+  };
+  document.querySelectorAll('[data-toggle-exam]').forEach(el=>{
+    el.onclick = async () => {
+      const id = el.getAttribute('data-toggle-exam');
+      const ex = state.exams.find(e=>e.id===id);
+      if(ex){ ex.active = !ex.active; await storSet('exams', state.exams); render(); }
+    };
+  });
+  document.querySelectorAll('[data-view-exam-results]').forEach(el=>{
+    el.onclick = () => {
+      state.resultsFilter = el.getAttribute('data-view-exam-results');
+      state.view='results'; render();
+    };
+  });
+
+  // take flow
+  document.querySelectorAll('[data-start-exam]').forEach(el=>{
+    el.onclick = () => {
+      state.takeExamId = el.getAttribute('data-start-exam');
+      state.takeStage='name'; render();
+    };
+  });
+  const backTakeList = document.querySelector('[data-back-take-list]');
+  if(backTakeList) backTakeList.onclick = () => {
+    state.takeStage='list'; state.takeExamId=null; state.answers=[]; state.currentQ=0; state.takerName=''; state.takerDept='';
+    render();
+  };
+  const beginQuiz = document.querySelector('[data-begin-quiz]');
+  if(beginQuiz) beginQuiz.onclick = () => {
+    const name = document.getElementById('taker-name').value.trim();
+    const dept = document.getElementById('taker-dept').value.trim();
+    if(!name){ showToast('Lütfen ad soyad girin.', 'err'); return; }
+    state.takerName = name; state.takerDept = dept;
+    state.answers = []; state.currentQ = 0;
+    state.takeStage='quiz'; render();
+  };
+  document.querySelectorAll('[data-select-opt]').forEach(el=>{
+    el.onclick = () => {
+      state.answers[state.currentQ] = parseInt(el.getAttribute('data-select-opt'),10);
+      render();
+    };
+  });
+  const prevQ = document.querySelector('[data-prev-q]');
+  if(prevQ) prevQ.onclick = () => { if(state.currentQ>0){ state.currentQ--; render(); } };
+  const nextQ = document.querySelector('[data-next-q]');
+  if(nextQ) nextQ.onclick = () => { state.currentQ++; render(); };
+  const finishQuiz = document.querySelector('[data-finish-quiz]');
+  if(finishQuiz) finishQuiz.onclick = async () => {
+    const ex = state.exams.find(e=>e.id===state.takeExamId);
+    let score = 0;
+    ex.questions.forEach((q,i)=>{ if(state.answers[i]===q.correctIndex) score++; });
+    const total = ex.questions.length;
+    const pct = Math.round((score/total)*100);
+    const result = {
+      id:'res-'+uid(10), examId: ex.id, sopTitle: ex.sopTitle,
+      name: state.takerName, dept: state.takerDept,
+      score, total, pct, answers: state.answers.slice(),
+      submittedAt: Date.now()
+    };
+    state.results.push(result);
+    await storSet('results', state.results);
+    state.lastResult = result;
+    state.takeStage='done';
+    render();
+  };
+
+  // results
+  const resFilter = document.getElementById('results-filter');
+  if(resFilter) resFilter.onchange = (e) => { state.resultsFilter = e.target.value; render(); };
+  const exportCsv = document.querySelector('[data-export-csv]');
+  if(exportCsv) exportCsv.onclick = () => {
+    const filtered = state.resultsFilter==='all' ? state.results : state.results.filter(r=>r.examId===state.resultsFilter);
+    let csv = 'Ad Soyad,Departman,SOP,Skor,Yuzde,Tarih\n';
+    filtered.forEach(r=>{
+      csv += `"${(r.name||'').replace(/"/g,'""')}","${(r.dept||'').replace(/"/g,'""')}","${r.sopTitle.replace(/"/g,'""')}",${r.score}/${r.total},${r.pct}%,"${new Date(r.submittedAt).toLocaleString('tr-TR')}"\n`;
+    });
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'sop-sinav-sonuclari.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+}
+
+boot();
+
+// PWA: gerçek bir sunucuda barındırıldığında (artifact önizlemesinde sessizce yok sayılır)
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{ /* barındırma yoksa sessiz geç */ });
+  });
+}
+</script>
+</body>
+</html>
