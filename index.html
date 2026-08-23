@@ -260,9 +260,32 @@
 <script>
 /* =========================================================================
    SOP EĞİTİM & SINAV SİSTEMİ
-   Tek dosyalık uygulama: SOP kütüphanesi + Claude API ile rastgele soru
-   üretimi + online sınav + sonuç kaydı (window.storage ile kalıcı).
+   Tek dosyalık uygulama: SOP kütüphanesi + yerleşik soru havuzundan rastgele
+   sınav üretimi (API gerektirmez) + online sınav + sonuç kaydı.
    ========================================================================= */
+
+/* Cihazlar arası ORTAK sonuç kaydı için (opsiyonel):
+   Bağımsız barındırmada (GitHub Pages vb.) window.storage çalışmadığından
+   sonuçlar varsayılan olarak yalnızca o cihazda (localStorage) tutulur.
+   Farklı telefonlardaki sonuçları TEK bir yerde toplamak isterseniz, aşağıya
+   bir Google Apps Script Web App URL'si yapıştırın - tüm cihazlar sonucu
+   otomatik olarak o Google E-Tablo'ya da gönderir. Boş bırakılırsa bu adım
+   sessizce atlanır. (Kurulum talimatı sohbette paylaşıldı.) */
+const CONFIG = {
+  sheetsWebhookUrl: '', // Örn: 'https://script.google.com/macros/s/AKfycb.../exec'
+};
+
+function syncResultToSheets(result){
+  if(!CONFIG.sheetsWebhookUrl) return;
+  try{
+    fetch(CONFIG.sheetsWebhookUrl, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script web app'ler için gerekli; yanıt okunamaz ama gönderim çalışır
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(result),
+    }).catch(()=>{ /* sessiz geç - yerel kayıt zaten yapıldı */ });
+  }catch(e){ /* sessiz geç */ }
+}
 
 const ICONS = {
   library: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
@@ -326,14 +349,210 @@ Adımlar: 1) Kazan dairesi genel görsel kontrolü (yabancı madde, sızıntı, 
 Adımlar: 1) Pompa enerjisi LOTO-Elektrik SOP'una göre kesilir, kilitlenir. 2) Pompa gövdesi/bağlantılar görsel kontrol edilir (sızıntı, korozyon, titreşim izleri) - kızgın yağ sisteminde sızıntı ciddi yangın riski oluşturur, en ufak belirti ciddiye alınmalı. 3) Salmastra/mekanik keçe kontrol edilir, aşınma/sızıntıda değiştirilir. 4) Motor-pompa akuplasyonu (kaplin) kontrol edilir, elastomer parçalarda çatlak/aşınma incelenir. 5) Yataklama (bearing) gres/yağlama durumu kontrol edilir, üretici talimatına göre yağlanır. 6) Motor akımı ve yatak sıcaklıkları referans değerlerle karşılaştırılır. 7) Titreşim seviyesi ölçülür, referansın üzerindeyse neden araştırılır. 8) Bakım sonrası LOTO kaldırılır, vana konumları (proses hattına açık) teyit edilir. 9) Pompa çalıştırılır, anormal ses/titreşim/sızıntı yok, basınç/akış normal aralıkta teyit edilir - kuru çalıştırma (yağsız) pompaya ciddi hasar verir, sistemin yağ dolu olduğu mutlaka teyit edilmeli. 10) Sonuçlar kayıt formuna işlenir.` },
 ];
 
-/* ---------------- Storage helpers ---------------- */
+/* ---------------- Question banks (statik - API gerektirmez) ----------------
+   Her SOP için ~12 soruluk havuz. Sınav oluşturulduğunda bu havuzdan rastgele
+   10 soru seçilir ve şıkların sırası karıştırılır - böylece API çağrısı
+   olmadan da her sınav farklı olur. Bağımsız barındırmada (GitHub Pages) bu
+   sayede "Sınav Oluştur" anında ve hatasız çalışır. */
+const QUESTION_BANKS = {
+  'loto-elektrik': [
+    {q:"LOTO-Elektrik prosedüründe ilk adım nedir?", o:["Şalteri kapatmak","Çalışılacak devrenin tüm besleme kaynaklarını tespit etmek","Kilidi takmak","Gerilim ölçmek"], c:1},
+    {q:"Yük altında hangi ekipman açılmamalıdır?", o:["Ayırıcı","Kesici/şalter","Kilit","Etiket"], c:0},
+    {q:"Birden fazla kişi aynı devrede çalışıyorsa ne kullanılır?", o:["Tek kilit yeterlidir","Multi-lock hasp","Sadece etiket","Sözlü uyarı"], c:1},
+    {q:"Gerilim ölçer kullanmadan önce ne yapılmalıdır?", o:["Hemen devreye dokunulmalı","Test cihazının bilinen enerjili bir kaynakta çalıştığı doğrulanmalı (test-before-test)","Cihaz kapatılmalı","Hiçbir şey"], c:1},
+    {q:"Depolanmış enerji (örn. kapasitör) ne yapılmalıdır?", o:["Görmezden gelinir","Boşaltılır/deşarj edilir","Kilitlenir yeterlidir","Sadece etiketlenir"], c:1},
+    {q:"Kilit/etiketi kim çıkarabilir?", o:["Herkes","Vardiya amiri her zaman","Yalnızca onu takan kişi (istisnai belgelenmiş prosedür hariç)","İSG sorumlusu"], c:2},
+    {q:"Enerji verilmeden önce ne kontrol edilmelidir?", o:["Hiçbir şey","Koruma ekipmanlarının (siperlik, kapak) yerinde olması","Sadece saat","Personel sayısı"], c:1},
+    {q:"Birden fazla besleme kaynağı olabileceği durumlara örnek nedir?", o:["Sadece şebeke","Şebeke + jeneratör + UPS","Sadece jeneratör","Hiçbiri"], c:1},
+    {q:"LOTO etiketinde hangi bilgiler bulunmalıdır?", o:["Sadece tarih","Ad-soyad, tarih, iş açıklaması","Sadece iş açıklaması","Hiçbir bilgi gerekmez"], c:1},
+    {q:"Gerilim ölçer ile hangi noktalar test edilir?", o:["Sadece faz-faz","Sadece faz-nötr","Faz-faz ve faz-nötr","Hiçbiri"], c:2},
+    {q:"Ekipman enerjilendirilmeden önce personel için ne teyit edilmelidir?", o:["Hepsinin alandan uzaklaştığı","Sadece bir kişinin haberi olması","Vardiya değişimi","Hiçbir şey"], c:0},
+    {q:"Ayırıcı ile şalter arasındaki fark bu SOP bağlamında nedir?", o:["Aynı şeydir","Şalter/kesici yükü keser, ayırıcı yük altında açılmaz","Ayırıcı her zaman önce açılır","Fark yoktur"], c:1},
+  ],
+  'loto-mekanik': [
+    {q:"Mekanik LOTO'da izole edilmesi gereken enerji formlarından biri değildir:", o:["Elektrik","Basınçlı hava/hidrolik","Kinetik/potansiyel enerji","Personel yorgunluğu"], c:3},
+    {q:"Basınçlı hat üzerinde artık basınç nasıl boşaltılır?", o:["Hattı kesmeden bırakılır","Bleed (tahliye) vanası açılarak, manometre sıfır teyidiyle","Sadece beklenerek","Hiçbir işlem gerekmez"], c:1},
+    {q:"Askıda yük veya gergin yay gibi parçalar için ne yapılmalıdır?", o:["Sadece hidrolik silindire güvenilir","Mekanik blok/pim/emniyet çubuğu ile sabitlenir","Görmezden gelinir","Sadece uyarı levhası asılır"], c:1},
+    {q:"Sıfır enerji durumu (try-out) testi sırasında nelere dikkat edilir?", o:["Tehlike bölgesinde kimse olmamalı","Herkes izleyebilir","Test gerekli değildir","Sadece uzaktan bakılır"], c:0},
+    {q:"Dönen kütleler (volan, rulo) için ne kontrol edilir?", o:["Hız artırılır","Tamamen durduğu ve serbest dönmeyeceği teyit edilir","Sadece renk kontrolü yapılır","Hiçbir şey"], c:1},
+    {q:"Enerji geri verilirken sıralama nasıl olmalıdır?", o:["Elektrik→mekanik→basınçlı hava","Mekanik→basınçlı hava/hidrolik→elektrik","Rastgele sıra","Hepsi aynı anda"], c:1},
+    {q:"Birden fazla enerji kaynağı/kişi varsa ne kullanılır?", o:["Tek kilit","Multi-lock hasp","Sadece sözlü onay","Hiçbir şey gerekmez"], c:1},
+    {q:"Bakım öncesi ekipman nasıl durdurulmalıdır?", o:["Aniden kapatılır","Normal durdurma prosedürüne göre, hareketin durduğu teyit edilerek","Enerji kesilmeden durdurulur","Durdurmaya gerek yoktur"], c:1},
+    {q:"Çalışma tamamlandıktan sonra ilk adım nedir?", o:["Direkt enerji verilir","Alan temizlenir, koruyucu kapaklar takılır, destekler çıkarılır","Hiçbir şey yapılmaz","Sadece rapor yazılır"], c:1},
+    {q:"Manometrenin sıfırı göstermesi neyi teyit eder?", o:["Elektrik kesildiğini","Basınçlı hatta artık basınç kalmadığını","Yağ seviyesini","Sıcaklığı"], c:1},
+    {q:"Mekanik LOTO'da elektrik izolasyonu hangi SOP'a göre yapılır?", o:["Bu SOP'un kendi adımına göre, ayrıca LOTO-Elektrik SOP referans alınır","Elektrik izolasyonuna gerek yok","Sadece sigorta kapatılır","Rastgele"], c:0},
+    {q:"Try-out testi ne zaman yapılır?", o:["Bakımdan önce, izolasyon sonrası","Bakımdan sonra","Hiç yapılmaz","Sadece yılda bir"], c:0},
+  ],
+  'sicak-calisma': [
+    {q:"Sıcak çalışma öncesi ilk adım nedir?", o:["Doğrudan kaynağa başlamak","Sıcak Çalışma İzin Formu doldurup onaylatmak","Sadece söndürme cihazı getirmek","Hiçbir hazırlık gerekmez"], c:1},
+    {q:"Çalışma alanı çevresindeki kaç metre yarıçapta yanıcı malzeme kontrolü yapılır?", o:["1 metre","5 metre","10 metre","50 metre"], c:2},
+    {q:"Ortam gaz ölçümünde hangi eşik değer çalışmayı durdurur?", o:["%5 LEL","%10 LEL","%50 LEL","%90 LEL"], c:1},
+    {q:"Yangın gözcüsü hakkında hangisi doğrudur?", o:["Kaynakçının kendisi olabilir","Farklı biri olmalı ve başka işle görevlendirilmemeli","Gerekli değildir","Sadece işin başında bulunur"], c:1},
+    {q:"İş bitiminde gözcü ne kadar süre daha alanda kalmalıdır?", o:["Hemen ayrılabilir","En az 30 dakika","5 dakika","1 hafta"], c:1},
+    {q:"Sıcak çalışma ekipmanında hangi kontrol yapılmalıdır?", o:["Sadece görsel temizlik","Kablo/hortum hasarı, geri tepme valfi, topraklama","Renk kontrolü","Hiçbiri"], c:1},
+    {q:"Yanıcı malzemeler ne yapılmalıdır?", o:["Olduğu gibi bırakılır","Uzaklaştırılır veya yanmaz örtü ile kapatılır","Sadece işaretlenir","Görmezden gelinir"], c:1},
+    {q:"Kıvılcım sıçrama riski hangi bölgeler için de değerlendirilmelidir?", o:["Sadece çalışma seviyesinde","Alt/yan katlar ve bölümler için de","Sadece tavan","Hiçbiri"], c:1},
+    {q:"Çalışma alanında en az kaç adet yangın söndürme cihazı bulundurulmalıdır?", o:["0","En az 1 adet, ilgili sınıfa uygun","Sadece izin varsa","Fark etmez"], c:1},
+    {q:"İş bitiminde ne yapılır?", o:["Ekipman açık bırakılır","Ekipman kapatılır, tüpler vanalarından kapatılır, alan kontrol edilir","Hemen ayrılınır","Hiçbir şey"], c:1},
+    {q:"Gaz ölçümü hangi durumda özellikle zorunludur?", o:["Asla gerekmez","Yanıcı/patlayıcı ortam riski olan alanlarda","Sadece açık alanda","Sadece gece"], c:1},
+    {q:"İzin formu ne zaman kapatılır?", o:["Çalışma başlamadan","Gözcünün 30 dk gözlemi sonrası, gizli yanma olmadığı teyit edilince","Hiç kapatılmaz","İşin ortasında"], c:1},
+  ],
+  'kapali-alan': [
+    {q:"Kapalı alan tanımına göre aşağıdakilerden hangisi kapalı alan sayılabilir?", o:["Açık saha","Tank, silo, kanal, çukur","Ofis odası","Otopark"], c:1},
+    {q:"Besleme/tahliye hatları nasıl izole edilmelidir?", o:["Sadece vana kapatılır","Kör tapa (blind) ile ayrılır","İzolasyona gerek yok","Sadece etiketlenir"], c:1},
+    {q:"Kabul edilebilir oksijen seviyesi aralığı nedir?", o:["%10-15","%19,5-23,5","%30-40","Fark etmez"], c:1},
+    {q:"Oksijen seviyesi %19,5'in altındaysa ne yapılmalıdır?", o:["Girişe izin verilir","Girişe kesinlikle izin verilmez","Sadece maskeyle girilir","Hızlıca girilip çıkılır"], c:1},
+    {q:"Gözcünün (attendant) görevi nedir?", o:["İçeri girip yardım eder","Alanı terk etmeden sürekli iletişimde kalır, acil durumda kurtarma ekibini çağırır","Sadece giriş kaydı tutar","Hiçbir görevi yoktur"], c:1},
+    {q:"Acil durumda gözcü ne yapmamalıdır?", o:["Kurtarma ekibini çağırmak","Tek başına içeri girmek","İletişimde kalmak","Alarm vermek"], c:1},
+    {q:"Giriş öncesi hangi ölçümler yapılır?", o:["Sadece sıcaklık","O2, LEL, toksik gaz (H2S, CO vb.)","Sadece nem","Hiçbiri"], c:1},
+    {q:"Kapalı alanla bağlantılı enerji kaynakları nasıl izole edilir?", o:["İzolasyona gerek yok","LOTO prosedürüne göre","Sadece uyarı yazısı asılır","Sadece sözlü uyarı"], c:1},
+    {q:"Çalışma boyunca atmosfer nasıl izlenir?", o:["Sadece girişte bir kez ölçülür","Sürekli/periyodik olarak izlenir","İzlemeye gerek yok","Yılda bir"], c:1},
+    {q:"Giriş-çıkış saatleri nereye kaydedilir?", o:["Kaydedilmez","İzin formuna","Sadece hafızada tutulur","Sonradan tahmin edilir"], c:1},
+    {q:"LEL değeri %10'un üzerindeyse ne yapılmalıdır?", o:["Girişe devam edilir","Girişe kesinlikle izin verilmez","Hızlı girilir","Fark etmez"], c:1},
+    {q:"İş bitiminde son adım nedir?", o:["Hemen ayrılmak","İzolasyonlar kaldırılır, ekipman normale döner, izin formu kapatılır","Hiçbir şey yapmadan çıkmak","Formu yırtmak"], c:1},
+  ],
+  'yuksekte-calisma': [
+    {q:"Yüksekte çalışma SOP'u kaç metre ve üzeri için geçerlidir?", o:["0,5 metre","1,8 metre","5 metre","10 metre"], c:1},
+    {q:"Öncelik olarak ne değerlendirilmelidir?", o:["Direkt yükseğe çıkmak","Düşme riskinin ortadan kaldırılıp kaldırılamayacağı (yerden erişim)","Hız","Maliyet"], c:1},
+    {q:"Kullanılacak ekipmanla ilgili hangisi doğrudur?", o:["Muayene tarihi önemli değildir","Muayene/kontrol etiketinin güncel olması şarttır","Görsel kontrol yeterlidir","Hiçbir kontrol gerekmez"], c:1},
+    {q:"Emniyet kemeri kancası nereye bağlanmalıdır?", o:["Korkuluğa","Boru hattına","Onaylı sabit ankraj noktasına","Herhangi bir yere"], c:2},
+    {q:"Merdiven yerleştirme açısı (yatay:dikey) yaklaşık ne olmalıdır?", o:["1:1","1:4","1:10","Fark etmez"], c:1},
+    {q:"Merdivende ağır iş yapılırken ne kullanılmalıdır?", o:["Hiçbir şey","Alet çantası/kemer (iki el serbest kalmalı)","Sadece bir el yeterli","Merdiven üstünde iş yapılmaz kuralı yok"], c:1},
+    {q:"Korkuluk yoksa hangi sistem kullanılır?", o:["Hiçbir önlem gerekmez","Düşmeyi durduran sistem (tam vücut emniyet kemeri + enerji sönümleyici halat + ankraj)","Sadece baret","Sadece uyarı levhası"], c:1},
+    {q:"Olumsuz hava koşullarında (rüzgar, yağış) ne yapılmalıdır?", o:["Çalışmaya devam edilir","Çalışma ertelenir","Hız artırılır","Fark etmez"], c:1},
+    {q:"Alet/malzeme düşmesini önlemek için ne kullanılır?", o:["Hiçbir şey","Alet kayışı/torbası","Sadece dikkat","Cep"], c:1},
+    {q:"Çalışma alanının altı için ne yapılmalıdır?", o:["Serbest bırakılır","Bariyer/şerit ile çevrilir, geçiş engellenir","Sadece uyarılır","Hiçbir işlem"], c:1},
+    {q:"İskele kurulumu kim tarafından yapılmalıdır?", o:["Herkes yapabilir","Yetkili ve eğitimli personel","Sadece amirin izniyle herkes","Stajyerler"], c:1},
+    {q:"İş bitiminde ekipmanla ilgili ne yapılır?", o:["Olduğu gibi bırakılır","Sökülür veya güvenli konuma alınır, bariyerler kaldırılır","Hemen terk edilir","Hiçbir işlem gerekmez"], c:1},
+  ],
+  'elektrik-pano': [
+    {q:"Pano çalışmasında hangi yöntem tercih edilmelidir?", o:["Her zaman enerjili çalışma","Mümkün olan her durumda enerjisiz çalışma","Fark etmez","Rastgele seçim"], c:1},
+    {q:"Enerjisiz çalışmada hangi SOP referans alınır?", o:["Hiçbiri","LOTO-Elektrik SOP","Yüksekte Çalışma SOP","Kapalı Alan SOP"], c:1},
+    {q:"Pano açılırken özellikle yüksek gerilimde ne kullanılır?", o:["Hiçbir ekipman","Yalıtkan zemin paspası","Sadece eldiven","Merdiven"], c:1},
+    {q:"Enerjili çalışma kaçınılmazsa ne gereklidir?", o:["Hiçbir izin gerekmez","Yazılı Enerjili Çalışma İzni ve gözcü","Sadece sözlü onay","Tek başına çalışma serbesttir"], c:1},
+    {q:"Pano içinde hangi el aletleri kullanılmalıdır?", o:["Herhangi bir alet","Yalnızca izoleli/yalıtkanlı el aletleri","Metal aletler tercih edilir","Fark etmez"], c:1},
+    {q:"Kapak açılmadan önce ne okunmalıdır?", o:["Hiçbir şey","Pano üzerindeki voltaj/arc flash uyarı etiketleri","Sadece marka bilgisi","Bakım tarihi"], c:1},
+    {q:"İşlem sonrası pano kapatılmadan önce ne kontrol edilir?", o:["Hiçbir şey","Unutulan alet/malzeme olup olmadığı","Sadece renk","Kapı menteşesi"], c:1},
+    {q:"Enerji geri verilirken pano kapağı nasıl olmalıdır?", o:["Açık tutulmalı","Mümkünse kapalı tutulmalı veya güvenli mesafeden yapılmalı (arc flash riski)","Fark etmez","Sökülmeli"], c:1},
+    {q:"Enerjili çalışmada kaç kişi bulunmalıdır?", o:["Tek kişi yeterli","En az iki kişi (biri gözcü)","Beş kişi","Kimse gerekmez"], c:1},
+    {q:"Arc flash koruyucu KKD'ye örnek nedir?", o:["Sadece bere","Yüz siperi, yanmaz kıyafet, yalıtkan eldiven","Güneş gözlüğü","Spor ayakkabı"], c:1},
+    {q:"Gerilim ölçer ile ne teyit edilir?", o:["Renk","Devrenin enerjisiz olduğu","Sıcaklık","Nem"], c:1},
+    {q:"Bu SOP hangi tür panolar için geçerlidir?", o:["Yalnızca düşük gerilim","Enerjili veya enerjisiz tüm elektrik pano/dolapları","Yalnızca yüksek gerilim","Sadece dış mekan panoları"], c:1},
+  ],
+  'kaldirma-ekip': [
+    {q:"Ekipman kapasitesi (SWL) ile yük ağırlığı ilişkisi nasıl olmalıdır?", o:["SWL yükten az olabilir","SWL, yükün ağırlığından fazla olmalıdır","Fark etmez","Sadece tahmini yeterli"], c:1},
+    {q:"Periyodik muayene zorunluluğu ne sıklıkla gereklidir?", o:["Hiç gerekmez","Yılda en az 1 kez","5 yılda bir","Sadece arıza olursa"], c:1},
+    {q:"Hasarlı/aşınmış ekipman ne yapılmalıdır?", o:["Dikkatli kullanılır","Derhal hizmet dışı bırakılır ve etiketlenir","Görmezden gelinir","Sadece rapor edilir"], c:1},
+    {q:"Test kaldırması ne amaçla yapılır?", o:["Zaman kaybıdır","Yük dengesini kontrol etmek için","Hız ölçmek için","Gerekli değildir"], c:1},
+    {q:"Dengesizlik/anormal ses tespit edilirse ne yapılmalıdır?", o:["Devam edilir","Yük derhal indirilir, kaldırma durdurulur","Hızlandırılır","Görmezden gelinir"], c:1},
+    {q:"Operatör görüşü kısıtlıysa ne yapılmalıdır?", o:["Devam edilir","Yönlendirici (signalman) görevlendirilir","İşlem iptal edilir her zaman","Fark etmez"], c:1},
+    {q:"Yük nasıl bağlanmalıdır?", o:["Çapraz ve dengesiz","Dengeli, ağırlık merkezi kontrol edilerek","Rastgele","Sadece bir noktadan"], c:1},
+    {q:"Kaldırma alanı için ne yapılmalıdır?", o:["Serbest bırakılır","Bariyer/şerit ile çevrilir","Sadece uyarılır","Hiçbir işlem"], c:1},
+    {q:"İşlem sonrası ekipmana ne yapılır?", o:["Olduğu gibi bırakılır","Güvenli konuma alınır, enerjisi kesilir","Hemen terk edilir","Hiçbir işlem"], c:1},
+    {q:"Kaldırma altında/geçiş güzergahında kim bulunmalıdır?", o:["Herkes bulunabilir","Kimse bulunmamalı","Sadece operatör","Sadece gözcü"], c:1},
+    {q:"Sapan/kanca kontrolünde nelere bakılır?", o:["Sadece renk","Aşınma, çatlak, açılma","Marka","Fiyat"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Yalnızca forklift","Vinç, forklift, zincirli kaldıraç, sapan vb.","Yalnızca sapan","Hiçbiri"], c:1},
+  ],
+  'yangin-dizel': [
+    {q:"Test çalıştırması ne sıklıkla yapılmalıdır?", o:["Günlük","Haftalık","Yıllık","Hiç yapılmaz"], c:1},
+    {q:"Yakıt seviyesi ile ilgili kural nedir?", o:["Kritik seviyenin altına düşürülmemeli","Boş olması normaldir","Önemli değildir","Sadece yılda bir kontrol edilir"], c:0},
+    {q:"Akü kontrolünde nelere dikkat edilir?", o:["Tek akü yeterlidir kontrol","İki bağımsız akü grubu ayrı ayrı test edilir","Akü kontrolü gerekmez","Sadece görsel bakılır"], c:1},
+    {q:"Motor start almazsa ne yapılmalıdır?", o:["Görmezden gelinir","Derhal arıza kaydı açılır, alternatif önlem değerlendirilir","Bir hafta beklenir","Sadece not alınır"], c:1},
+    {q:"Test süresi genellikle ne kadardır?", o:["1 dakika","Minimum 30 dakika","5 saat","Süre önemli değil"], c:1},
+    {q:"Test sonrası panel hangi moda alınmalıdır?", o:["Manuel modda bırakılır","Mutlaka AUTO moda alınır","Kapalı bırakılır","Fark etmez"], c:1},
+    {q:"AUTO moda alınmazsa ne olur?", o:["Hiçbir sorun olmaz","Gerçek yangında pompa otomatik devreye girmez","Pompa daha hızlı çalışır","Enerji tasarrufu sağlanır"], c:1},
+    {q:"Test sırasında hangi parametreler izlenir?", o:["Sadece renk","RPM, sıcaklık, basınç","Sadece ses","Hiçbiri"], c:1},
+    {q:"Yağ ve soğutma suyu seviyesi ne zaman kontrol edilir?", o:["Hiçbir zaman","Her testte, eksikse tamamlanır","Yalnızca arıza olunca","Yılda bir"], c:1},
+    {q:"Bu pompa hangi sistem için kullanılır?", o:["Havalandırma","Yangın söndürme sistemi","Isıtma","Su arıtma"], c:1},
+    {q:"Test sonuçları nereye kaydedilir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada tutulur","Sözlü olarak iletilir"], c:1},
+    {q:"Deşarj basıncı ile ilgili ne beklenir?", o:["Programlanan değere ulaşması gözlemlenir","Basınç önemli değildir","Sıfır olmalıdır","Sürekli değişmelidir"], c:0},
+  ],
+  'yangin-jokey': [
+    {q:"Jokey pompanın temel görevi nedir?", o:["Yangın söndürmek","Sistem hat basıncını sürekli korumak","Su arıtmak","Havalandırma yapmak"], c:1},
+    {q:"Pompanın sık sık kısa aralıklarla devreye girip çıkması neye işaret edebilir?", o:["Normal durum","Sistemde sızıntı olabileceğine","Enerji tasarrufuna","Hiçbir anlamı yoktur"], c:1},
+    {q:"Motor akım değeri hangi cihazla kontrol edilir?", o:["Manometre","Ampermetre","Termometre","Barometre"], c:1},
+    {q:"Salmastra/mekanik keçeden hafif damlama nasıl değerlendirilir?", o:["Her zaman acil arızadır","Bazı tiplerde normal kabul edilebilir, sürekli akış bakım gerektirir","Asla kabul edilmez","Önemsizdir, kontrol gerekmez"], c:1},
+    {q:"Otomatik start/stop döngüsünde ne gözlemlenir?", o:["Sadece renk","Basınç düşünce çalışması, sağlanınca durması","Ses seviyesi","Hiçbir şey"], c:1},
+    {q:"Sistem hat basıncı hangi cihazdan okunur?", o:["Ampermetre","Manometre (basınç göstergesi)","Termometre","Debimetre"], c:1},
+    {q:"Panel gösterge lambalarında arıza yanarsa ne yapılmalıdır?", o:["Görmezden gelinir","Neden araştırılır","Panel kapatılır","Hiçbir şey"], c:1},
+    {q:"Jokey pompa neden gereklidir?", o:["Ana yangın pompasının gereksiz devreye girmesini önlemek için","Yalnızca dekoratif amaçlı","Enerji üretmek için","Hiçbir amacı yoktur"], c:0},
+    {q:"Kontrol sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada tutulur","Sözlü bildirilir"], c:1},
+    {q:"Genel görsel kontrolde nelere bakılır?", o:["Sızıntı, anormal titreşim/ses","Sadece renk","Sadece marka","Hiçbir şey"], c:0},
+    {q:"Bu pompa ana yangın pompasından farkı nedir?", o:["Aynı işi yapar, farkı yoktur","Küçük basınç düşüşlerini kompanse eder, ana pompa gibi büyük debi vermez","Daha büyüktür","Yangını söndürür"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılmalıdır?", o:["Görmezden gelinir","Bakım talebi oluşturulur","Sadece not alınır, işlem yapılmaz","Pompa söz konusu edilmez"], c:1},
+  ],
+  'sprinkler': [
+    {q:"En kritik kontrol noktası hangisidir?", o:["Sprinkler kafası rengi","Ana kontrol vanasının tam açık ve mühürlü/kilitli olması","Boru rengi","Duvar boyası"], c:1},
+    {q:"Boyanmış veya üzerine malzeme asılmış sprinkler kafası nasıl değerlendirilir?", o:["Normal kabul edilir","Devre dışı kalmış sayılır, değiştirilmeli/engel kaldırılmalı","Önemsizdir","Sadece not edilir"], c:1},
+    {q:"Sprinkler kafaları etrafında korunması gereken minimum boşluk nedir?", o:["Boşluk gerekmez","Yaklaşık 45-50 cm","5 cm","2 metre"], c:1},
+    {q:"Su akış anahtarı (flow switch) testi ne ile yapılır?", o:["Test/drain vanası açılarak","Kafaları sökerek","Sadece gözle bakarak","Test yapılmaz"], c:0},
+    {q:"Test sırasında ne teyit edilmelidir?", o:["Hiçbir şey","Yangın alarm paneline sinyal gittiği","Sadece ses duyulduğu","Su rengi"], c:1},
+    {q:"Deluge sistemi için ek olarak ne test edilir?", o:["Hiçbir şey","Dedektör hattı ve solenoid valf","Sadece kapı","Aydınlatma"], c:1},
+    {q:"Kontrol vanası kapalı veya kısmen kapalıysa ne olur?", o:["Sorun olmaz","Yangında sistem devreye girmez","Sistem daha hızlı çalışır","Fark etmez"], c:1},
+    {q:"Sistem su basıncı nereden okunur?", o:["Ampermetre","Basınç göstergesi/manometre","Termometre","Debimetre"], c:1},
+    {q:"Test sonrası vanalar nasıl bırakılmalıdır?", o:["Açık bırakılır","Normal işletim konumuna getirilir","Kapalı bırakılır","Fark etmez"], c:1},
+    {q:"Sprinkler kafası önüne malzeme istiflenmesi neden sorun oluşturur?", o:["Sorun oluşturmaz","Su püskürtme etkinliğini engeller","Görüntüyü bozar","Sadece tozlanmaya sebep olur"], c:1},
+    {q:"Kontrol sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Havalandırma","Sprinkler/yağmurlama (deluge) sistemi","Isıtma sistemi","Su yumuşatma"], c:1},
+  ],
+  'kizgin-yag-kazan': [
+    {q:"Düşük yağ seviyesinde kazan çalıştırılırsa ne olur?", o:["Sorun olmaz","Ciddi hasar oluşabilir","Daha verimli çalışır","Otomatik durur her zaman"], c:1},
+    {q:"Yağ çıkış sıcaklığı nasıl yükseltilmelidir?", o:["Aniden","Kademeli olarak (ısıtma eğrisine/rampa hızına uygun)","Mümkün olduğunca hızlı","Fark etmez"], c:1},
+    {q:"Ani ısıtmanın riski nedir?", o:["Risk yoktur","Termal şok ve boru hasarı","Daha az yakıt tüketimi","Daha hızlı ısınma her zaman iyidir"], c:1},
+    {q:"Ateşleme başarısız olursa (flame failure) sistem ne yapar?", o:["Görmezden gelir","Otomatik olarak kilitlenir (lockout)","Daha güçlü ateşler","Hiçbir şey"], c:1},
+    {q:"Yağ seviyesi nereden kontrol edilir?", o:["Kazan gövdesinden tahmini","Genleşme tankından (expansion tank)","Bacadan","Yakıt tankından"], c:1},
+    {q:"Devreden çıkarmada (shutdown) sirkülasyon pompaları ne zaman durdurulur?", o:["Hemen","Yağ sıcaklığı güvenli seviyeye düşene kadar çalışır bırakılır","Asla durdurulmaz","Rastgele"], c:1},
+    {q:"Erken durdurmanın riski nedir?", o:["Risk yoktur","Kazan içinde yerel aşırı ısınma (hot spot) oluşabilir","Enerji tasarrufu sağlar","Daha hızlı soğuma"], c:1},
+    {q:"Start öncesi baca/egzoz için ne kontrol edilir?", o:["Renk","Açık olması ve tıkanıklık olmaması","Sıcaklığı","Hiçbir şey"], c:1},
+    {q:"Sirkülasyon pompaları ve vana konumlarıyla ilgili ne kontrol edilir?", o:["Önemli değil","Proses hattına açık, drenaja kapalı olması","Sadece renk","Sadece ses"], c:1},
+    {q:"Start sırasında sırasıyla ne izlenir?", o:["Rastgele kontrol","Ön havalandırma (pre-purge), ateşleme, alev sensörü onayı","Sadece basınç","Sadece sıcaklık"], c:1},
+    {q:"Kazan dairesi genel kontrolünde nelere bakılır?", o:["Yabancı madde, sızıntı, yanıcı malzeme olmaması","Sadece renk","Sadece gürültü","Hiçbir şey"], c:0},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Soğutma sistemi","Kızgın yağ kazanı","Su yumuşatma","Kompresör"], c:1},
+  ],
+  'kizgin-yag-pompa': [
+    {q:"Bakım öncesi pompa enerjisi nasıl kesilir?", o:["Kesmeye gerek yok","LOTO-Elektrik SOP'una göre kesilir, kilitlenir, etiketlenir","Sadece anahtar çevrilir","Rastgele"], c:1},
+    {q:"Kızgın yağ sistemlerinde sızıntının önemi nedir?", o:["Önemsizdir","Ciddi yangın riski oluşturur, en ufak belirti ciddiye alınmalı","Sadece görüntü sorunu","Kabul edilebilir"], c:1},
+    {q:"Kaplin (akuplasyon) kontrolünde nelere bakılır?", o:["Renk","Elastomer parçalarda çatlak/aşınma","Sadece ses","Hiçbir şey"], c:1},
+    {q:"Yataklama (bearing) bakımı için ne yapılır?", o:["Hiçbir şey","Üretici talimatına göre gres/yağlama yapılır","Sadece temizlenir","Değiştirilmez, kontrol edilmez"], c:1},
+    {q:"Kuru çalıştırma (yağsız) pompaya ne yapar?", o:["Zararı yoktur","Ciddi hasar verir","Daha verimli çalıştırır","Normal bir durumdur"], c:1},
+    {q:"Pompa çalıştırılmadan önce ne teyit edilmelidir?", o:["Hiçbir şey","Sistemin yağ ile dolu olduğu","Sadece rengi","Sadece sesi"], c:1},
+    {q:"Motor akımı ve yatak sıcaklıkları ne ile karşılaştırılır?", o:["Rastgele değerlerle","Referans değerlerle","Hava sıcaklığıyla","Karşılaştırma gerekmez"], c:1},
+    {q:"Titreşim seviyesi referansın üzerindeyse ne yapılmalıdır?", o:["Görmezden gelinir","Nedeni araştırılır","Pompa hızlandırılır","Hiçbir şey"], c:1},
+    {q:"Bakım tamamlandıktan sonra pompa çalıştırılmadan önce ne kontrol edilir?", o:["Hiçbir şey","LOTO kaldırılır, vana konumlarının doğru olduğu teyit edilir","Sadece renk","Sadece saat"], c:1},
+    {q:"Salmastra/mekanik keçe aşınmışsa ne yapılır?", o:["Görmezden gelinir","Değiştirilir","Sadece not edilir","Bekletilir"], c:1},
+    {q:"Bakım sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna (ölçüm değerleri, değiştirilen parçalar)","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Kompresör","Kızgın yağ sirkülasyon pompaları","Hidrofor","Jeneratör"], c:1},
+  ],
+};
+
+/* ---------------- Storage helpers ----------------
+   claude.ai artifact ortamında window.storage kullanılır (ortak/paylaşılan).
+   Bağımsız barındırmada (GitHub Pages vb.) window.storage yoktur; bu durumda
+   localStorage'a otomatik düşülür. NOT: localStorage yalnızca o cihaz/tarayıcıya
+   özeldir - farklı telefonlar birbirinin verisini göremez. Cihazlar arası ortak
+   sonuç takibi için Google Sheets webhook desteği aşağıda ayrıca eklenmiştir. */
+const HAS_ARTIFACT_STORAGE = (typeof window.storage !== 'undefined');
+
 async function storGet(key){
-  try{ const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null; }
-  catch(e){ return null; }
+  try{
+    if(HAS_ARTIFACT_STORAGE){
+      const r = await window.storage.get(key, true);
+      return r ? JSON.parse(r.value) : null;
+    }else{
+      const v = localStorage.getItem('sop-sinav:'+key);
+      return v ? JSON.parse(v) : null;
+    }
+  }catch(e){ return null; }
 }
 async function storSet(key, val){
-  try{ await window.storage.set(key, JSON.stringify(val), true); return true; }
-  catch(e){ return false; }
+  try{
+    if(HAS_ARTIFACT_STORAGE){
+      await window.storage.set(key, JSON.stringify(val), true);
+    }else{
+      localStorage.setItem('sop-sinav:'+key, JSON.stringify(val));
+    }
+    return true;
+  }catch(e){ return false; }
 }
 function uid(n){ n = n || 10; const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(let i=0;i<n;i++) s+=c[Math.floor(Math.random()*c.length)]; return s; }
 
@@ -341,7 +560,7 @@ function uid(n){ n = n || 10; const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=
 const state = {
   view:'library',
   sops: [],
-  exams: [],
+  exams: [], // artık kullanılmıyor (geriye dönük uyumluluk için tutuluyor)
   results: [],
   loaded:false,
   loading:false,
@@ -356,7 +575,8 @@ const state = {
   openSopId:null,
   // take flow
   takeStage:'list', // list | name | quiz | done
-  takeExamId:null,
+  takeSopId:null,
+  currentQuizQuestions:[],
   takerName:'',
   takerDept:'',
   answers:[],
@@ -379,62 +599,35 @@ async function boot(){
     sops = SOP_SEED;
     await storSet('sop-library', sops);
   }
-  let exams = await storGet('exams'); if(!exams) exams = [];
+  let exams = await storGet('exams'); if(!exams) exams = []; // legacy, kullanılmıyor
   let results = await storGet('results'); if(!results) results = [];
   state.sops = sops; state.exams = exams; state.results = results;
   state.loading = false; state.loaded = true;
   render();
 }
 
-/* ---------------- Claude API question generation ---------------- */
-async function generateQuestions(sop){
-  const nonce = uid(6);
-  const prompt = `Aşağıda bir fabrika teknik bakım biriminin SOP (Standart Operasyon Prosedürü) içeriği verilmiştir. Bu içeriğe dayanarak, eğitim alan personelin bilgisini ölçecek 10 adet ÇOKTAN SEÇMELİ soru üret.
+/* ---------------- Local question generation (API gerektirmez) ---------------- */
+function shuffleArr(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
 
-Kurallar:
-- Her sorunun tam olarak 4 şıkkı olsun, yalnızca 1 doğru cevap olsun.
-- Sorular SOP içeriğindeki somut adımlara, sıraya, dikkat edilecek hususlara ve güvenlik kurallarına dayansın; genel/alakasız sorular sorma.
-- Sorular birbirinden farklı ve SOP'un farklı bölümlerini kapsayacak şekilde dağıtılsın.
-- Her çalıştırmada soru seti ve şık sırası farklı ve rastgele olsun (oturum kodu: ${nonce}).
-- Şıklar kısa ve net olsun, "yukarıdakilerin hepsi" gibi ifadeler kullanma.
-- Yalnızca JSON döndür, başka hiçbir açıklama, markdown işaretleyici veya metin ekleme.
-
-JSON formatı (kesinlikle bu şema):
-[{"question":"...", "options":["...","...","...","..."], "correctIndex":0}, ...]
-
-SOP Başlığı: ${sop.title}
-SOP İçeriği:
-${sop.content}`;
-
-  const resp = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-6",
-      max_tokens: 3500,
-      messages: [{ role: "user", content: prompt }]
-    })
-  });
-  if(!resp.ok) throw new Error("API isteği başarısız oldu (" + resp.status + ")");
-  const data = await resp.json();
-  const textBlocks = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
-  let cleaned = textBlocks.trim();
-  cleaned = cleaned.replace(/^```json/i,'').replace(/^```/,'').replace(/```$/,'').trim();
-  const firstBracket = cleaned.indexOf('[');
-  const lastBracket = cleaned.lastIndexOf(']');
-  if(firstBracket >= 0 && lastBracket > firstBracket){
-    cleaned = cleaned.slice(firstBracket, lastBracket+1);
+function pickExamQuestions(sop){
+  const bank = QUESTION_BANKS[sop.id];
+  if(!bank || bank.length < 5){
+    throw new Error('Bu SOP için henüz soru havuzu hazırlanmadı. Sorularınızı ileterek eklememi isteyebilirsiniz.');
   }
-  let questions;
-  try{ questions = JSON.parse(cleaned); }
-  catch(e){ throw new Error("Soru verisi ayrıştırılamadı, tekrar deneyin."); }
-  if(!Array.isArray(questions) || questions.length < 5) throw new Error("Beklenmeyen soru formatı, tekrar deneyin.");
-  questions = questions.slice(0,10).map(q=>({
-    question: String(q.question||'').trim(),
-    options: (q.options||[]).slice(0,4).map(o=>String(o).trim()),
-    correctIndex: Number.isInteger(q.correctIndex) ? q.correctIndex : 0,
-  }));
-  return questions;
+  const chosen = shuffleArr(bank).slice(0, Math.min(10, bank.length));
+  return chosen.map(item => {
+    const optOrder = shuffleArr(item.o.map((text, idx) => ({text, idx})));
+    const newCorrect = optOrder.findIndex(o => o.idx === item.c);
+    return {
+      question: item.q,
+      options: optOrder.map(o => o.text),
+      correctIndex: newCorrect,
+    };
+  });
 }
 
 /* ---------------- Render: shell ---------------- */
@@ -492,7 +685,7 @@ function renderSidebar(){
       </div>
     `).join('')}
     <div class="sidebar-foot">
-      ${state.sops.length} SOP &middot; ${state.exams.length} sınav &middot; ${state.results.length} sonuç kaydı
+      ${state.sops.length} SOP &middot; ${state.results.length} sonuç kaydı
     </div>
   </div>`;
 }
@@ -612,13 +805,12 @@ function renderAddSopForm(){
 /* ---------------- Generate view ---------------- */
 function renderGenerate(){
   if(state.genLoading){
-    return `<div class="loading-block"><div class="needle-spin"></div><div>Sorular hazırlanıyor... (Claude ile üretiliyor)</div></div>`;
+    return `<div class="loading-block"><div class="needle-spin"></div><div>Sınav hazırlanıyor...</div></div>`;
   }
-  const selected = state.sops.find(s=>s.id===state.genSopId);
   return `
     <div class="panel" style="max-width:640px;">
-      <div class="panel-title">SOP Seçin</div>
-      <div class="panel-sub">Seçilen SOP içeriğine göre otomatik 10 soruluk sınav üretilecek.</div>
+      <div class="panel-title">Sınavı Önizle / Test Et</div>
+      <div class="panel-sub">Bir SOP seçin ve o SOP'un 10 soruluk sınavını kendiniz deneyin. Personel için ayrıca bir şey oluşturmanız gerekmez — "Sınava Gir" sekmesinden herkes doğrudan istediği SOP'u seçip başlayabilir.</div>
       <div class="field">
         <select id="gen-sop-select">
           <option value="">— SOP seçin —</option>
@@ -626,61 +818,40 @@ function renderGenerate(){
         </select>
       </div>
       ${state.genError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.genError)}</div>` : ''}
-      <button class="btn primary block" data-gen-start ${!state.genSopId?'disabled':''}>${ICONS.bolt} Sınav Oluştur (10 Soru)</button>
+      <button class="btn primary block" data-gen-start ${!state.genSopId?'disabled':''}>${ICONS.bolt} Sınavı Başlat</button>
     </div>
-
-    ${state.exams.length ? `
-    <div style="margin-top:26px;">
-      <div class="panel-title" style="margin-bottom:12px;">Oluşturulan Sınavlar</div>
-      <div class="grid">
-        ${state.exams.slice().reverse().map(ex => `
-          <div class="card ${ex.active?'tag-green':''}">
-            <div class="row">
-              <span class="pill ${ex.active?'live':'closed'}">${ex.active?'Aktif':'Kapalı'}</span>
-              <code class="k">${ex.code}</code>
-            </div>
-            <h3>${escapeHtml(ex.sopTitle)}</h3>
-            <div class="meta">
-              <span>${ex.questions.length} soru</span>
-              <span>${new Date(ex.createdAt).toLocaleString('tr-TR')}</span>
-            </div>
-            <div class="row">
-              <button class="btn sm ghost" data-toggle-exam="${ex.id}">${ex.active?'Kapat':'Aktifleştir'}</button>
-              <button class="btn sm ghost" data-view-exam-results="${ex.id}">Sonuçları Gör</button>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>` : ''}
   `;
 }
 
 /* ---------------- Take view ---------------- */
 function renderTake(){
   if(state.takeStage === 'list'){
-    const active = state.exams.filter(e=>e.active);
     return `
-      ${active.length===0 ? `<div class="empty">${ICONS.take}<div class="t">Şu anda aktif sınav yok</div>"Sınav Oluştur" bölümünden yeni bir sınav başlatın.</div>` : `
+      ${state.sops.length===0 ? `<div class="empty">${ICONS.take}<div class="t">Henüz SOP eklenmedi</div>Önce SOP Kütüphanesi'nden SOP ekleyin.</div>` : `
       <div class="grid">
-        ${active.map(ex => `
-          <div class="card tag-green">
-            <span class="pill live">Aktif</span>
-            <h3>${escapeHtml(ex.sopTitle)}</h3>
-            <div class="meta"><span>${ex.questions.length} soru</span><span>Kod: ${ex.code}</span></div>
-            <button class="btn primary block" data-start-exam="${ex.id}">Sınava Başla</button>
-          </div>
-        `).join('')}
+        ${state.sops.map(sop => {
+          const hasBank = QUESTION_BANKS[sop.id] && QUESTION_BANKS[sop.id].length >= 5;
+          return `
+          <div class="card ${hasBank?'tag-green':''}">
+            <span class="pill ${hasBank?'live':'closed'}">${hasBank?'Sınav Hazır':'Soru Havuzu Yok'}</span>
+            <h3>${escapeHtml(sop.title)}</h3>
+            <div class="meta"><span>${sop.category||'Genel'}</span></div>
+            <button class="btn primary block" data-start-exam="${sop.id}" ${hasBank?'':'disabled'}>Sınava Başla</button>
+          </div>`;
+        }).join('')}
       </div>`}
     `;
   }
 
   if(state.takeStage === 'name'){
-    const ex = state.exams.find(e=>e.id===state.takeExamId);
+    const sop = state.sops.find(s=>s.id===state.takeSopId);
+    if(!sop) return '';
+    const bankSize = (QUESTION_BANKS[sop.id]||[]).length;
     return `
-      <div class="backlink" data-back-take-list>${ICONS.back} Sınav listesine dön</div>
+      <div class="backlink" data-back-take-list>${ICONS.back} SOP listesine dön</div>
       <div class="panel" style="max-width:480px;">
-        <div class="panel-title">${escapeHtml(ex.sopTitle)}</div>
-        <div class="panel-sub">${ex.questions.length} soruluk sınava başlamadan önce bilgilerinizi girin.</div>
+        <div class="panel-title">${escapeHtml(sop.title)}</div>
+        <div class="panel-sub">${Math.min(10,bankSize)} soruluk sınava başlamadan önce bilgilerinizi girin. Sorular her denemede rastgele seçilir.</div>
         <div class="field">
           <label class="field-label">Ad Soyad</label>
           <input type="text" id="taker-name" placeholder="Adınız Soyadınız" value="${escapeAttr(state.takerName)}"/>
@@ -695,13 +866,14 @@ function renderTake(){
   }
 
   if(state.takeStage === 'quiz'){
-    const ex = state.exams.find(e=>e.id===state.takeExamId);
-    const q = ex.questions[state.currentQ];
-    const total = ex.questions.length;
+    const sop = state.sops.find(s=>s.id===state.takeSopId);
+    const qs = state.currentQuizQuestions;
+    const q = qs[state.currentQ];
+    const total = qs.length;
     const answered = state.answers[state.currentQ];
     return `
       <div class="exam-wrap">
-        <div class="qcounter">SORU ${state.currentQ+1} / ${total} &middot; ${escapeHtml(ex.sopTitle)}</div>
+        <div class="qcounter">SORU ${state.currentQ+1} / ${total} &middot; ${escapeHtml(sop.title)}</div>
         <div class="progressbar"><div class="fill" style="width:${((state.currentQ)/total)*100}%"></div></div>
         <div class="qcard">
           <div class="qtext">${escapeHtml(q.question)}</div>
@@ -724,7 +896,6 @@ function renderTake(){
   if(state.takeStage === 'done'){
     const r = state.lastResult;
     const pct = r.pct;
-    const zone = pct>=85?'good':(pct>=70?'mid':'bad');
     const needleDeg = -135 + (pct/100)*270;
     const r1 = 270*0.70, r2 = 270*0.85;
     return `
@@ -745,7 +916,7 @@ function renderTake(){
             <div class="verdict ${pct>=70?'pass':'fail'}">${pct>=70?'BAŞARILI':'BAŞARISIZ'}</div>
           </div>
           <div style="margin-top:22px; display:flex; gap:10px; justify-content:center;">
-            <button class="btn primary" data-back-take-list>Sınav Listesine Dön</button>
+            <button class="btn primary" data-back-take-list>SOP Listesine Dön</button>
           </div>
         </div>
       </div>
@@ -756,7 +927,7 @@ function renderTake(){
 
 /* ---------------- Results view ---------------- */
 function renderResults(){
-  const filtered = state.resultsFilter==='all' ? state.results : state.results.filter(r=>r.examId===state.resultsFilter);
+  const filtered = state.resultsFilter==='all' ? state.results : state.results.filter(r=>r.sopId===state.resultsFilter);
   const avg = filtered.length ? Math.round(filtered.reduce((a,r)=>a+r.pct,0)/filtered.length) : 0;
   const passCount = filtered.filter(r=>r.pct>=70).length;
 
@@ -769,11 +940,13 @@ function renderResults(){
 
     <div style="display:flex; gap:10px; align-items:center; margin-bottom:16px;">
       <select id="results-filter" style="max-width:280px;">
-        <option value="all" ${state.resultsFilter==='all'?'selected':''}>Tüm Sınavlar</option>
-        ${state.exams.map(ex=>`<option value="${ex.id}" ${state.resultsFilter===ex.id?'selected':''}>${escapeHtml(ex.sopTitle)} (${ex.code})</option>`).join('')}
+        <option value="all" ${state.resultsFilter==='all'?'selected':''}>Tüm SOP'lar</option>
+        ${state.sops.map(s=>`<option value="${s.id}" ${state.resultsFilter===s.id?'selected':''}>${escapeHtml(s.title)}</option>`).join('')}
       </select>
       <button class="btn ghost" data-export-csv>${ICONS.download} CSV İndir</button>
     </div>
+
+    ${!HAS_ARTIFACT_STORAGE ? `<div style="font-size:11.5px; color:var(--text-2); margin:-8px 0 16px;">Not: Bağımsız barındırmada bu tablo yalnızca bu cihazda tamamlanan sınavları gösterir. Cihazlar arası ortak kayıt için Google E-Tablo entegrasyonu gerekir.</div>` : ''}
 
     ${filtered.length===0 ? `<div class="empty">${ICONS.results}<div class="t">Henüz sonuç yok</div>Personel sınavları tamamladıkça burada listelenecek.</div>` : `
     <div class="panel" style="padding:0; overflow-x:auto;">
@@ -833,52 +1006,32 @@ function bindEvents(){
     el.onclick = () => { state.genSopId = el.getAttribute('data-goto-generate'); state.view='generate'; state.openSopId=null; render(); };
   });
 
-  // generate
+  // generate (admin önizleme - doğrudan take akışına yönlendirir)
   const genSelect = document.getElementById('gen-sop-select');
   if(genSelect) genSelect.onchange = (e) => { state.genSopId = e.target.value || null; render(); };
   const genStart = document.querySelector('[data-gen-start]');
-  if(genStart) genStart.onclick = async () => {
+  if(genStart) genStart.onclick = () => {
     const sop = state.sops.find(s=>s.id===state.genSopId);
     if(!sop) return;
-    state.genLoading = true; state.genError=null; render();
-    try{
-      const questions = await generateQuestions(sop);
-      const exam = { id:'exam-'+uid(10), code: uid(6), sopId: sop.id, sopTitle: sop.title, questions, createdAt: Date.now(), active:true };
-      state.exams.push(exam);
-      await storSet('exams', state.exams);
-      state.genLoading=false;
-      showToast('Sınav oluşturuldu: ' + exam.code);
-      state.view='take'; state.takeStage='list';
-      render();
-    }catch(err){
-      state.genLoading=false; state.genError = err.message || 'Sınav oluşturulamadı.';
-      render();
+    if(!QUESTION_BANKS[sop.id] || QUESTION_BANKS[sop.id].length < 5){
+      state.genError = 'Bu SOP için henüz soru havuzu hazırlanmadı.'; render(); return;
     }
+    state.takeSopId = sop.id; state.takerName=''; state.takerDept='';
+    state.view='take'; state.takeStage='name';
+    render();
   };
-  document.querySelectorAll('[data-toggle-exam]').forEach(el=>{
-    el.onclick = async () => {
-      const id = el.getAttribute('data-toggle-exam');
-      const ex = state.exams.find(e=>e.id===id);
-      if(ex){ ex.active = !ex.active; await storSet('exams', state.exams); render(); }
-    };
-  });
-  document.querySelectorAll('[data-view-exam-results]').forEach(el=>{
-    el.onclick = () => {
-      state.resultsFilter = el.getAttribute('data-view-exam-results');
-      state.view='results'; render();
-    };
-  });
 
   // take flow
   document.querySelectorAll('[data-start-exam]').forEach(el=>{
     el.onclick = () => {
-      state.takeExamId = el.getAttribute('data-start-exam');
+      state.takeSopId = el.getAttribute('data-start-exam');
+      state.takerName=''; state.takerDept='';
       state.takeStage='name'; render();
     };
   });
   const backTakeList = document.querySelector('[data-back-take-list]');
   if(backTakeList) backTakeList.onclick = () => {
-    state.takeStage='list'; state.takeExamId=null; state.answers=[]; state.currentQ=0; state.takerName=''; state.takerDept='';
+    state.takeStage='list'; state.takeSopId=null; state.answers=[]; state.currentQ=0; state.takerName=''; state.takerDept=''; state.currentQuizQuestions=[];
     render();
   };
   const beginQuiz = document.querySelector('[data-begin-quiz]');
@@ -886,7 +1039,12 @@ function bindEvents(){
     const name = document.getElementById('taker-name').value.trim();
     const dept = document.getElementById('taker-dept').value.trim();
     if(!name){ showToast('Lütfen ad soyad girin.', 'err'); return; }
+    const sop = state.sops.find(s=>s.id===state.takeSopId);
+    let questions;
+    try{ questions = pickExamQuestions(sop); }
+    catch(err){ showToast(err.message, 'err'); return; }
     state.takerName = name; state.takerDept = dept;
+    state.currentQuizQuestions = questions;
     state.answers = []; state.currentQ = 0;
     state.takeStage='quiz'; render();
   };
@@ -902,19 +1060,21 @@ function bindEvents(){
   if(nextQ) nextQ.onclick = () => { state.currentQ++; render(); };
   const finishQuiz = document.querySelector('[data-finish-quiz]');
   if(finishQuiz) finishQuiz.onclick = async () => {
-    const ex = state.exams.find(e=>e.id===state.takeExamId);
+    const sop = state.sops.find(s=>s.id===state.takeSopId);
+    const qs = state.currentQuizQuestions;
     let score = 0;
-    ex.questions.forEach((q,i)=>{ if(state.answers[i]===q.correctIndex) score++; });
-    const total = ex.questions.length;
+    qs.forEach((q,i)=>{ if(state.answers[i]===q.correctIndex) score++; });
+    const total = qs.length;
     const pct = Math.round((score/total)*100);
     const result = {
-      id:'res-'+uid(10), examId: ex.id, sopTitle: ex.sopTitle,
+      id:'res-'+uid(10), sopId: sop.id, sopTitle: sop.title,
       name: state.takerName, dept: state.takerDept,
       score, total, pct, answers: state.answers.slice(),
       submittedAt: Date.now()
     };
     state.results.push(result);
     await storSet('results', state.results);
+    syncResultToSheets(result); // yapılandırılmışsa Google E-Tablo'ya da gönderir (fire-and-forget)
     state.lastResult = result;
     state.takeStage='done';
     render();
