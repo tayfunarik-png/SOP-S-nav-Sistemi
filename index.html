@@ -465,10 +465,34 @@ const PERSONNEL_SEED = [
   { id:'00010089', name:'KADİR CANSARAY', dept:'ELEKTRİK BAKIM', title:'KIDEMLİ ELEKTRİK BAKIM TEKNİSYENİ' },
 ];
 
-/* ---------------- SOP assignment seed (yalnızca ilk kez, atama yoksa uygulanır) ---------------- */
+/* ---------------- SOP assignment seed (departman bazlı, v2 - önceki hatalı atamaların üzerine yazar) ---------------- */
+const MEK = ['00006752','00008364','00009835','00009876','00009907','00010400']; // Mekanik Bakım
+const ELK = ['00010220','00000394','00007049','00008597','00008810','00010068','00010089']; // Elektrik Bakım
+const YT  = ['00012747','00011790','00006973','00007285','00007450','00007899']; // Yardımcı Tesisler
+const INS = ['00008625','00008626','00008627']; // İnşaat Proje
+const ASSIGNMENT_SEED_VERSION = 2;
 const SOP_ASSIGNMENT_SEED = {
-  'loto-elektrik': { deadline:'2026-09-22', personnelIds:['00010220','00000394','00007049','00008597','00008810','00010068','00010089'] },
-  'elektrik-pano': { deadline:'2026-09-22', personnelIds:['00010220','00000394','00007049','00008597','00008810','00010068','00010089'] },
+  'loto-elektrik': { deadline:'2026-09-22', personnelIds: ELK },
+  'elektrik-pano': { deadline:'2026-09-22', personnelIds: ELK },
+  'loto-mekanik': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
+  'sicak-calisma': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
+  'kapali-alan': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
+  'yuksekte-calisma': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT, ...INS] },
+  'kaldirma-ekip': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
+  'lel-sensor': { deadline:'2026-09-22', personnelIds: MEK },
+  'xtp601-kalibrasyon': { deadline:'2026-09-22', personnelIds: YT },
+  'yangin-dizel': { deadline:'2026-09-22', personnelIds: YT },
+  'yangin-jokey': { deadline:'2026-09-22', personnelIds: YT },
+  'sprinkler': { deadline:'2026-09-22', personnelIds: YT },
+  'kizgin-yag-kazan': { deadline:'2026-09-22', personnelIds: YT },
+  'kizgin-yag-pompa': { deadline:'2026-09-22', personnelIds: YT },
+  'iq8-panel-reset': { deadline:'2026-09-22', personnelIds: YT },
+  'iq8-sesli-alarm': { deadline:'2026-09-22', personnelIds: YT },
+  'iq8-bolge-acma-kapama': { deadline:'2026-09-22', personnelIds: YT },
+  'iq8-lamba-testi': { deadline:'2026-09-22', personnelIds: YT },
+  'iq8-dedektor-acma-kapama': { deadline:'2026-09-22', personnelIds: YT },
+  'iq8-role-kontrolu': { deadline:'2026-09-22', personnelIds: YT },
+  'iq8-tarih-saat': { deadline:'2026-09-22', personnelIds: YT },
 };
 
 /* ---------------- Question banks (statik - API gerektirmez) ----------------
@@ -891,13 +915,17 @@ async function boot(){
     if(newP.length){ personnel = personnel.concat(newP); await storSet('personnel', personnel); }
   }
   let sopAssignments = await storGet('sop-assignments'); if(!sopAssignments) sopAssignments = {};
-  // Yalnızca daha önce hiç atama yapılmamış SOP'lara varsayılan atama uygulanır - admin'in
-  // elle yaptığı/değiştirdiği atamaların üzerine asla yazılmaz.
-  let assignmentsChanged = false;
-  Object.entries(SOP_ASSIGNMENT_SEED).forEach(([sopId, seedAssign]) => {
-    if(!sopAssignments[sopId]){ sopAssignments[sopId] = seedAssign; assignmentsChanged = true; }
-  });
-  if(assignmentsChanged) await storSet('sop-assignments', sopAssignments);
+  // Atama şablonu (departman bazlı) versiyonlanır: önceki bir sürümden düşükse, buradaki
+  // doğru eşleştirme mevcut atamaların üzerine yazılır. Bu, admin'in bu noktadan SONRA
+  // elle yapacağı değişiklikleri etkilemez - yalnızca geçmiş hatalı/varsayılan atamaları düzeltir.
+  let seedVersion = await storGet('assignment-seed-version'); if(!seedVersion) seedVersion = 0;
+  if(seedVersion < ASSIGNMENT_SEED_VERSION){
+    Object.entries(SOP_ASSIGNMENT_SEED).forEach(([sopId, seedAssign]) => {
+      sopAssignments[sopId] = seedAssign;
+    });
+    await storSet('sop-assignments', sopAssignments);
+    await storSet('assignment-seed-version', ASSIGNMENT_SEED_VERSION);
+  }
 
   state.sops = sops; state.exams = exams; state.results = results;
   state.personnel = personnel; state.sopAssignments = sopAssignments;
