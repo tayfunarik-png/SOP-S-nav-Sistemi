@@ -272,7 +272,7 @@
    otomatik olarak o Google E-Tablo'ya da gönderir. Boş bırakılırsa bu adım
    sessizce atlanır. (Kurulum talimatı sohbette paylaşıldı.) */
 const CONFIG = {
-  sheetsWebhookUrl: '', // Örn: 'https://script.google.com/macros/s/AKfycb.../exec'
+  sheetsWebhookUrl: 'https://script.google.com/macros/s/AKfycbzqPm1B8ey8Nd87Pf21WLBw9MoKYIK7TxuPMWVwe4nk44Go1NTAtiZ_AgCa52nMo-I8Ew/exec',
 };
 
 function syncResultToSheets(result){
@@ -280,11 +280,32 @@ function syncResultToSheets(result){
   try{
     fetch(CONFIG.sheetsWebhookUrl, {
       method: 'POST',
-      mode: 'no-cors', // Apps Script web app'ler için gerekli; yanıt okunamaz ama gönderim çalışır
+      mode: 'no-cors', // Apps Script web app için gerekli; yanıt okunamaz ama gönderim çalışır
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(result),
     }).catch(()=>{ /* sessiz geç - yerel kayıt zaten yapıldı */ });
   }catch(e){ /* sessiz geç */ }
+}
+
+async function fetchCloudResults(){
+  if(!CONFIG.sheetsWebhookUrl) return null;
+  try{
+    const resp = await fetch(CONFIG.sheetsWebhookUrl, { method:'GET' });
+    if(!resp.ok) return null;
+    const data = await resp.json();
+    if(!Array.isArray(data)) return null;
+    return data.map(r => ({
+      id: r.id || ('cloud-'+r.name+'-'+r.submittedAt),
+      sopId: r.sopId || '',
+      sopTitle: r.sopTitle || '',
+      name: r.name || '',
+      dept: r.dept || '',
+      score: Number(r.score)||0,
+      total: Number(r.total)||0,
+      pct: Number(r.pct)||0,
+      submittedAt: typeof r.submittedAt === 'number' ? r.submittedAt : Date.parse(r.submittedAt) || Date.now(),
+    }));
+  }catch(e){ return null; }
 }
 
 const ICONS = {
@@ -584,6 +605,7 @@ const state = {
   lastResult:null,
   // results view
   resultsFilter:'all',
+  cloudSyncing:false,
 };
 
 function showToast(msg, type){
@@ -944,9 +966,11 @@ function renderResults(){
         ${state.sops.map(s=>`<option value="${s.id}" ${state.resultsFilter===s.id?'selected':''}>${escapeHtml(s.title)}</option>`).join('')}
       </select>
       <button class="btn ghost" data-export-csv>${ICONS.download} CSV İndir</button>
+      ${CONFIG.sheetsWebhookUrl ? `<button class="btn ghost" data-refresh-cloud>${state.cloudSyncing?'<div class="spinner light"></div>':''} Bulut Sonuçlarını Yenile</button>` : ''}
     </div>
 
-    ${!HAS_ARTIFACT_STORAGE ? `<div style="font-size:11.5px; color:var(--text-2); margin:-8px 0 16px;">Not: Bağımsız barındırmada bu tablo yalnızca bu cihazda tamamlanan sınavları gösterir. Cihazlar arası ortak kayıt için Google E-Tablo entegrasyonu gerekir.</div>` : ''}
+    ${!HAS_ARTIFACT_STORAGE && !CONFIG.sheetsWebhookUrl ? `<div style="font-size:11.5px; color:var(--text-2); margin:-8px 0 16px;">Not: Bağımsız barındırmada bu tablo yalnızca bu cihazda tamamlanan sınavları gösterir. Cihazlar arası ortak kayıt için Google E-Tablo entegrasyonu eklenebilir.</div>` : ''}
+    ${!HAS_ARTIFACT_STORAGE && CONFIG.sheetsWebhookUrl ? `<div style="font-size:11.5px; color:var(--text-2); margin:-8px 0 16px;">Google E-Tablo'ya bağlı — tüm cihazlardan gelen sonuçları görmek için "Bulut Sonuçlarını Yenile" butonuna basın.</div>` : ''}
 
     ${filtered.length===0 ? `<div class="empty">${ICONS.results}<div class="t">Henüz sonuç yok</div>Personel sınavları tamamladıkça burada listelenecek.</div>` : `
     <div class="panel" style="padding:0; overflow-x:auto;">
@@ -1083,6 +1107,23 @@ function bindEvents(){
   // results
   const resFilter = document.getElementById('results-filter');
   if(resFilter) resFilter.onchange = (e) => { state.resultsFilter = e.target.value; render(); };
+  const refreshCloud = document.querySelector('[data-refresh-cloud]');
+  if(refreshCloud) refreshCloud.onclick = async () => {
+    state.cloudSyncing = true; render();
+    const cloud = await fetchCloudResults();
+    state.cloudSyncing = false;
+    if(cloud === null){
+      showToast('Bulut sonuçları alınamadı. Google E-Tablo\'yu doğrudan açabilirsiniz.', 'err');
+    }else{
+      const localIds = new Set(state.results.map(r=>r.id));
+      let added = 0;
+      cloud.forEach(r => { if(!localIds.has(r.id)){ state.results.push(r); added++; } });
+      state.results.sort((a,b)=>a.submittedAt-b.submittedAt);
+      await storSet('results', state.results);
+      showToast(added>0 ? `${added} yeni sonuç eklendi.` : 'Yeni sonuç yok, liste güncel.');
+    }
+    render();
+  };
   const exportCsv = document.querySelector('[data-export-csv]');
   if(exportCsv) exportCsv.onclick = () => {
     const filtered = state.resultsFilter==='all' ? state.results : state.results.filter(r=>r.examId===state.resultsFilter);
@@ -1101,10 +1142,12 @@ function bindEvents(){
 
 boot();
 
-// PWA: gerçek bir sunucuda barındırıldığında (artifact önizlemesinde sessizce yok sayılır)
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+// PWA: yalnızca gerçek bir sunucuda barındırıldığında service worker'ı kaydetmeyi dene.
+// claude.ai artifact önizlemesinde sw.js dosyası bulunmadığından (HAS_ARTIFACT_STORAGE=true
+// olduğu ortam), burada deneme bile yapılmaz - konsolda gereksiz "Failed to fetch" oluşmasın diye.
+if (!HAS_ARTIFACT_STORAGE && 'serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(()=>{ /* barındırma yoksa sessiz geç */ });
+    navigator.serviceWorker.register('sw.js').catch(() => { /* sw.js yoksa sessiz geç */ });
   });
 }
 </script>
