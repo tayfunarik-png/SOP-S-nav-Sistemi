@@ -397,6 +397,42 @@ Adımlar: 1) Kazan dairesi genel görsel kontrolü (yabancı madde, sızıntı, 
   { id:'kizgin-yag-pompa', title:'Kızgın Yağ Sirkülasyon Pompaları SOP', category:'Termal Sistemler',
     content:`KAPSAM: Kızgın yağ sistemi sirkülasyon pompalarının periyodik bakımı ve devreye alma işlemleri.
 Adımlar: 1) Pompa enerjisi LOTO-Elektrik SOP'una göre kesilir, kilitlenir. 2) Pompa gövdesi/bağlantılar görsel kontrol edilir (sızıntı, korozyon, titreşim izleri) - kızgın yağ sisteminde sızıntı ciddi yangın riski oluşturur, en ufak belirti ciddiye alınmalı. 3) Salmastra/mekanik keçe kontrol edilir, aşınma/sızıntıda değiştirilir. 4) Motor-pompa akuplasyonu (kaplin) kontrol edilir, elastomer parçalarda çatlak/aşınma incelenir. 5) Yataklama (bearing) gres/yağlama durumu kontrol edilir, üretici talimatına göre yağlanır. 6) Motor akımı ve yatak sıcaklıkları referans değerlerle karşılaştırılır. 7) Titreşim seviyesi ölçülür, referansın üzerindeyse neden araştırılır. 8) Bakım sonrası LOTO kaldırılır, vana konumları (proses hattına açık) teyit edilir. 9) Pompa çalıştırılır, anormal ses/titreşim/sızıntı yok, basınç/akış normal aralıkta teyit edilir - kuru çalıştırma (yağsız) pompaya ciddi hasar verir, sistemin yağ dolu olduğu mutlaka teyit edilmeli. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'lel-sensor', title:'Honeywell Optima Plus LEL Sensör Kalibrasyon SOP', category:'Gaz Algılama',
+    content:`KAPSAM: Windmöller baskı makinelerindeki Honeywell Searchpoint Optima Plus LEL sensörlerinin periyodik sıfır ve span kalibrasyonu.
+Adımlar: 1) Sensör en az 1 saat enerjili ısınmaya bırakılır - çok yüksek/düşük basınç, aşırı nem, yüksek hava akışında kalibrasyon yapılmaz. 2) Panel/PLC üzerinden sensör Bakımda moduna alınır, 4-20mA çıkışı inhibe edilir - vardiya sorumlusuna bilgi verilir, aksi halde yanlış alarm/trip oluşabilir. 3) 13mm açık ağızlı anahtarla hava koruma başlığı sökülür, kalibrasyon kapağı takılır. 4) SHC-1 el terminali bağlanır, Calibrate>CalSensor seçilir. 5) Sıfır gaz uygulanır (1-1,5 l/dk), Zero Calibrated mesajı beklenir - sıfır tamamlanmadan span'a geçilmez. 6) %50 LEL span gazı uygulanır, Span Calibrated beklenir - atlanacaksa menüden çıkılarak sonlandırılmalı, aksi halde sensöre zarar verebilir. 7) Kalibrasyon kapağı sökülür, koruma başlığı takılır. 8) Normal moda alınır, 4-20mA serbest bırakılır, okuma 0 LEL'e döndüğü teyit edilir. 9) A1/A2 alarm eşik testi simüle edilerek güvenlik sisteminin tepkisi kontrol edilir. 10) Kalibrasyon tarihi ve gaz sertifika bilgileri kayıt defterine işlenir.` },
+
+  { id:'xtp601-kalibrasyon', title:'Michell XTP601-EX1 Kalibrasyon SOP', category:'Gaz Algılama',
+    content:`KAPSAM: ATEX tehlikeli bölgelerdeki Michell XTP601-EX1 proses oksijen (O2) analizörlerinin 2 noktalı (zero/span) saha kalibrasyonu.
+Adımlar: 1) Sıfır ve span gaz tüpleri regülatörle hazırlanır; analizör en az 30 dakika enerjili bekletilir. 2) Alt kalibrasyon gazı uygulanır (basınç 0,75-2 barA, debi 270-330 ml/dk), en az 5 dk purge yapılır. 3) ENTER ile Passcode ekranına girilir (Şifre: 1919), Field Cal sayfasında CAL TYPE "2 POINT" seçilir. 4) REF GAS 1 değeri (yalnızca yeni tüpte) sertifika değerine ayarlanır. 5) ADJUSTED stabil olunca ACTUAL 1 seçilip Yukarı tuşuna 3 kez basılır; ±0,01% toleransla teyit edilir. 6) Üst kalibrasyon gazı uygulanır, 5 dk purge yapılır. 7) REF GAS 2 sertifika değerine ayarlanır. 8) ACTUAL 2 onaylanır, ESC ile ana menüye dönülür. 9) Settings'te FIELD CAL "ON" olduğu kontrol edilir - fabrika teslimatında OFF'tur, ilk kalibrasyonda otomatik ON'a geçer. 10) Kalibrasyon gazları kesilir, analizör numune hattına bağlanır; Info sayfasında Last Cal Date güncellemesi kontrol edilir, sonuçlar kayıt formuna işlenir.` },
+
+  { id:'iq8-panel-reset', title:'Esser IQ8Control M Panel Reset SOP', category:'Yangın Alarm Paneli',
+    content:`KAPSAM: Esser IQ8Control M panelinde algılanan yangın/arıza/TAL mesajlarının sıfırlanarak panelin normale döndürülmesi.
+Adımlar: 1) Anahtar yatay konuma getirilerek klavye kilidi açılır (Access Level 2) - kilitliyken sadece Buzzer Off, F1 ve imleç tuşları çalışır. 2) Ekrandaki alarm/arıza mesajı incelenir, kaynağı not edilir - reset öncesi gerçek neden araştırılmalı, olay giderilmeden reset yapılmamalı. 3) Panel Reset tuşuna basılır (Access Level 2 gerektirir). 4) İşlem devam ederken ekranda mesaj görüntülenir. 5) Tüm mesajların iptal edildiği, panelin Normal Condition (yeşil in Operation LED) durumuna döndüğü teyit edilir - alarm devam ediyorsa panel resetlenemez. 6) Anahtar tekrar kilitlenir.` },
+
+  { id:'iq8-sesli-alarm', title:'Esser IQ8Control M Sesli Alarm Susturma SOP', category:'Yangın Alarm Paneli',
+    content:`KAPSAM: Esser IQ8Control M panelinde dahili buzzer ve bağlı sesli alarm cihazlarının geçici susturulması.
+Adımlar: 1) Buzzer Off tuşuna basılır - bu tuş anahtar kilitliyken (Access Level 1) de çalışır, yeni olayda buzzer tekrar aktifleşir. 2) Harici sesli cihazları susturmak için anahtar açılır (Access Level 2), Audible Alarm Off/Silence tuşuna basılır - susturulan cihazlar yeni olayda otomatik tekrar aktifleşebilir. 3) Alternatif olarak Control+F4 kullanılabilir (yalnızca V03.10R000 ve üzeri sürümlerde). 4) Access Level 3'te susturma kalıcı olur, otomatik açılmaz; Level 3'ten çıkınca fonksiyon Level 2 başlangıcına döner. 5) Neden giderildikten sonra sesli cihazlar tekrar aktif edilir veya Panel Reset uygulanır - Master Box'ın susturulması itfaiye bildirimini de durdurduğundan ayrıca kontrol edilmelidir.` },
+
+  { id:'iq8-bolge-acma-kapama', title:'Esser IQ8Control M Bölge Açma/Kapama/Reset SOP', category:'Yangın Alarm Paneli',
+    content:`KAPSAM: Esser IQ8Control M panelinde bir bölgenin (zone) devreye alınması/resetlenmesi, devre dışı bırakılması ve durum sorgulanması.
+Adımlar: 1) Anahtar açılır (Access Level 2). 2) Zone tuşu + bölge no + On tuşu ile bölge devreye alınır/resetlenir - kapalı bölgeyi açar veya aktif bölgedeki mesajları siler. 3) Ekranda "on in progress" görüntülenir. 4) Zone + bölge no + Off ile devre dışı bırakılır - devre dışı bölge olayda alarm vermez, yalnızca bakım/servis amacıyla ve yetkiyle yapılmalı. 5) Devre dışı durum sarı Disconnection LED ile teyit edilir. 6) Zone + bölge no + Status query ile durum sorgulanır. 7) End tuşu ile çıkılır, anahtar kilitlenir - devre dışı bırakılan bölge iş bitiminde mutlaka tekrar devreye alınmalı, unutulmamalı.` },
+
+  { id:'iq8-lamba-testi', title:'Esser IQ8Control M Lamba Testi SOP', category:'Yangın Alarm Paneli',
+    content:`KAPSAM: Esser IQ8Control M panelindeki tüm LED göstergelerin ve dahili buzzerın görsel/işitsel kontrolü (Lamp Test).
+Adımlar: 1) Test (Lamp Test) tuşuna basılır - panelin normal izleme fonksiyonu etkilenmez. 2) Tüm LED'ler yaklaşık 10 saniye yanar, ekran kararır, buzzer çalar. 3) Yanmayan/arızalı LED olup olmadığı gözlemlenir - tespit edilirse arıza kaydı açılıp servis çağrılmalı. 4) Test sonunda ekranda panel yazılım versiyon numarası görüntülenir. 5) Erken sonlandırmak için Test tuşuna tekrar basılır. 6) Panelin normal duruma (yeşil in Operation LED) döndüğü teyit edilir.` },
+
+  { id:'iq8-dedektor-acma-kapama', title:'Esser IQ8Control M Dedektör Açma/Kapama/Reset SOP', category:'Yangın Alarm Paneli',
+    content:`KAPSAM: Esser IQ8Control M panelinde adreslenebilir bir dedektörün devreye alınması/resetlenmesi, devre dışı bırakılması ve durum sorgulanması.
+Adımlar: 1) Anahtar açılır (Access Level 2). 2) Zone + bölge no + Detector + dedektör no + On ile devreye alınır/resetlenir - bölge no her zaman dedektör no'dan önce girilir; bu fonksiyon yalnızca adreslenebilir (9100/9200/IQ8Quad) dedektörlerde çalışır, standart 9000 serisi tekil açılıp kapatılamaz. 3) Ekranda "on in progress" görüntülenir. 4) Zone+Detector+Off ile devre dışı bırakılır - devre dışı dedektör olayda alarm vermez, yalnızca bakım amacıyla yapılmalı. 5) Devre dışı durum sarı Disconnection LED ile teyit edilir. 6) Zone+Detector+Status query ile durum sorgulanır. 7) End ile çıkılır, anahtar kilitlenir - devre dışı bırakılan dedektör iş bitiminde mutlaka tekrar devreye alınmalı.` },
+
+  { id:'iq8-role-kontrolu', title:'Esser IQ8Control M Röle Kontrolü SOP', category:'Yangın Alarm Paneli',
+    content:`KAPSAM: Esser IQ8Control M panelinde bir rölenin (kontrol çıkışı) devreye alınması, devre dışı bırakılması ve durum sorgulanması.
+Adımlar: 1) Anahtar açılır (Access Level 2). 2) Relay + röle no + On ile devreye alınır - devreye alınan röle bir olayda programlanmış koşullara göre çalışır. 3) Ekranda "on in progress" görüntülenir. 4) Relay + röle no + Off ile devre dışı bırakılır - röle inverse programlanmışsa devre dışı bırakıldığında normalde aktif çıkış deaktive olur, bağlı ekipman olayda çalışmaz. 5) Devre dışı durum sarı Disconnection LED ile teyit edilir. 6) Relay + röle no + Status query ile durum (Normal/Activated/Disconnection/Trouble) sorgulanır. 7) End ile çıkılır, anahtar kilitlenir - devre dışı bırakılan röle iş bitiminde mutlaka tekrar devreye alınmalı.` },
+
+  { id:'iq8-tarih-saat', title:'Esser IQ8Control M Tarih/Saat Girişi SOP', category:'Yangın Alarm Paneli',
+    content:`KAPSAM: Esser IQ8Control M panelinde sistem tarih ve saat bilgisinin girilmesi/güncellenmesi.
+Adımlar: 1) Anahtar açılır (Access Level 2). 2) Ana menüden Time funct. tuşuna basılır, Time/Date ekranına girilir. 3) İmleç tuşlarıyla değiştirilecek alan (saat, dakika, gün, ay, yıl) seçilir. 4) Numerik tuş takımı (0-9) ile değer girilir - tarih GG.AA.YY formatında girildiğinde haftanın günü sistem tarafından otomatik hesaplanır. 5) Function tuşuyla kaydedilir - kaydetmeden çıkmak için Escape tuşuna basılmalı; herhangi bir tuşa basılmadan beklenirse ekran kaydedilmeden önceki menüye otomatik döner. 6) Güncellenen tarih/saatin doğru göründüğü teyit edilir, anahtar tekrar kilitlenir.` },
 ];
 
 /* ---------------- Question banks (statik - API gerektirmez) ----------------
@@ -572,6 +608,141 @@ const QUESTION_BANKS = {
     {q:"Salmastra/mekanik keçe aşınmışsa ne yapılır?", o:["Görmezden gelinir","Değiştirilir","Sadece not edilir","Bekletilir"], c:1},
     {q:"Bakım sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna (ölçüm değerleri, değiştirilen parçalar)","Sadece hafızada","Sözlü bildirilir"], c:1},
     {q:"Bu SOP hangi ekipmanı kapsar?", o:["Kompresör","Kızgın yağ sirkülasyon pompaları","Hidrofor","Jeneratör"], c:1},
+  ],
+
+  'lel-sensor': [
+    {q:"Kalibrasyon öncesi sensör kaç saat enerjili ısınmaya bırakılır?", o:["10 dakika","1 saat","6 saat","Isınmaya gerek yok"], c:1},
+    {q:"Sensör bakım moduna alınmadan işlem yapılırsa ne olabilir?", o:["Hiçbir sorun olmaz","Yanlış alarm/trip oluşabilir","Sensör otomatik kalibre olur","Enerji tasarrufu sağlanır"], c:1},
+    {q:"Hava koruma başlığı sökülürken hangi alet kullanılır?", o:["10 mm alyan","13 mm açık ağızlı anahtar","Pense","Tornavida"], c:1},
+    {q:"El terminali menüsünde kalibrasyon için hangi seçenek seçilir?", o:["Settings > Reset","Calibrate > CalSensor","Test > Lamp","Info > Version"], c:1},
+    {q:"Sıfır gaz uygulama debisi ne kadardır?", o:["0,1-0,5 l/dk","1-1,5 l/dk","5-10 l/dk","Debi önemli değil"], c:1},
+    {q:"Span kalibrasyonunda kullanılan gaz konsantrasyonu nedir?", o:["%10 LEL","%25 LEL","%50 LEL","%100 LEL"], c:2},
+    {q:"Span kalibrasyonu yapılmayacaksa ne yapılmalıdır?", o:["Rastgele bir tuşa basılır","Menüden çıkılarak sonlandırılmalı","Cihaz kapatılır","Hiçbir şey yapılmaz"], c:1},
+    {q:"Sıfır kalibrasyonu tamamlanmadan ne yapılmamalıdır?", o:["Span kalibrasyonuna geçilmemeli","Kapak takılmamalı","Enerji verilmemeli","Rapor yazılmamalı"], c:0},
+    {q:"Kalibrasyon sonrası normal duruma dönüşte okuma hangi değere dönmelidir?", o:["%10 LEL","%50 LEL","0 LEL","Fark etmez"], c:2},
+    {q:"A1/A2 alarm eşik testi neyi kontrol eder?", o:["Sadece ekran parlaklığını","Güvenlik sisteminin (uyarı/trip) doğru tepkisini","Pil seviyesini","Wi-Fi bağlantısını"], c:1},
+    {q:"Bu sensör hangi tip gazı algılar?", o:["Toksik gaz","Alevlenebilir gaz (LEL)","Oksijen","Nem"], c:1},
+    {q:"Bu SOP hangi makinelerdeki sensörleri kapsar?", o:["Laminasyon makineleri","Windmöller baskı makineleri","Dilimleme makineleri","Kompresörler"], c:1},
+  ],
+
+  'xtp601-kalibrasyon': [
+    {q:"XTP601-EX1 hangi tip cihazdır?", o:["Basınç şalteri","Proses oksijen (O2) analizörü","Sıcaklık sensörü","Debimetre"], c:1},
+    {q:"Kalibrasyon tipi olarak panelde ne seçilir?", o:["1 Point","2 Point","3 Point","Auto Cal"], c:1},
+    {q:"Kalibrasyon şifresi olarak ne girilir?", o:["0000","1919","1234","Şifre yok"], c:1},
+    {q:"Analizör start öncesi ne kadar süre enerjili bekletilmelidir?", o:["5 dakika","En az 30 dakika","2 saat","Beklemeye gerek yok"], c:1},
+    {q:"Numune/kalibrasyon gazı basınç aralığı nedir?", o:["0,75-2 barA","5-10 barA","Basınç önemli değil","0-0,1 barA"], c:0},
+    {q:"REF GAS 1 değeri ne zaman ayarlanmalıdır?", o:["Her kalibrasyonda","Yalnızca yeni gaz tüpü kullanıldığında","Asla","Günde bir kez"], c:1},
+    {q:"ADJUSTED değerinin REF GAS değerine eşitliği hangi toleransla teyit edilir?", o:["±0,01%","±5%","±1%","Tolerans yok"], c:0},
+    {q:"Kalibrasyon gazlarına uzun süre maruz kalmak neden tehlikelidir?", o:["Tehlikeli değildir","İyi havalandırılmayan alanda risklidir","Sadece koku yapar","Cihaza zarar verir"], c:1},
+    {q:"Field Cal ayarı fabrika teslimatında hangi durumdadır?", o:["ON","OFF","Otomatik","Belirsiz"], c:1},
+    {q:"ACTUAL 1 onayı için Yukarı tuşuna kaç kez basılır?", o:["1 kez","3 kez","5 kez","10 kez"], c:1},
+    {q:"Kalibrasyon tamamlandıktan sonra analizör nereye bağlanır?", o:["Kalibrasyon gazına bağlı kalır","Numune (proses) hattına yeniden bağlanır","Hiçbir yere bağlanmaz","Yedek analizöre aktarılır"], c:1},
+    {q:"Info sayfasında kalibrasyon sonrası hangi bilgi güncellenir?", o:["Seri numarası","Last Cal Date","IP adresi","Firma adı"], c:1},
+  ],
+
+  'iq8-panel-reset': [
+    {q:"Panel Reset işlemi için anahtar hangi konuma getirilir?", o:["Dikey (kilitli)","Yatay (açık)","45 derece","Fark etmez"], c:1},
+    {q:"Anahtar kilitliyken hangi tuşlar çalışır?", o:["Hiçbiri","Buzzer Off, F1 ve imleç tuşları","Tüm tuşlar","Sadece Panel Reset"], c:1},
+    {q:"Panel Reset öncesi ne yapılmalıdır?", o:["Doğrudan reset yapılır","Alarmın gerçek nedeni araştırılmalı","Anahtar sökülür","Hiçbir şey"], c:1},
+    {q:"Panel Reset hangi Access Level yetkisi gerektirir?", o:["Access Level 1","Access Level 2","Access Level 4","Yetki gerekmez"], c:1},
+    {q:"Alarm durumu devam ediyorsa panel resetlenebilir mi?", o:["Evet, her zaman","Hayır, resetlenemez","Sadece gece resetlenir","Otomatik resetlenir"], c:1},
+    {q:"Normal Condition durumunda hangi LED yanık olmalıdır?", o:["Kırmızı Fire LED","Sarı Disconnection LED","Yeşil in Operation LED","Hiçbiri"], c:2},
+    {q:"Reset sonrası anahtar ne yapılmalıdır?", o:["Açık bırakılır","Tekrar dikey konuma getirilip kilitlenir","Sökülür","Kaybedilir"], c:1},
+    {q:"Panel Reset işlemi ne işe yarar?", o:["Sadece ekranı kapatır","Yangın/arıza/TAL mesajlarını sıfırlayıp normale döndürür","Enerjiyi keser","Yazılımı günceller"], c:1},
+    {q:"Reset sırasında ekranda ne görüntülenir?", o:["Hiçbir şey","İşlemin devam ettiğine dair mesaj","Hata kodu","Boş ekran"], c:1},
+    {q:"TAL ne anlama gelir?", o:["Teknik Alarm","Toplam Arıza Listesi","Test Alarm Loop","Zaman Ayar Listesi"], c:0},
+    {q:"Bu SOP hangi panel için geçerlidir?", o:["Herhangi bir panel","Esser IQ8Control M","Michell XTP601","Honeywell Optima"], c:1},
+    {q:"Reset öncesi alarmın kaynağı neden not edilmelidir?", o:["Gerekli değildir","İzlenebilirlik ve doğru müdahale için","Sadece rapor için","Estetik amaçlı"], c:1},
+  ],
+
+  'iq8-sesli-alarm': [
+    {q:"Buzzer Off tuşu hangi Access Level'da çalışır?", o:["Sadece Level 3","Access Level 1'de de çalışır","Sadece Level 4","Hiçbir seviyede çalışmaz"], c:1},
+    {q:"Buzzer Off sonrası yeni bir olay olursa ne olur?", o:["Buzzer sessiz kalır","Buzzer tekrar aktifleşir","Panel kapanır","Hiçbir şey"], c:1},
+    {q:"Audible Alarm Off/Silence hangi yetkiyi gerektirir?", o:["Access Level 1","Access Level 2 (anahtar açık)","Yetki gerekmez","Access Level 4"], c:1},
+    {q:"Control+F4 fonksiyonu hangi sürümlerde geçerlidir?", o:["Tüm sürümlerde","V03.10R000 ve üzeri","Sadece eski sürümlerde","Hiçbir sürümde"], c:1},
+    {q:"Access Level 3'te susturma yapılırsa ne olur?", o:["Geçici susturma olur","Kalıcı susturma olur, otomatik açılmaz","Hiçbir etkisi olmaz","Panel kilitlenir"], c:1},
+    {q:"Alarm nedeni giderildikten sonra ne yapılır?", o:["Hiçbir şey yapılmaz","Sesli cihazlar tekrar aktif edilir veya Panel Reset yapılır","Panel kapatılır","Anahtar kırılır"], c:1},
+    {q:"Sesli cihazlar susturulsa bile hangi hat kontrol edilmelidir?", o:["Hiçbiri","İtfaiye bildirim hattı (Master Box)","Elektrik hattı","Su hattı"], c:1},
+    {q:"Ekrandaki hangi gösterge susturma durumunu teyit eder?", o:["Battery gösterge","Alarm Off göstergesi","Wi-Fi ikonu","Saat"], c:1},
+    {q:"Access Level 3'ten çıkıldığında susturma fonksiyonu ne olur?", o:["Kalıcı kalır","Access Level 2 başlangıç durumuna döner","Sistem kapanır","Hata verir"], c:1},
+    {q:"Bu SOP'un amacı nedir?", o:["Bölge açmak","Dahili buzzer ve sesli alarm cihazlarını susturmak","Röle kontrolü yapmak","Tarih girmek"], c:1},
+    {q:"Master Box'ın susturulması neyi etkiler?", o:["Hiçbir şeyi","Otomatik yangın bildirimini de durdurur","Sadece ekran rengini","LED parlaklığını"], c:1},
+    {q:"F4 tuşu hangi tuşla birlikte kullanılır?", o:["Shift","Control","Alt","Escape"], c:1},
+  ],
+
+  'iq8-bolge-acma-kapama': [
+    {q:"Bölge işlemleri için anahtar hangi konumda olmalıdır?", o:["Dikey (kilitli)","Yatay (açık)","Fark etmez","Anahtar gerekmez"], c:1},
+    {q:"Bölgeyi devreye almak için hangi tuş sırası izlenir?", o:["Relay > On","Zone > numara > On","Detector > Off","Test > Zone"], c:1},
+    {q:"Zone > On işlemi ne yapar?", o:["Bölgeyi kalıcı kapatır","Kapalı bölgeyi devreye alır veya aktif bölgeyi resetler","Panel kapatır","Alarmı susturur"], c:1},
+    {q:"Devre dışı bırakılan bölge bir olayda ne yapar?", o:["Alarm verir","Alarm vermez","Otomatik açılır","Panik yapar"], c:1},
+    {q:"Bölge devre dışı bırakma hangi amaçla yapılmalıdır?", o:["Günlük rutin","Yalnızca bakım/servis amacıyla ve yetkilendirmeyle","Rastgele","Enerji tasarrufu için"], c:1},
+    {q:"Devre dışı bırakma hangi LED renginde gösterilir?", o:["Yeşil","Sarı (Disconnection)","Mavi","Beyaz"], c:1},
+    {q:"Bölge durumu nasıl sorgulanır?", o:["Zone > numara > Status query","Relay > Status","Test > Query","Sorgulanamaz"], c:0},
+    {q:"Sorgu ekranından çıkmak için hangi tuşa basılır?", o:["Reset","End","Buzzer Off","Zone"], c:1},
+    {q:"Devre dışı bırakılan bölge unutulursa ne olabilir?", o:["Sorun olmaz","İş bitiminde devreye alınmazsa güvenlik açığı oluşur","Otomatik düzelir","Panel arıza verir"], c:1},
+    {q:"On işlemi sırasında ekranda hangi mesaj görünür?", o:["Hata mesajı","on in progress","Reset complete","Boş ekran"], c:1},
+    {q:"Bu SOP hangi işlemleri kapsar?", o:["Sadece açma","Bölge açma/kapama/reset ve durum sorgulama","Sadece kapama","Sadece sorgulama"], c:1},
+    {q:"Zone numarası ne zaman girilir?", o:["Girilmez","Zone tuşundan sonra","On tuşundan sonra","Reset'ten sonra"], c:1},
+  ],
+
+  'iq8-lamba-testi': [
+    {q:"Lamba testi hangi tuşla başlatılır?", o:["Reset","Test (Lamp Test)","Zone","Relay"], c:1},
+    {q:"Test sırasında panelin izleme fonksiyonu ne olur?", o:["Tamamen durur","Etkilenmez, sadece göstergeler test edilir","Kapanır","Reset olur"], c:1},
+    {q:"LED'ler test sırasında yaklaşık ne kadar süre yanar?", o:["1 saniye","10 saniye","1 dakika","10 dakika"], c:1},
+    {q:"Test sırasında panel buzzer'ı ne yapar?", o:["Sessiz kalır","Çalar","Kapanır","Arıza verir"], c:1},
+    {q:"Yanmayan bir LED tespit edilirse ne yapılmalıdır?", o:["Görmezden gelinir","Arıza kaydı açılıp servis çağrılmalı","Panel kapatılır","Kendiliğinden düzelir"], c:1},
+    {q:"Test süresi sonunda ekranda ne görüntülenir?", o:["Boş ekran","Panel yazılım versiyon numarası","Hata kodu","Tarih"], c:1},
+    {q:"Testi erken sonlandırmak için ne yapılır?", o:["Reset tuşuna basılır","Test tuşuna tekrar basılır","Anahtar çıkarılır","Bir şey yapılamaz"], c:1},
+    {q:"Test tamamlandıktan sonra panel hangi duruma dönmelidir?", o:["Kapalı","Normal (yeşil in Operation LED)","Arıza modu","Test modu"], c:1},
+    {q:"Bu testin amacı nedir?", o:["Bölge açmak","Tüm LED ve buzzer'ın çalışır durumda olduğunu doğrulamak","Röle kontrolü","Tarih ayarlamak"], c:1},
+    {q:"Test sırasında ekran alanı ne olur?", o:["Aydınlanır","Tamamen kararır","Değişmez","Titreşir"], c:1},
+    {q:"Lamba testi hangi ekipmanları kapsar?", o:["Sadece panel LED'leri","Panel ve varsa tekli bölge gösterge ünitesi LED'leri","Sadece buzzer","Sadece ekran"], c:1},
+    {q:"Test için özel bir yetki seviyesi gerekir mi?", o:["Evet, Access Level 4","SOP'ta özel bir kısıtlama belirtilmemiştir","Evet, şifre gerekir","Sadece yöneticiler yapabilir"], c:1},
+  ],
+
+  'iq8-dedektor-acma-kapama': [
+    {q:"Dedektör işlemlerinde hangi sıra izlenir?", o:["Detector > Zone","Zone > Detector","Relay > Zone","Test > Detector"], c:1},
+    {q:"Bu fonksiyon hangi tip dedektörlerde kullanılabilir?", o:["Tüm dedektörlerde","Yalnızca adreslenebilir (9100/9200/IQ8Quad) dedektörlerde","Sadece duman dedektörlerinde","Hiçbirinde"], c:1},
+    {q:"Standart 9000 serisi dedektörler için ne geçerlidir?", o:["Tekil açılıp kapatılabilir","Tekil olarak açılıp kapatılamaz","Otomatik kapanır","Fark etmez"], c:1},
+    {q:"Devre dışı bırakılan dedektör bir olayda ne yapar?", o:["Alarm verir","Alarm vermez","Otomatik devreye girer","Panik yapar"], c:1},
+    {q:"Dedektör devre dışı bırakma hangi göstergeyle teyit edilir?", o:["Yeşil LED","Sarı Disconnection LED","Mavi LED","Gösterge yok"], c:1},
+    {q:"Dedektör durumu nasıl sorgulanır?", o:["Zone+Detector+Status query","Relay+Status","Test+Query","Sorgulanamaz"], c:0},
+    {q:"Bölge numarası dedektör numarasından önce mi girilir?", o:["Evet, her zaman","Hayır, sonra girilir","Fark etmez","Girilmez"], c:0},
+    {q:"Devre dışı bırakılan dedektör ne zaman devreye alınmalı?", o:["Asla","İş bitiminde mutlaka","Bir hafta sonra","Otomatik alınır"], c:1},
+    {q:"Bu işlem hangi Access Level gerektirir?", o:["Access Level 1","Access Level 2","Yetki gerekmez","Access Level 4"], c:1},
+    {q:"On işlemi dedektör için ne yapar?", o:["Devreye alır/resetler","Kalıcı kapatır","Siler","Test eder"], c:0},
+    {q:"Sorgu ekranından çıkmak için hangi tuş kullanılır?", o:["End","Reset","Detector","Zone"], c:0},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Röle","Adreslenebilir dedektör","Bölge genel","Sesli alarm"], c:1},
+  ],
+
+  'iq8-role-kontrolu': [
+    {q:"Röle işlemleri için hangi tuş kullanılır?", o:["Zone","Relay","Detector","Test"], c:1},
+    {q:"Devreye alınan röle ne zaman çalışır?", o:["Hiçbir zaman","Programlanmış kontrol koşullarına göre bir olay meydana geldiğinde","Sürekli çalışır","Rastgele çalışır"], c:1},
+    {q:"Röle inverse (ters) programlanmışsa devre dışı bırakıldığında ne olur?", o:["Hiçbir değişiklik olmaz","Normalde aktif olan çıkış deaktive olur","Röle yanar","Panel kilitlenir"], c:1},
+    {q:"Devre dışı röle göstergesi hangi renktedir?", o:["Yeşil","Sarı (Disconnection)","Kırmızı","Mavi"], c:1},
+    {q:"Röle durumu sorgulandığında hangi bilgiler görüntülenebilir?", o:["Sadece açık/kapalı","Normal/Activated/Disconnection/Trouble","Sadece arıza","Hiçbir bilgi"], c:1},
+    {q:"Devre dışı bırakılan röle unutulursa ne olabilir?", o:["Sorun olmaz","Bağlı ekipman bir olayda çalışmaz","Otomatik düzelir","Panel arıza verir"], c:1},
+    {q:"Röleyi devreye almak için hangi tuş sırası izlenir?", o:["Relay > numara > On","Zone > On","Detector > On","Test > On"], c:0},
+    {q:"On işlemi sırasında ekranda ne görüntülenir?", o:["Hata","on in progress","Reset","Boş ekran"], c:1},
+    {q:"Sorgu ekranından çıkmak için ne yapılır?", o:["End tuşuna basılır","Anahtar çıkarılır","Reset yapılır","Panel kapatılır"], c:0},
+    {q:"Röle işlemleri hangi yetkiyi gerektirir?", o:["Access Level 2 (anahtar açık)","Yetki gerekmez","Access Level 4","Sadece şifre"], c:0},
+    {q:"Bu SOP neyi kapsar?", o:["Dedektör kontrolü","Röle (kontrol çıkışı) devreye alma/kapama/sorgulama","Bölge kontrolü","Tarih girişi"], c:1},
+    {q:"Röle programlaması kim tarafından belirlenir?", o:["Kullanıcı her seferinde belirler","Önceden sistem tarafından programlanmıştır","Rastgele atanır","Hiç programlanmaz"], c:1},
+  ],
+
+  'iq8-tarih-saat': [
+    {q:"Tarih/saat girişi için ana menüden hangi seçenek seçilir?", o:["Zone funct.","Time funct.","Relay funct.","Test funct."], c:1},
+    {q:"Alan seçimi için hangi tuşlar kullanılır?", o:["Sayı tuşları","İmleç (cursor) tuşları","Zone tuşu","Relay tuşu"], c:1},
+    {q:"Değer girişi için ne kullanılır?", o:["Fare","Numerik tuş takımı (0-9)","Sesli komut","Dokunmatik ekran"], c:1},
+    {q:"Tarih hangi formatta girilir?", o:["YY.AA.GG","GG.AA.YY","AA.GG.YY","Format önemli değil"], c:1},
+    {q:"Haftanın günü nasıl belirlenir?", o:["Elle girilir","Sistem tarafından otomatik hesaplanır","Girilmez","Rastgele atanır"], c:1},
+    {q:"Değerleri kaydetmek için hangi tuşa basılır?", o:["Escape","Function","Reset","Zone"], c:1},
+    {q:"Değişiklikleri kaydetmeden çıkmak için ne yapılır?", o:["Function tuşuna basılır","Escape tuşuna basılır","Hiçbir şey yapılmaz","Panel kapatılır"], c:1},
+    {q:"Herhangi bir tuşa basılmadan beklenirse ne olur?", o:["Sistem kilitlenir","Ekran değişiklik kaydedilmeden önceki menüye döner","Panel kapanır","Hata verir"], c:1},
+    {q:"Bu işlem için anahtar konumu ne olmalıdır?", o:["Dikey (kilitli)","Yatay (açık, Access Level 2)","Fark etmez","Anahtar gerekmez"], c:1},
+    {q:"İşlem sonunda ne teyit edilmelidir?", o:["Hiçbir şey","Güncellenen tarih/saatin doğru göründüğü","Sadece saat","Sadece tarih"], c:1},
+    {q:"Bu SOP'un amacı nedir?", o:["Bölge ayarlamak","Sistem tarih/saat bilgisini girmek/güncellemek","Röle kontrolü","Lamba testi"], c:1},
+    {q:"Tarih girişi tamamlandıktan sonra anahtar ne yapılır?", o:["Açık bırakılır","Tekrar kilitlenir","Sökülür","Kaybedilir"], c:1},
   ],
 };
 
