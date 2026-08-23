@@ -1171,15 +1171,6 @@ function bindEvents(){
 }
 
 boot();
-
-// PWA: yalnızca gerçek bir sunucuda barındırıldığında service worker'ı kaydetmeyi dene.
-// claude.ai artifact önizlemesinde sw.js dosyası bulunmadığından (HAS_ARTIFACT_STORAGE=true
-// olduğu ortam), burada deneme bile yapılmaz - konsolda gereksiz "Failed to fetch" oluşmasın diye.
-if (!HAS_ARTIFACT_STORAGE && 'serviceWorker' in navigator && location.protocol.startsWith('http')) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => { /* sw.js yoksa sessiz geç */ });
-  });
-}
 </script>
 </body>
 </html>
