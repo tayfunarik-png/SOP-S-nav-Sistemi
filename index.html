@@ -225,13 +225,14 @@
     display:none; position:fixed; left:0; right:0; bottom:0; z-index:50;
     background:var(--bg-1); border-top:1px solid var(--line);
     padding:6px 4px calc(6px + env(safe-area-inset-bottom));
-    grid-template-columns:repeat(4,1fr); gap:2px;
+    grid-template-columns:repeat(6,1fr); gap:1px;
   }
   .bottomnav .bnitem{
     display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 2px;
     color:var(--text-2); font-size:9.5px; font-weight:600; letter-spacing:.2px; border-radius:8px;
   }
-  .bottomnav .bnitem svg{ width:19px;height:19px; }
+  .bottomnav .bnitem svg{ width:17px;height:17px; }
+  .bottomnav .bnitem span{ font-size:8.8px; white-space:nowrap; }
   .bottomnav .bnitem.active{ color:var(--amber); background:rgba(245,166,35,0.08); }
 
   @media (max-width: 820px){
@@ -346,6 +347,9 @@ const ICONS = {
   back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>`,
   download: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>`,
   bolt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 11-14h-7l1-6z"/></svg>`,
+  users: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  target: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>`,
+  trash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>`,
 };
 
 /* ---------------- SOP seed data ---------------- */
@@ -433,6 +437,25 @@ Adımlar: 1) Anahtar açılır (Access Level 2). 2) Relay + röle no + On ile de
   { id:'iq8-tarih-saat', title:'Esser IQ8Control M Tarih/Saat Girişi SOP', category:'Yangın Alarm Paneli',
     content:`KAPSAM: Esser IQ8Control M panelinde sistem tarih ve saat bilgisinin girilmesi/güncellenmesi.
 Adımlar: 1) Anahtar açılır (Access Level 2). 2) Ana menüden Time funct. tuşuna basılır, Time/Date ekranına girilir. 3) İmleç tuşlarıyla değiştirilecek alan (saat, dakika, gün, ay, yıl) seçilir. 4) Numerik tuş takımı (0-9) ile değer girilir - tarih GG.AA.YY formatında girildiğinde haftanın günü sistem tarafından otomatik hesaplanır. 5) Function tuşuyla kaydedilir - kaydetmeden çıkmak için Escape tuşuna basılmalı; herhangi bir tuşa basılmadan beklenirse ekran kaydedilmeden önceki menüye otomatik döner. 6) Güncellenen tarih/saatin doğru göründüğü teyit edilir, anahtar tekrar kilitlenir.` },
+];
+
+/* ---------------- Personnel seed ---------------- */
+const PERSONNEL_SEED = [
+  { id:'00006752', name:'KERİM TOPRAKLI', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
+  { id:'00008364', name:'BÜLENT ÇABUKER', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
+  { id:'00009835', name:'BURHAN BAYINDIR', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
+  { id:'00009876', name:'FEYYAZ ARIKAN', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
+  { id:'00009907', name:'MURAT BALCI', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
+  { id:'00010400', name:'HAYRİ İNAL', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
+  { id:'00008625', name:'KAĞAN US', dept:'ÇORLU İNŞAAT PROJE', title:'İNŞAAT DUVAR USTASI' },
+  { id:'00008626', name:'KÜRŞAD HAKAN US', dept:'ÇORLU İNŞAAT PROJE', title:'İNŞAAT BOYA USTASI' },
+  { id:'00008627', name:'ÜMİT PAMUKCU', dept:'ÇORLU İNŞAAT PROJE', title:'İNŞAAT KALIP USTASI' },
+  { id:'00012747', name:'MEHMET AKİF UZUN', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'TEKNİK BAKIM MÜHENDİSİ' },
+  { id:'00011790', name:'NASIF YILDIZ', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'YARDIMCI TESİSLER TEKNİSYENİ' },
+  { id:'00006973', name:'TARIK GÖÇER', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER FORMENİ' },
+  { id:'00007285', name:'MEHMET ÇABUKER', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER TEKNİSYENİ' },
+  { id:'00007450', name:'BİRCAN BİLEN', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER TEKNİSYENİ' },
+  { id:'00007899', name:'BÜLENT KOYUNCU', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER ELEMANI' },
 ];
 
 /* ---------------- Question banks (statik - API gerektirmez) ----------------
@@ -809,6 +832,14 @@ const state = {
   isAdmin: (function(){ try{ return sessionStorage.getItem('sop-sinav-admin')==='1'; }catch(e){ return false; } })(),
   showAdminLogin:false,
   adminLoginError:null,
+  personnel: [],
+  sopAssignments: {},
+  showAddPersonnel:false,
+  newPersonnel:{id:'', name:'', dept:'', title:''},
+  assignSopId:null,
+  assignDeadlineDraft:'',
+  assignSelectedIds:new Set(),
+  complianceFilter:'all',
 };
 
 function showToast(msg, type){
@@ -836,7 +867,20 @@ async function boot(){
   }
   let exams = await storGet('exams'); if(!exams) exams = []; // legacy, kullanılmıyor
   let results = await storGet('results'); if(!results) results = [];
+
+  let personnel = await storGet('personnel');
+  if(!personnel || !personnel.length){
+    personnel = PERSONNEL_SEED;
+    await storSet('personnel', personnel);
+  }else{
+    const existingPIds = new Set(personnel.map(p=>p.id));
+    const newP = PERSONNEL_SEED.filter(p=>!existingPIds.has(p.id));
+    if(newP.length){ personnel = personnel.concat(newP); await storSet('personnel', personnel); }
+  }
+  let sopAssignments = await storGet('sop-assignments'); if(!sopAssignments) sopAssignments = {};
+
   state.sops = sops; state.exams = exams; state.results = results;
+  state.personnel = personnel; state.sopAssignments = sopAssignments;
   state.loading = false; state.loaded = true;
   render();
 }
@@ -886,6 +930,8 @@ function renderBottomNav(){
     {v:'generate', label:'Sınav Oluştur', icon:ICONS.generate},
     {v:'take', label:'Sınava Gir', icon:ICONS.take},
     {v:'results', label:'Sonuçlar', icon:ICONS.results},
+    {v:'personnel', label:'Personel', icon:ICONS.users},
+    {v:'compliance', label:'Uyum', icon:ICONS.target},
   ];
   return `
   <div class="bottomnav">
@@ -903,6 +949,8 @@ function renderSidebar(){
     {v:'generate', label:'Sınav Oluştur', icon:ICONS.generate},
     {v:'take', label:'Sınava Gir', icon:ICONS.take},
     {v:'results', label:'Sonuçlar', icon:ICONS.results},
+    {v:'personnel', label:'Personel', icon:ICONS.users},
+    {v:'compliance', label:'Uyum Takibi', icon:ICONS.target},
   ];
   return `
   <div class="sidebar">
@@ -955,6 +1003,8 @@ function viewMeta(){
     case 'generate': return {h:'Sınav Oluştur', s:'Bir SOP seçin, sistem otomatik 10 soruluk sınav üretsin.'};
     case 'take': return {h:'Sınava Gir', s:'Aktif sınavlardan birini seçip başlayın.'};
     case 'results': return {h:'Sonuçlar', s:'Tamamlanan tüm sınav sonuçları ve istatistikler.'};
+    case 'personnel': return {h:'Personel', s:'Personel listesi ve SOP bazlı sorumluluk atamaları.'};
+    case 'compliance': return {h:'Uyum Takibi', s:'Atanan personelin sınav tamamlama durumu ve son tarihe göre sapması.'};
     default: return {h:'', s:''};
   }
 }
@@ -980,6 +1030,8 @@ function renderView(){
     case 'generate': return renderGenerate();
     case 'take': return renderTake();
     case 'results': return renderResults();
+    case 'personnel': return renderPersonnel();
+    case 'compliance': return renderCompliance();
     default: return '';
   }
 }
@@ -1230,6 +1282,194 @@ function renderResults(){
   `;
 }
 
+/* ---------------- Personnel & Compliance ---------------- */
+function renderPersonnel(){
+  const assignedSop = state.assignSopId ? state.sops.find(s=>s.id===state.assignSopId) : null;
+  return `
+    ${state.isAdmin ? `
+    <div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
+      <button class="btn primary" data-toggle-add-personnel>${ICONS.plus} Yeni Personel Ekle</button>
+    </div>
+    ${state.showAddPersonnel ? renderAddPersonnelForm() : ''}
+    ` : ''}
+
+    <div class="panel-title" style="margin-bottom:12px;">Personel Listesi</div>
+    <div class="panel" style="margin-bottom:26px; padding:0; overflow-x:auto;">
+      <table>
+        <thead><tr><th>Sicil No</th><th>Ad Soyad</th><th>Departman</th><th>Görev</th>${state.isAdmin?'<th></th>':''}</tr></thead>
+        <tbody>
+          ${state.personnel.map(p => `
+            <tr>
+              <td class="num">${escapeHtml(p.id)}</td>
+              <td>${escapeHtml(p.name)}</td>
+              <td>${escapeHtml(p.dept)}</td>
+              <td>${escapeHtml(p.title)}</td>
+              ${state.isAdmin?`<td><button class="btn sm danger" data-delete-personnel="${p.id}">Sil</button></td>`:''}
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel-title" style="margin-bottom:4px;">SOP Sorumluluk Ataması</div>
+    <div class="panel-sub" style="margin-bottom:16px;">Her SOP için hangi personelin sınavı tamamlaması gerektiğini ve son tarihi belirleyin.</div>
+
+    <div class="panel" style="max-width:720px; margin-bottom:26px;">
+      <div class="field">
+        <label class="field-label">SOP Seçin</label>
+        <select id="assign-sop-select">
+          <option value="">— SOP seçin —</option>
+          ${state.sops.map(s=>`<option value="${s.id}" ${s.id===state.assignSopId?'selected':''}>${escapeHtml(s.title)}</option>`).join('')}
+        </select>
+      </div>
+      ${assignedSop ? `
+        <div class="field">
+          <label class="field-label">Son Tamamlama Tarihi</label>
+          <input type="date" id="assign-deadline-input" value="${escapeAttr(state.assignDeadlineDraft)}" ${state.isAdmin?'':'disabled'}/>
+        </div>
+        <div class="field">
+          <label class="field-label">Sorumlu Personel (${state.assignSelectedIds.size} seçili)</label>
+          <div style="display:flex; flex-direction:column; gap:7px; max-height:260px; overflow-y:auto; border:1px solid var(--line-soft); border-radius:8px; padding:10px;">
+            ${state.personnel.map(p => `
+              <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; ${state.isAdmin?'cursor:pointer;':'opacity:.75;'}">
+                <input type="checkbox" data-assign-check="${p.id}" ${state.assignSelectedIds.has(p.id)?'checked':''} ${state.isAdmin?'':'disabled'}/>
+                ${escapeHtml(p.name)} <span style="color:var(--text-2);">— ${escapeHtml(p.title)}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+        ${state.isAdmin ? `<button class="btn primary" data-save-assignment>Atamayı Kaydet</button>` : `<div style="font-size:11.5px; color:var(--text-2);">Atamaları değiştirmek için yönetici girişi gereklidir.</div>`}
+      ` : ''}
+    </div>
+
+    ${Object.entries(state.sopAssignments).some(([,a])=>a.personnelIds&&a.personnelIds.length) ? `
+      <div class="panel-title" style="margin-bottom:12px;">Mevcut Atamalar</div>
+      <div class="grid">
+        ${Object.entries(state.sopAssignments).filter(([,a])=>a.personnelIds&&a.personnelIds.length).map(([sopId, a]) => {
+          const sop = state.sops.find(s=>s.id===sopId);
+          if(!sop) return '';
+          return `
+          <div class="card tag-amber">
+            <h3>${escapeHtml(sop.title)}</h3>
+            <div class="meta"><span>${a.personnelIds.length} kişi</span><span>Son tarih: ${a.deadline?new Date(a.deadline).toLocaleDateString('tr-TR'):'—'}</span></div>
+            <button class="btn sm ghost" data-view-compliance="${sopId}">Uyumu Gör</button>
+          </div>`;
+        }).join('')}
+      </div>
+    ` : ''}
+  `;
+}
+
+function renderAddPersonnelForm(){
+  return `
+  <div class="panel" style="margin-bottom:20px; max-width:480px;">
+    <div class="panel-title">Yeni Personel Ekle</div>
+    <div class="field"><label class="field-label">Sicil No</label><input type="text" id="new-p-id" value="${escapeAttr(state.newPersonnel.id)}"/></div>
+    <div class="field"><label class="field-label">Ad Soyad</label><input type="text" id="new-p-name" value="${escapeAttr(state.newPersonnel.name)}"/></div>
+    <div class="field"><label class="field-label">Departman</label><input type="text" id="new-p-dept" value="${escapeAttr(state.newPersonnel.dept)}"/></div>
+    <div class="field"><label class="field-label">Görev</label><input type="text" id="new-p-title" value="${escapeAttr(state.newPersonnel.title)}"/></div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn primary" data-save-personnel>Kaydet</button>
+      <button class="btn ghost" data-cancel-add-personnel>Vazgeç</button>
+    </div>
+  </div>`;
+}
+
+function normalizeName(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,' '); }
+
+function getComplianceRows(){
+  const rows = [];
+  Object.entries(state.sopAssignments).forEach(([sopId, assign]) => {
+    if(!assign || !assign.personnelIds || !assign.personnelIds.length) return;
+    const sop = state.sops.find(s=>s.id===sopId);
+    if(!sop) return;
+    const deadlineTs = assign.deadline ? new Date(assign.deadline+'T23:59:59').getTime() : null;
+    assign.personnelIds.forEach(pid => {
+      const person = state.personnel.find(p=>p.id===pid);
+      if(!person) return;
+      const attempts = state.results.filter(r=>r.sopId===sopId && normalizeName(r.name)===normalizeName(person.name));
+      attempts.sort((a,b)=>a.submittedAt-b.submittedAt);
+      const first = attempts[0];
+      let status, deviationDays;
+      if(first){
+        if(deadlineTs!=null){
+          const diffDays = Math.round((deadlineTs - first.submittedAt)/86400000);
+          status = diffDays >= 0 ? 'zamaninda' : 'gec';
+          deviationDays = diffDays;
+        }else{ status = 'tamamlandi'; deviationDays = null; }
+      }else{
+        if(deadlineTs!=null && Date.now() > deadlineTs){
+          status = 'gecikti'; deviationDays = -Math.round((Date.now()-deadlineTs)/86400000);
+        }else{ status = 'bekliyor'; deviationDays = null; }
+      }
+      rows.push({
+        sopId, sopTitle: sop.title, personId: pid, personName: person.name, dept: person.dept,
+        deadline: assign.deadline, completedAt: first?first.submittedAt:null,
+        pct: first?first.pct:null, status, deviationDays
+      });
+    });
+  });
+  return rows;
+}
+
+function renderCompliance(){
+  const rows = getComplianceRows();
+  const filtered = state.complianceFilter==='all' ? rows : rows.filter(r=>r.sopId===state.complianceFilter);
+
+  const completed = filtered.filter(r=>r.status!=='bekliyor').length;
+  const lateOrOverdue = filtered.filter(r=>r.status==='gec'||r.status==='gecikti').length;
+  const pending = filtered.filter(r=>r.status==='bekliyor').length;
+
+  const statusMeta = {
+    zamaninda: {label:'Zamanında Tamamladı', color:'var(--green)'},
+    gec: {label:'Geç Tamamladı', color:'var(--red)'},
+    tamamlandi: {label:'Tamamlandı', color:'var(--green)'},
+    gecikti: {label:'Gecikmede', color:'var(--red)'},
+    bekliyor: {label:'Bekliyor', color:'var(--text-2)'},
+  };
+  const maxDays = Math.max(1, ...filtered.map(r=>Math.abs(r.deviationDays||0)), 1);
+
+  return `
+    <div class="stat-row">
+      <div class="stat"><div class="v">${filtered.length}</div><div class="k">Toplam Atama</div></div>
+      <div class="stat"><div class="v" style="color:var(--green);">${completed}</div><div class="k">Tamamlayan</div></div>
+      <div class="stat"><div class="v" style="color:var(--red);">${lateOrOverdue}</div><div class="k">Geç / Gecikmede</div></div>
+      <div class="stat"><div class="v" style="color:var(--text-2);">${pending}</div><div class="k">Bekliyor</div></div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <select id="compliance-filter" style="max-width:320px;">
+        <option value="all" ${state.complianceFilter==='all'?'selected':''}>Tüm SOP'lar</option>
+        ${state.sops.filter(s=>state.sopAssignments[s.id]&&state.sopAssignments[s.id].personnelIds&&state.sopAssignments[s.id].personnelIds.length).map(s=>`<option value="${s.id}" ${state.complianceFilter===s.id?'selected':''}>${escapeHtml(s.title)}</option>`).join('')}
+      </select>
+    </div>
+
+    ${filtered.length===0 ? `<div class="empty">${ICONS.target}<div class="t">Henüz atama yok</div>"Personel" sekmesinden bir SOP'a personel atayarak başlayın.</div>` : `
+    <div class="panel" style="padding:18px;">
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        ${filtered.slice().sort((a,b)=>(a.deviationDays==null?999:a.deviationDays)-(b.deviationDays==null?999:b.deviationDays)).map(r => {
+          const meta = statusMeta[r.status];
+          const barPct = r.deviationDays==null ? 0 : Math.min(100, Math.abs(r.deviationDays)/maxDays*100);
+          return `
+          <div>
+            <div style="display:flex; justify-content:space-between; gap:10px; font-size:12px; margin-bottom:4px;">
+              <span><b>${escapeHtml(r.personName)}</b> <span style="color:var(--text-2);">— ${escapeHtml(r.sopTitle)}</span></span>
+              <span style="color:${meta.color}; font-weight:600; white-space:nowrap;">${meta.label}${r.deviationDays!=null?` (${r.deviationDays>=0?'+':''}${r.deviationDays} gün)`:''}</span>
+            </div>
+            <div style="height:8px; background:var(--bg-0); border-radius:100px; overflow:hidden; border:1px solid var(--line-soft);">
+              <div style="height:100%; width:${barPct}%; background:${meta.color}; border-radius:100px;"></div>
+            </div>
+            <div style="font-size:10.5px; color:var(--text-2); margin-top:3px;">
+              Son tarih: ${r.deadline?new Date(r.deadline).toLocaleDateString('tr-TR'):'—'}
+              ${r.completedAt?` &middot; Tamamlama: ${new Date(r.completedAt).toLocaleDateString('tr-TR')} (%${r.pct})`:''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`}
+  `;
+}
+
 /* ---------------- utils ---------------- */
 function escapeHtml(str){
   return String(str||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -1437,6 +1677,83 @@ function bindEvents(){
       render();
     };
   });
+
+  // personnel
+  const toggleAddP = document.querySelector('[data-toggle-add-personnel]');
+  if(toggleAddP) toggleAddP.onclick = () => { state.showAddPersonnel = !state.showAddPersonnel; render(); };
+  const cancelAddP = document.querySelector('[data-cancel-add-personnel]');
+  if(cancelAddP) cancelAddP.onclick = () => { state.showAddPersonnel=false; render(); };
+  const savePersonnel = document.querySelector('[data-save-personnel]');
+  if(savePersonnel) savePersonnel.onclick = async () => {
+    const id = document.getElementById('new-p-id').value.trim();
+    const name = document.getElementById('new-p-name').value.trim();
+    const dept = document.getElementById('new-p-dept').value.trim();
+    const title = document.getElementById('new-p-title').value.trim();
+    if(!id || !name){ showToast('Sicil no ve ad soyad zorunlu.', 'err'); return; }
+    if(state.personnel.some(p=>p.id===id)){ showToast('Bu sicil no zaten kayıtlı.', 'err'); return; }
+    state.personnel.push({id, name, dept, title});
+    await storSet('personnel', state.personnel);
+    state.showAddPersonnel=false; state.newPersonnel={id:'',name:'',dept:'',title:''};
+    showToast('Personel eklendi.');
+    render();
+  };
+  document.querySelectorAll('[data-delete-personnel]').forEach(el=>{
+    el.onclick = async () => {
+      const id = el.getAttribute('data-delete-personnel');
+      const p = state.personnel.find(x=>x.id===id);
+      if(!p) return;
+      if(!confirm(`${p.name} personelini silmek istediğinize emin misiniz?`)) return;
+      state.personnel = state.personnel.filter(x=>x.id!==id);
+      await storSet('personnel', state.personnel);
+      // atamalardan da temizle
+      Object.values(state.sopAssignments).forEach(a=>{ if(a.personnelIds) a.personnelIds = a.personnelIds.filter(pid=>pid!==id); });
+      await storSet('sop-assignments', state.sopAssignments);
+      showToast('Personel silindi.');
+      render();
+    };
+  });
+
+  // SOP ataması
+  const assignSopSelect = document.getElementById('assign-sop-select');
+  if(assignSopSelect) assignSopSelect.onchange = (e) => {
+    const sopId = e.target.value || null;
+    state.assignSopId = sopId;
+    const existing = sopId ? state.sopAssignments[sopId] : null;
+    state.assignDeadlineDraft = existing && existing.deadline ? existing.deadline : '';
+    state.assignSelectedIds = new Set(existing && existing.personnelIds ? existing.personnelIds : []);
+    render();
+  };
+  const assignDeadlineInput = document.getElementById('assign-deadline-input');
+  if(assignDeadlineInput) assignDeadlineInput.onchange = (e) => { state.assignDeadlineDraft = e.target.value; };
+  document.querySelectorAll('[data-assign-check]').forEach(el=>{
+    el.onchange = (e) => {
+      const pid = el.getAttribute('data-assign-check');
+      if(e.target.checked) state.assignSelectedIds.add(pid); else state.assignSelectedIds.delete(pid);
+      render();
+    };
+  });
+  const saveAssignment = document.querySelector('[data-save-assignment]');
+  if(saveAssignment) saveAssignment.onclick = async () => {
+    if(!state.assignSopId) return;
+    const deadlineVal = document.getElementById('assign-deadline-input') ? document.getElementById('assign-deadline-input').value : state.assignDeadlineDraft;
+    state.sopAssignments[state.assignSopId] = {
+      deadline: deadlineVal || null,
+      personnelIds: Array.from(state.assignSelectedIds),
+    };
+    await storSet('sop-assignments', state.sopAssignments);
+    showToast('Atama kaydedildi.');
+    render();
+  };
+  document.querySelectorAll('[data-view-compliance]').forEach(el=>{
+    el.onclick = () => {
+      state.complianceFilter = el.getAttribute('data-view-compliance');
+      state.view = 'compliance'; render();
+    };
+  });
+
+  // uyum takibi
+  const complianceFilter = document.getElementById('compliance-filter');
+  if(complianceFilter) complianceFilter.onchange = (e) => { state.complianceFilter = e.target.value; render(); };
 }
 
 boot();
