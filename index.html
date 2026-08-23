@@ -287,12 +287,26 @@ function syncResultToSheets(result){
   }catch(e){ /* sessiz geç */ }
 }
 
+function jsonpRequest(url, timeoutMs){
+  return new Promise((resolve, reject) => {
+    const cbName = '__sopSinavCb_' + Date.now() + '_' + Math.floor(Math.random()*1e6);
+    const script = document.createElement('script');
+    let done = false;
+    const cleanup = () => { try{ delete window[cbName]; }catch(e){} if(script.parentNode) script.parentNode.removeChild(script); };
+    const timer = setTimeout(() => { if(done) return; done=true; cleanup(); reject(new Error('timeout')); }, timeoutMs || 10000);
+    window[cbName] = (data) => { if(done) return; done=true; clearTimeout(timer); cleanup(); resolve(data); };
+    script.src = url + (url.indexOf('?')>=0 ? '&' : '?') + 'callback=' + cbName;
+    script.onerror = () => { if(done) return; done=true; clearTimeout(timer); cleanup(); reject(new Error('script load error')); };
+    document.head.appendChild(script);
+  });
+}
+
 async function fetchCloudResults(){
   if(!CONFIG.sheetsWebhookUrl) return null;
   try{
-    const resp = await fetch(CONFIG.sheetsWebhookUrl, { method:'GET' });
-    if(!resp.ok) return null;
-    const data = await resp.json();
+    // JSONP kullanılır: Apps Script Web App'lerin GET yanıtları cross-origin fetch()
+    // ile her zaman güvenilir okunamıyor (CORS); <script> ile yükleme bu sınırı aşar.
+    const data = await jsonpRequest(CONFIG.sheetsWebhookUrl, 10000);
     if(!Array.isArray(data)) return null;
     return data.map(r => ({
       id: r.id || ('cloud-'+r.name+'-'+r.submittedAt),
@@ -998,10 +1012,32 @@ function escapeHtml(str){
 }
 function escapeAttr(str){ return escapeHtml(str); }
 
+async function autoSyncCloudResults(){
+  state.cloudSyncing = true; render();
+  const cloud = await fetchCloudResults();
+  state.cloudSyncing = false;
+  if(cloud !== null){
+    const localIds = new Set(state.results.map(r=>r.id));
+    let added = 0;
+    cloud.forEach(r => { if(!localIds.has(r.id)){ state.results.push(r); added++; } });
+    if(added>0){
+      state.results.sort((a,b)=>a.submittedAt-b.submittedAt);
+      await storSet('results', state.results);
+    }
+  }
+  render();
+  return cloud;
+}
+
 /* ---------------- Events ---------------- */
 function bindEvents(){
   document.querySelectorAll('[data-nav]').forEach(el=>{
-    el.onclick = () => { state.view = el.getAttribute('data-nav'); state.openSopId=null; render(); };
+    el.onclick = () => {
+      state.view = el.getAttribute('data-nav'); state.openSopId=null; render();
+      if(state.view==='results' && CONFIG.sheetsWebhookUrl && !state.cloudSyncing){
+        autoSyncCloudResults();
+      }
+    };
   });
 
   // library
@@ -1109,20 +1145,14 @@ function bindEvents(){
   if(resFilter) resFilter.onchange = (e) => { state.resultsFilter = e.target.value; render(); };
   const refreshCloud = document.querySelector('[data-refresh-cloud]');
   if(refreshCloud) refreshCloud.onclick = async () => {
-    state.cloudSyncing = true; render();
-    const cloud = await fetchCloudResults();
-    state.cloudSyncing = false;
+    const before = state.results.length;
+    const cloud = await autoSyncCloudResults();
     if(cloud === null){
       showToast('Bulut sonuçları alınamadı. Google E-Tablo\'yu doğrudan açabilirsiniz.', 'err');
     }else{
-      const localIds = new Set(state.results.map(r=>r.id));
-      let added = 0;
-      cloud.forEach(r => { if(!localIds.has(r.id)){ state.results.push(r); added++; } });
-      state.results.sort((a,b)=>a.submittedAt-b.submittedAt);
-      await storSet('results', state.results);
+      const added = state.results.length - before;
       showToast(added>0 ? `${added} yeni sonuç eklendi.` : 'Yeni sonuç yok, liste güncel.');
     }
-    render();
   };
   const exportCsv = document.querySelector('[data-export-csv]');
   if(exportCsv) exportCsv.onclick = () => {
