@@ -350,6 +350,7 @@ const ICONS = {
   users: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
   target: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>`,
   trash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>`,
+  search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
 };
 
 /* ---------------- SOP seed data ---------------- */
@@ -661,6 +662,18 @@ Adımlar: 1) Dolap kapısının kolay açılabilir olduğu, önünde engel olmad
   { id:'emniyet-kemeri-muayene', title:'Emniyet Kemeri ve Düşme Önleme Ekipmanları Periyodik Muayene SOP', category:'Temel Güvenlik',
     content:`KAPSAM: Tam vücut emniyet kemeri, halat, karabina gibi düşme önleme ekipmanlarının periyodik muayenesi.
 Adımlar: 1) Ekipman kullanım öncesi ve periyodik (genelde yılda bir) muayene edilir. 2) Kemer kayışları kesik/aşınma/UV bozulması yönünden kontrol edilir. 3) Dikişlerde sökülme kontrol edilir. 4) Metal parçalar (toka, D-halka, karabina) korozyon yönünden kontrol edilir. 5) Enerji sönümleyici etiketinin aktive olmamış olduğu kontrol edilir. 6) Halat/yaşam hattı hasar yönünden kontrol edilir. 7) Hasarlı ekipman derhal kullanım dışı bırakılıp imha edilir - hasarlı ekipmanla çalışma ciddi düşme riski taşır. 8) Sonuçlar kayıt formuna işlenir, sonraki muayene takvime eklenir.` },
+
+  { id:'nira-neptune-analiz', title:'Nira Neptune 801 Numune Analizi SOP', category:'Kalite Ölçüm',
+    content:`KAPSAM: Nira Neptune 801 hızlı kalıntı solvent analiz cihazı ile baskılı/laminasyonlu esnek ambalaj filmlerinde kalıntı solvent ölçümü işlemleri.
+Adımlar: 1) Cihazın basınçlı hava (3 bar) ve hidrojen (4,5 saflık, 3 bar) beslemelerinin açık ve stabil olduğu kontrol edilir - FID dedektörü hidrojen olmadan çalışmaz. 2) Cihaz açılır, endüstriyel PC ve dokunmatik ekran hazır hale gelir. 3) Analiz edilecek film numunesi bilinen bir alan/ağırlıkta kesilir. 4) Numune, açık uçlu numune şişesine (vial, ~20 ml) yerleştirilip cihazın ön yüzündeki entegre headspace bölmesine takılır. 5) Headspace kapağı hermetik olarak kapatılır - tam kapanmazsa hatalı/düşük sonuç alınabilir. 6) Dokunmatik ekrandan analiz başlatılır; cihaz desorpsiyon çevriminde numune iç basıncını otomatik izler. 7) Otomatik valf birkaç mikrolitre numuneyi doğrudan kapiler kolona enjekte eder. 8) Analiz tamamlandığında (~7-12 dakika) sonuç raporu (tarih, tekil solvent konsantrasyonları, toplam kalıntı solvent mg/m²) ekranda görüntülenir ve PDF olarak kaydedilir. 9) Sistem bir sonraki analizden önce basınçlı hava ile otomatik temizlenir. 10) Numune şişesi çıkarılır, atıklar bertaraf edilir. 11) Sonuçlar limit/şartname değerleriyle karşılaştırılır, sapma varsa proses ekibine bildirilir.` },
+
+  { id:'nira-neptune-kalibrasyon', title:'Nira Neptune 801 Kalibrasyon SOP', category:'Kalite Ölçüm',
+    content:`KAPSAM: Nira Neptune 801 kalıntı solvent analiz cihazının periyodik kalibrasyonu (standart kalibrasyon karışımı ile).
+Adımlar: 1) Sertifikalı standart kalibrasyon karışımı hazırlanır/temin edilir. 2) Cihaz üzerindeki doğrudan sıvı enjeksiyonuna ayrılmış ek sızdırmazlık noktasından standart karışım enjekte edilir. 3) Dokunmatik ekrandan kalibrasyon modu seçilir. 4) Cihaz standardı analiz eder, ölçülen değerler referans sertifika değeriyle karşılaştırılır. 5) Sapma toleransın dışındaysa kalibrasyon eğrisi (response factor) güncellenir. 6) Farklı konsantrasyonda ikinci bir standartla doğrulama yapılır. 7) Kalibrasyon sonucu (tarih, standart bilgisi, sapma) kayıt formuna işlenir. 8) Bir sonraki kalibrasyon tarihi planlanır.` },
+
+  { id:'nira-neptune-hidrojen', title:'Nira Neptune 801 Hidrojen Gaz Tüpü Değişimi SOP', category:'Kalite Ölçüm',
+    content:`KAPSAM: Nira Neptune 801 cihazının FID dedektörü için gerekli 4,5 saflık hidrojen gaz tüpünün güvenli değişimi ve depolanması.
+Adımlar: 1) Hidrojen tüpü dik, sabitlenmiş, iyi havalandırılan ve ateş kaynağından uzak bir alanda depolanır - hidrojen son derece yanıcı ve geniş patlama aralığına (%4-75) sahiptir. 2) Tüp değişimi öncesi cihazın hidrojen beslemesi kapatılır. 3) Boşalan tüpün vanası kapatılır, regülatör sökülür. 4) Yeni tüpün saflık derecesi (4,5 grade) ve basıncı kontrol edilir. 5) Regülatör yeni tüpe takılır, bağlantı sızdırmazlığı sabunlu su ile kontrol edilir - hidrojen kaçağı görünmez ve kokusuzdur, test zorunludur. 6) Tüp vanası yavaşça açılır, besleme basıncı 3 bara ayarlanır. 7) Cihazın otomatik hidrojen kapama sisteminin (anomalide beslemeyi otomatik kesen) aktif olduğu bilinerek çalışmaya devam edilir. 8) Cihaz açılışında alev sensörü/ateşleme durumu kontrol edilir. 9) Boş tüp işaretlenip ayrı depolanır. 10) Değişim kayıt formuna işlenir.` },
 ];
 
 /* ---------------- Personnel seed ---------------- */
@@ -696,7 +709,7 @@ const MEK = ['00006752','00008364','00009835','00009876','00009907','00010400','
 const ELK = ['00010220','00000394','00007049','00008597','00008810','00010068','00010089']; // Elektrik Bakım
 const YT  = ['00012747','00011790','00006973','00007285','00007450','00007899']; // Yardımcı Tesisler
 const INS = ['00008625','00008626','00008627']; // İnşaat Proje
-const ASSIGNMENT_SEED_VERSION = 7;
+const ASSIGNMENT_SEED_VERSION = 8;
 const SOP_ASSIGNMENT_SEED = {
   'loto-elektrik': { deadline:'2026-09-22', personnelIds: ELK },
   'elektrik-pano': { deadline:'2026-09-22', personnelIds: ELK },
@@ -775,6 +788,9 @@ const SOP_ASSIGNMENT_SEED = {
   'gaz-tupu-depolama': { deadline:'2026-09-22', personnelIds: MEK },
   'yangin-dolabi-hidrant': { deadline:'2026-09-22', personnelIds: YT },
   'emniyet-kemeri-muayene': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT, ...INS] },
+  'nira-neptune-analiz': { deadline:'2026-09-22', personnelIds: YT },
+  'nira-neptune-kalibrasyon': { deadline:'2026-09-22', personnelIds: YT },
+  'nira-neptune-hidrojen': { deadline:'2026-09-22', personnelIds: YT },
 };
 
 /* ---------------- Question banks (statik - API gerektirmez) ----------------
@@ -1926,6 +1942,51 @@ const QUESTION_BANKS = {
     {q:"Bir sonraki muayene tarihi ne yapılır?", o:["Unutulur","Takvime eklenir","Hiçbir yere kaydedilmez","Sözlü hatırlanır"], c:1},
     {q:"Bu ekipmanlar hangi çalışmalarda kullanılır?", o:["Kapalı alan çalışması","Yükseklikte çalışma","Sıcak çalışma","Elektrik çalışması"], c:1},
   ],
+
+  'nira-neptune-analiz': [
+    {q:"Nira Neptune 801 cihazının temel amacı nedir?", o:["Kalınlık ölçmek","Filmlerde kalıntı solventi ölçmek","Basınç ölçmek","Sıcaklık ölçmek"], c:1},
+    {q:"FID dedektörü çalışması için hangi gaz gereklidir?", o:["Azot","Hidrojen","Karbondioksit","Argon"], c:1},
+    {q:"Numune şişesinin (vial) iç hacmi yaklaşık ne kadardır?", o:["5 ml","20 ml","100 ml","1 litre"], c:1},
+    {q:"Headspace kapağı tam kapanmazsa ne olur?", o:["Sorun olmaz","Hatalı/düşük sonuç alınabilir","Daha hızlı analiz olur","Enerji tasarrufu sağlar"], c:1},
+    {q:"Bir analiz yaklaşık ne kadar sürer?", o:["1 saniye","7-12 dakika","1 saat","1 gün"], c:1},
+    {q:"Analiz sonucu nasıl kaydedilir?", o:["Kaydedilmez","PDF olarak (tarih, konsantrasyonlar, toplam solvent)","Sadece sözlü bildirilir","El yazısıyla"], c:1},
+    {q:"Analizler arasında sistem nasıl temizlenir?", o:["Temizlenmez","Basınçlı hava ile otomatik","Elle silinir","Su ile yıkanır"], c:1},
+    {q:"Numune nereye yerleştirilir?", o:["Doğrudan kolona","Numune şişesine (vial), sonra headspace bölmesine","Enjektöre","Filtreye"], c:1},
+    {q:"Sonuç limit değerini aşarsa ne yapılır?", o:["Görmezden gelinir","İlgili proses ekibine (baskı/laminasyon) bildirilir","Cihaz kapatılır kalıcı olarak","Numune tekrar üretilir otomatik"], c:1},
+    {q:"Cihazın hava ve hidrojen beslemesi hangi basınçta olmalıdır?", o:["1 bar","3 bar","10 bar","Basınç önemli değil"], c:1},
+    {q:"Otomatik valf numuneyi nereye enjekte eder?", o:["Doğrudan dedektöre","Kapiler kolona","Headspace'e geri","Atık hattına"], c:1},
+    {q:"Bu cihaz hangi sektörde kullanılır?", o:["Gıda üretimi","Esnek ambalaj (baskı/laminasyon)","İnşaat","Otomotiv"], c:1},
+  ],
+
+  'nira-neptune-kalibrasyon': [
+    {q:"Kalibrasyon için ne kullanılır?", o:["Su","Sertifikalı standart kalibrasyon karışımı","Hava","Azot"], c:1},
+    {q:"Standart karışım cihaza nasıl verilir?", o:["Headspace ile aynı yoldan","Doğrudan sıvı enjeksiyonuna ayrılmış ek sızdırmazlık noktasından","Buharlaştırılarak","Cihaza verilmez"], c:1},
+    {q:"Sapma toleransın dışındaysa ne yapılır?", o:["Görmezden gelinir","Kalibrasyon eğrisi (response factor) güncellenir","Cihaz atılır","Hiçbir şey"], c:1},
+    {q:"Çok noktalı kalibrasyon neden yapılır?", o:["Gerekli değildir","Farklı konsantrasyonlarda doğrulama için","Sadece görünüm için","Hız için"], c:1},
+    {q:"Kalibrasyon sonucu nereye işlenir?", o:["Kaydedilmez","Kayıt formuna (tarih, standart, sapma)","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu SOP hangi cihazı kapsar?", o:["XTP601","Nira Neptune 801","Honeywell Optima","Esser IQ8Control"], c:1},
+    {q:"Kalibrasyon karışımı nasıl olmalıdır?", o:["Herhangi bir sıvı","Sertifikalı, bilinen konsantrasyonda","Tahmini karışım","Su ile seyreltilmiş"], c:1},
+    {q:"Kalibrasyon modu nereden seçilir?", o:["Fiziksel bir düğmeden","Dokunmatik ekrandan","Seçilmez otomatik başlar","Bilgisayardan uzaktan"], c:1},
+    {q:"Kalibrasyon işlemi hangi amaçla yapılır?", o:["Estetik","Ölçüm doğruluğunu sağlamak","Enerji tasarrufu","Hız artırmak"], c:1},
+    {q:"Enjeksiyon için hangi ekipman kullanılır?", o:["Kaşık","Enjeksiyon şırıngası","Huni","Pipet ucu yeterli değil"], c:1},
+    {q:"Bir sonraki kalibrasyon tarihi ne yapılır?", o:["Unutulur","Planlanır/not edilir","Hiçbir yere kaydedilmez","Sözlü hatırlanır"], c:1},
+    {q:"Kalibrasyon sırasında hangi KKD önerilir?", o:["Hiçbiri","Koruyucu gözlük, kimyasal dayanıklı eldiven","Sadece baret","Sadece kulaklık"], c:1},
+  ],
+
+  'nira-neptune-hidrojen': [
+    {q:"Hidrojen gazının en önemli tehlikesi nedir?", o:["Kokusu","Son derece yanıcı olması ve geniş patlama aralığı","Rengi","Ağırlığı"], c:1},
+    {q:"Hidrojen kaçağı neden sabunlu su ile test edilir?", o:["Gerekli değildir","Hidrojen kaçağı görünmez ve kokusuzdur","Sadece gelenek","Su testi daha ucuzdur"], c:1},
+    {q:"Tüp değişimi öncesi ilk adım nedir?", o:["Direkt tüpü sökmek","Cihazın hidrojen beslemesini kapatmak","Regülatörü sökmek","Hiçbir şey"], c:1},
+    {q:"Yeni tüpün saflık derecesi ne olmalıdır?", o:["Herhangi bir saflık","4,5 grade (yüksek saflık)","Endüstriyel tip","Önemli değil"], c:1},
+    {q:"Hidrojen tüpü nasıl depolanmalıdır?", o:["Yatık","Dik, sabitlenmiş, iyi havalandırılan alanda","Kapalı dolapta havasız","Sıcak bir yerde"], c:1},
+    {q:"Cihazın otomatik hidrojen kapama sistemi ne işe yarar?", o:["Enerji tasarrufu sağlar","Anomali durumunda hidrojen beslemesini otomatik keser","Sesi azaltır","Rengi değiştirir"], c:1},
+    {q:"Besleme basıncı ne olmalıdır?", o:["1 bar","3 bar","10 bar","Basınç önemli değil"], c:1},
+    {q:"Boş tüp ne yapılır?", o:["Dolu tüplerle karıştırılır","BOŞ olarak işaretlenip ayrı depolanır","Hemen atılır","Doldurulmadan tekrar kullanılır"], c:1},
+    {q:"Cihaz açılışında ek olarak ne kontrol edilir?", o:["Hiçbir şey","Alev sensörü/ateşleme durumu","Sadece ekran parlaklığı","Sadece saat"], c:1},
+    {q:"Bu SOP hangi gazı kapsar?", o:["Azot","Hidrojen (4,5 saflık)","Oksijen","Argon"], c:1},
+    {q:"Değişim sonrası ne yapılır?", o:["Hiçbir şey","Kayıt formuna işlenir","Unutulur","Sadece sözlü bildirilir"], c:1},
+    {q:"Hidrojenin patlama aralığı yaklaşık nedir?", o:["%0,1-1","%4-75","%90-99","Patlama aralığı yoktur"], c:1},
+  ],
 };
 
 /* ---------------- Storage helpers ----------------
@@ -1998,6 +2059,10 @@ const state = {
   assignSopId:null,
   assignDeadlineDraft:'',
   assignSelectedIds:new Set(),
+  currentPersonnelId: (function(){ try{ return sessionStorage.getItem('sop-sinav-personnel-id') || null; }catch(e){ return null; } })(),
+  showPersonnelLogin:false,
+  personnelLoginError:null,
+  librarySearch:'',
   complianceFilter:'all',
 };
 
@@ -2114,14 +2179,17 @@ function renderBottomNav(){
 }
 
 function renderSidebar(){
-  const items = [
+  const currentPersonnel = getCurrentPersonnel();
+  const restrictedNav = !state.isAdmin && currentPersonnel; // sadece personel girişliyse admin sekmeleri gizlenir
+  const allItems = [
     {v:'library', label:'SOP Kütüphanesi', icon:ICONS.library},
-    {v:'generate', label:'Sınav Oluştur', icon:ICONS.generate},
+    {v:'generate', label:'Sınav Oluştur', icon:ICONS.generate, adminOnly:true},
     {v:'take', label:'Sınava Gir', icon:ICONS.take},
     {v:'results', label:'Sonuçlar', icon:ICONS.results},
-    {v:'personnel', label:'Personel', icon:ICONS.users},
-    {v:'compliance', label:'Uyum Takibi', icon:ICONS.target},
+    {v:'personnel', label:'Personel', icon:ICONS.users, adminOnly:true},
+    {v:'compliance', label:'Uyum Takibi', icon:ICONS.target, adminOnly:true},
   ];
+  const items = restrictedNav ? allItems.filter(it=>!it.adminOnly) : allItems;
   return `
   <div class="sidebar">
     <div class="brand">
@@ -2139,14 +2207,20 @@ function renderSidebar(){
     `).join('')}
     <div class="sidebar-foot">
       ${state.sops.length} SOP &middot; ${state.results.length} sonuç kaydı
-      <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--line-soft);">
+      <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--line-soft); display:flex; flex-direction:column; gap:6px;">
+        ${currentPersonnel ? `
+          <div><span style="color:var(--blue);">&#9679;</span> Merhaba, ${escapeHtml(currentPersonnel.name)} &middot; <a href="#" data-personnel-logout style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Çıkış</a></div>
+        ` : `
+          <a href="#" data-personnel-login-open style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Personel Girişi</a>
+        `}
         ${state.isAdmin
-          ? `<span style="color:var(--green);">&#9679;</span> Yönetici modu &middot; <a href="#" data-admin-logout style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Çıkış</a>`
+          ? `<div><span style="color:var(--green);">&#9679;</span> Yönetici modu &middot; <a href="#" data-admin-logout style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Çıkış</a></div>`
           : `<a href="#" data-admin-login-open style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Yönetici Girişi</a>`}
       </div>
     </div>
   </div>
-  ${state.showAdminLogin ? renderAdminLoginModal() : ''}`;
+  ${state.showAdminLogin ? renderAdminLoginModal() : ''}
+  ${state.showPersonnelLogin ? renderPersonnelLoginModal() : ''}`;
 }
 
 function renderAdminLoginModal(){
@@ -2162,6 +2236,29 @@ function renderAdminLoginModal(){
       <div style="display:flex; gap:10px;">
         <button class="btn primary" data-admin-login-submit>Giriş Yap</button>
         <button class="btn ghost" data-admin-login-cancel>Vazgeç</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderPersonnelLoginModal(){
+  return `
+  <div style="position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:998; display:flex; align-items:center; justify-content:center;" data-personnel-modal-backdrop>
+    <div class="panel" style="max-width:320px; width:90%;" onclick="event.stopPropagation()">
+      <div class="panel-title">Personel Girişi</div>
+      <div class="panel-sub">Sicil numaranızı hem kullanıcı adı hem şifre olarak girin.</div>
+      <div class="field">
+        <label class="field-label">Sicil No</label>
+        <input type="text" id="personnel-id-input" placeholder="Örn. 00006752" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Şifre</label>
+        <input type="password" id="personnel-password-input" placeholder="Sicil numaranız" autocomplete="off"/>
+      </div>
+      ${state.personnelLoginError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.personnelLoginError)}</div>` : ''}
+      <div style="display:flex; gap:10px;">
+        <button class="btn primary" data-personnel-login-submit>Giriş Yap</button>
+        <button class="btn ghost" data-personnel-login-cancel>Vazgeç</button>
       </div>
     </div>
   </div>`;
@@ -2227,12 +2324,29 @@ function renderLibrary(){
     }
   }
 
+  const currentPersonnel = getCurrentPersonnel();
+  const restrictToPersonnel = !state.isAdmin && currentPersonnel;
+
+  let visibleSops = state.sops;
+  if(restrictToPersonnel){
+    visibleSops = visibleSops.filter(s => isSopAssignedToPersonnel(s.id, currentPersonnel.id));
+  }
+  const q = normalizeName(state.librarySearch);
+  if(q){
+    visibleSops = visibleSops.filter(s => normalizeName(s.title).includes(q) || normalizeName(s.category||'').includes(q));
+  }
+
   const cats = {};
-  state.sops.forEach(s => { const c=s.category||'Genel'; (cats[c]=cats[c]||[]).push(s); });
+  visibleSops.forEach(s => { const c=s.category||'Genel'; (cats[c]=cats[c]||[]).push(s); });
 
   return `
-    <div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
-      <button class="btn primary" data-toggle-add>${ICONS.plus} Yeni SOP Ekle</button>
+    ${restrictToPersonnel ? `<div class="pill live" style="margin-bottom:14px;">Sadece ${escapeHtml(currentPersonnel.name)} için atanmış SOP'lar gösteriliyor</div>` : ''}
+    <div style="display:flex; justify-content:space-between; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+      <div style="position:relative; flex:1; min-width:220px; max-width:380px;">
+        ${ICONS.search ? `<span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-2); pointer-events:none;">${ICONS.search}</span>` : ''}
+        <input type="text" id="library-search-input" placeholder="SOP ara..." value="${escapeAttr(state.librarySearch)}" style="padding-left:34px;"/>
+      </div>
+      ${!restrictToPersonnel ? `<button class="btn primary" data-toggle-add>${ICONS.plus} Yeni SOP Ekle</button>` : ''}
     </div>
     ${state.showAddForm ? renderAddSopForm() : ''}
     ${Object.keys(cats).length===0 ? renderEmptyLibrary() : Object.entries(cats).map(([cat, list]) => `
@@ -2256,7 +2370,7 @@ function renderLibrary(){
 }
 
 function renderEmptyLibrary(){
-  return `<div class="empty">${ICONS.library}<div class="t">Henüz SOP eklenmedi</div>Yukarıdan yeni bir SOP ekleyerek başlayın.</div>`;
+  return `<div class="empty">${ICONS.library}<div class="t">Sonuç bulunamadı</div>Arama teriminizi değiştirip tekrar deneyin ya da yeni bir SOP ekleyin.</div>`;
 }
 
 function renderAddSopForm(){
@@ -2307,10 +2421,17 @@ function renderGenerate(){
 /* ---------------- Take view ---------------- */
 function renderTake(){
   if(state.takeStage === 'list'){
+    const currentPersonnel = getCurrentPersonnel();
+    const restrictToPersonnel = !state.isAdmin && currentPersonnel;
+    let listSops = state.sops;
+    if(restrictToPersonnel){
+      listSops = listSops.filter(s => isSopAssignedToPersonnel(s.id, currentPersonnel.id));
+    }
     return `
-      ${state.sops.length===0 ? `<div class="empty">${ICONS.take}<div class="t">Henüz SOP eklenmedi</div>Önce SOP Kütüphanesi'nden SOP ekleyin.</div>` : `
+      ${restrictToPersonnel ? `<div class="pill live" style="margin-bottom:14px;">Hoş geldiniz, ${escapeHtml(currentPersonnel.name)} — size atanmış sınavlar</div>` : ''}
+      ${listSops.length===0 ? `<div class="empty">${ICONS.take}<div class="t">${restrictToPersonnel?'Size atanmış bir sınav yok':'Henüz SOP eklenmedi'}</div>${restrictToPersonnel?'Yöneticinizle iletişime geçin.':'Önce SOP Kütüphanesi\'nden SOP ekleyin.'}</div>` : `
       <div class="grid">
-        ${state.sops.map(sop => {
+        ${listSops.map(sop => {
           const hasBank = QUESTION_BANKS[sop.id] && QUESTION_BANKS[sop.id].length >= 5;
           return `
           <div class="card ${hasBank?'tag-green':''}">
@@ -2547,6 +2668,14 @@ function renderAddPersonnelForm(){
 
 function normalizeName(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,' '); }
 
+function getCurrentPersonnel(){
+  return state.currentPersonnelId ? state.personnel.find(p=>p.id===state.currentPersonnelId) : null;
+}
+function isSopAssignedToPersonnel(sopId, personnelId){
+  const a = state.sopAssignments[sopId];
+  return !!(a && a.personnelIds && a.personnelIds.includes(personnelId));
+}
+
 function getComplianceRows(){
   const rows = [];
   Object.entries(state.sopAssignments).forEach(([sopId, assign]) => {
@@ -2719,8 +2848,22 @@ function bindEvents(){
   document.querySelectorAll('[data-start-exam]').forEach(el=>{
     el.onclick = () => {
       state.takeSopId = el.getAttribute('data-start-exam');
-      state.takerName=''; state.takerDept='';
-      state.takeStage='name'; render();
+      const currentPersonnel = getCurrentPersonnel();
+      if(!state.isAdmin && currentPersonnel){
+        // Personel girişliyse isim adımı atlanır, doğrudan sınav başlar.
+        const sop = state.sops.find(s=>s.id===state.takeSopId);
+        let questions;
+        try{ questions = pickExamQuestions(sop); }
+        catch(err){ showToast(err.message, 'err'); return; }
+        state.takerName = currentPersonnel.name;
+        state.takerDept = currentPersonnel.dept || '';
+        state.currentQuizQuestions = questions;
+        state.answers = []; state.currentQ = 0;
+        state.takeStage='quiz'; render();
+      }else{
+        state.takerName=''; state.takerDept='';
+        state.takeStage='name'; render();
+      }
     };
   });
   const backTakeList = document.querySelector('[data-back-take-list]');
@@ -2831,6 +2974,49 @@ function bindEvents(){
     state.isAdmin = false;
     try{ sessionStorage.removeItem('sop-sinav-admin'); }catch(err){}
     render();
+  };
+
+  // personel: giriş/çıkış
+  const personnelLoginOpen = document.querySelector('[data-personnel-login-open]');
+  if(personnelLoginOpen) personnelLoginOpen.onclick = (e) => { e.preventDefault(); state.showPersonnelLogin=true; state.personnelLoginError=null; render(); };
+  const personnelLoginCancel = document.querySelector('[data-personnel-login-cancel]');
+  if(personnelLoginCancel) personnelLoginCancel.onclick = () => { state.showPersonnelLogin=false; render(); };
+  const personnelModalBackdrop = document.querySelector('[data-personnel-modal-backdrop]');
+  if(personnelModalBackdrop) personnelModalBackdrop.onclick = () => { state.showPersonnelLogin=false; render(); };
+  const personnelLoginSubmit = document.querySelector('[data-personnel-login-submit]');
+  const doPersonnelLogin = () => {
+    const idInput = document.getElementById('personnel-id-input').value.trim();
+    const pwInput = document.getElementById('personnel-password-input').value.trim();
+    const person = state.personnel.find(p => p.id === idInput);
+    if(person && pwInput === person.id){
+      state.currentPersonnelId = person.id; state.showPersonnelLogin=false; state.personnelLoginError=null;
+      try{ sessionStorage.setItem('sop-sinav-personnel-id', person.id); }catch(e){}
+      showToast(`Hoş geldiniz, ${person.name}.`);
+    }else{
+      state.personnelLoginError = 'Sicil no veya şifre hatalı.';
+    }
+    render();
+  };
+  if(personnelLoginSubmit) personnelLoginSubmit.onclick = doPersonnelLogin;
+  const personnelPwInput = document.getElementById('personnel-password-input');
+  if(personnelPwInput) personnelPwInput.onkeydown = (e) => { if(e.key==='Enter') doPersonnelLogin(); };
+  const personnelLogout = document.querySelector('[data-personnel-logout]');
+  if(personnelLogout) personnelLogout.onclick = (e) => {
+    e.preventDefault();
+    state.currentPersonnelId = null;
+    try{ sessionStorage.removeItem('sop-sinav-personnel-id'); }catch(err){}
+    if(state.view==='generate' || state.view==='personnel' || state.view==='compliance') state.view='library';
+    render();
+  };
+
+  // SOP kütüphanesi arama (her render tüm DOM'u yenilediği için odağı elle geri veriyoruz)
+  const librarySearchInput = document.getElementById('library-search-input');
+  if(librarySearchInput) librarySearchInput.oninput = (e) => {
+    state.librarySearch = e.target.value;
+    const cursorPos = e.target.selectionStart;
+    render();
+    const newInput = document.getElementById('library-search-input');
+    if(newInput){ newInput.focus(); newInput.setSelectionRange(cursorPos, cursorPos); }
   };
 
   // admin: sonuç silme
