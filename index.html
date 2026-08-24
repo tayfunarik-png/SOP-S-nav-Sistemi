@@ -330,6 +330,7 @@ async function fetchCloudResults(){
       sopTitle: r.sopTitle || '',
       name: r.name || '',
       dept: r.dept || '',
+      personnelId: r.personnelId || null,
       score: Number(r.score)||0,
       total: Number(r.total)||0,
       pct: Number(r.pct)||0,
@@ -678,6 +679,7 @@ Adımlar: 1) Hidrojen tüpü dik, sabitlenmiş, iyi havalandırılan ve ateş ka
 
 /* ---------------- Personnel seed ---------------- */
 const PERSONNEL_SEED = [
+  { id:'00013151', name:'MURAT OSMAN ÇAPUK', dept:'ÇORLU MEKANİK BAKIM', title:'MEKANİK BAKIM TEKNİSYENİ' },
   { id:'00010938', name:'SİNAN TIKNAS', dept:'ÇORLU MEKANİK BAKIM', title:'METAL İŞLERİ TEKNİSYENİ' },
   { id:'00004700', name:'TANJU ORUÇ', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
   { id:'00006752', name:'KERİM TOPRAKLI', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
@@ -705,11 +707,11 @@ const PERSONNEL_SEED = [
 ];
 
 /* ---------------- SOP assignment seed (departman bazlı, v2 - önceki hatalı atamaların üzerine yazar) ---------------- */
-const MEK = ['00006752','00008364','00009835','00009876','00009907','00010400','00010938','00004700']; // Mekanik Bakım
+const MEK = ['00006752','00008364','00009835','00009876','00009907','00010400','00010938','00004700','00013151']; // Mekanik Bakım
 const ELK = ['00010220','00000394','00007049','00008597','00008810','00010068','00010089']; // Elektrik Bakım
 const YT  = ['00012747','00011790','00006973','00007285','00007450','00007899']; // Yardımcı Tesisler
 const INS = ['00008625','00008626','00008627']; // İnşaat Proje
-const ASSIGNMENT_SEED_VERSION = 8;
+const ASSIGNMENT_SEED_VERSION = 9;
 const SOP_ASSIGNMENT_SEED = {
   'loto-elektrik': { deadline:'2026-09-22', personnelIds: ELK },
   'elektrik-pano': { deadline:'2026-09-22', personnelIds: ELK },
@@ -2064,6 +2066,7 @@ const state = {
   personnelLoginError:null,
   librarySearch:'',
   complianceFilter:'all',
+  compliancePersonFilter:'all',
 };
 
 function showToast(msg, type){
@@ -2422,6 +2425,22 @@ function renderGenerate(){
 function renderTake(){
   if(state.takeStage === 'list'){
     const currentPersonnel = getCurrentPersonnel();
+
+    // Girişsiz (ne admin ne personel) sınava girilemez - isim yazarak sınava girme
+    // yöntemi kaldırıldı; bu, sonuçların doğru kişiyle eşleşmesini garanti eder.
+    if(!state.isAdmin && !currentPersonnel){
+      return `
+        <div class="empty">
+          ${ICONS.take}
+          <div class="t">Önce giriş yapmanız gerekiyor</div>
+          Sınava girebilmek için sicil numaranızla giriş yapın.
+          <div style="margin-top:16px;">
+            <button class="btn primary" data-personnel-login-open-from-take>Personel Girişi Yap</button>
+          </div>
+        </div>
+      `;
+    }
+
     const restrictToPersonnel = !state.isAdmin && currentPersonnel;
     let listSops = state.sops;
     if(restrictToPersonnel){
@@ -2429,6 +2448,7 @@ function renderTake(){
     }
     return `
       ${restrictToPersonnel ? `<div class="pill live" style="margin-bottom:14px;">Hoş geldiniz, ${escapeHtml(currentPersonnel.name)} — size atanmış sınavlar</div>` : ''}
+      ${state.isAdmin && !currentPersonnel ? `<div class="pill" style="margin-bottom:14px;">Yönetici modu — tüm SOP'lar görünüyor, isim elle girilecek</div>` : ''}
       ${listSops.length===0 ? `<div class="empty">${ICONS.take}<div class="t">${restrictToPersonnel?'Size atanmış bir sınav yok':'Henüz SOP eklenmedi'}</div>${restrictToPersonnel?'Yöneticinizle iletişime geçin.':'Önce SOP Kütüphanesi\'nden SOP ekleyin.'}</div>` : `
       <div class="grid">
         ${listSops.map(sop => {
@@ -2666,7 +2686,20 @@ function renderAddPersonnelForm(){
   </div>`;
 }
 
-function normalizeName(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,' '); }
+function normalizeName(s){
+  // ÖNEMLİ: Türkçe karakterler küçük harfe çevrilmeden ÖNCE ASCII'ye indirgenir.
+  // Aksi halde tarayıcının varsayılan toLowerCase() işlemi "İ" harfini görünmez
+  // bir noktalı-i dizisine çevirebiliyor ve bu da aynı ismin eşleşmemesine yol açıyordu.
+  return (s||'').trim()
+    .replace(/İ/g,'I').replace(/ı/g,'i')
+    .replace(/Ş/g,'S').replace(/ş/g,'s')
+    .replace(/Ğ/g,'G').replace(/ğ/g,'g')
+    .replace(/Ü/g,'U').replace(/ü/g,'u')
+    .replace(/Ö/g,'O').replace(/ö/g,'o')
+    .replace(/Ç/g,'C').replace(/ç/g,'c')
+    .toLowerCase()
+    .replace(/\s+/g,' ');
+}
 
 function getCurrentPersonnel(){
   return state.currentPersonnelId ? state.personnel.find(p=>p.id===state.currentPersonnelId) : null;
@@ -2686,7 +2719,11 @@ function getComplianceRows(){
     assign.personnelIds.forEach(pid => {
       const person = state.personnel.find(p=>p.id===pid);
       if(!person) return;
-      const attempts = state.results.filter(r=>r.sopId===sopId && normalizeName(r.name)===normalizeName(person.name));
+      // Önce sicil no (personnelId) ile kesin eşleştirme denenir; personel girişi yapmadan
+      // (misafir olarak) alınan eski sonuçlar için isim eşleştirmesine geri dönülür.
+      const attempts = state.results.filter(r => r.sopId===sopId && (
+        r.personnelId ? r.personnelId===pid : normalizeName(r.name)===normalizeName(person.name)
+      ));
       attempts.sort((a,b)=>a.submittedAt-b.submittedAt);
       const first = attempts[0];
       let status, deviationDays;
@@ -2713,7 +2750,10 @@ function getComplianceRows(){
 
 function renderCompliance(){
   const rows = getComplianceRows();
-  const filtered = state.complianceFilter==='all' ? rows : rows.filter(r=>r.sopId===state.complianceFilter);
+  let filtered = state.complianceFilter==='all' ? rows : rows.filter(r=>r.sopId===state.complianceFilter);
+  if(state.compliancePersonFilter && state.compliancePersonFilter!=='all'){
+    filtered = filtered.filter(r=>r.personId===state.compliancePersonFilter);
+  }
 
   const completed = filtered.filter(r=>r.status!=='bekliyor').length;
   const lateOrOverdue = filtered.filter(r=>r.status==='gec'||r.status==='gecikti').length;
@@ -2728,22 +2768,36 @@ function renderCompliance(){
   };
   const maxDays = Math.max(1, ...filtered.map(r=>Math.abs(r.deviationDays||0)), 1);
 
+  const selectedPerson = (state.compliancePersonFilter && state.compliancePersonFilter!=='all')
+    ? state.personnel.find(p=>p.id===state.compliancePersonFilter) : null;
+
+  // Personel listesi: atanmış en az bir SOP'u olanlar, ada göre sıralı
+  const assignedPersonIds = new Set();
+  rows.forEach(r=>assignedPersonIds.add(r.personId));
+  const personOptions = state.personnel.filter(p=>assignedPersonIds.has(p.id)).sort((a,b)=>a.name.localeCompare(b.name,'tr'));
+
   return `
+    ${selectedPerson ? `<div class="pill live" style="margin-bottom:14px;">${escapeHtml(selectedPerson.name)} — ${escapeHtml(selectedPerson.title||selectedPerson.dept||'')}</div>` : ''}
     <div class="stat-row">
-      <div class="stat"><div class="v">${filtered.length}</div><div class="k">Toplam Atama</div></div>
+      <div class="stat"><div class="v">${filtered.length}</div><div class="k">${selectedPerson?'Atanmış SOP':'Toplam Atama'}</div></div>
       <div class="stat"><div class="v" style="color:var(--green);">${completed}</div><div class="k">Tamamlayan</div></div>
       <div class="stat"><div class="v" style="color:var(--red);">${lateOrOverdue}</div><div class="k">Geç / Gecikmede</div></div>
       <div class="stat"><div class="v" style="color:var(--text-2);">${pending}</div><div class="k">Bekliyor</div></div>
     </div>
 
-    <div style="margin-bottom:16px;">
+    <div style="margin-bottom:16px; display:flex; gap:10px; flex-wrap:wrap;">
+      <select id="compliance-person-filter" style="max-width:280px;">
+        <option value="all" ${!state.compliancePersonFilter||state.compliancePersonFilter==='all'?'selected':''}>Tüm Personel</option>
+        ${personOptions.map(p=>`<option value="${p.id}" ${state.compliancePersonFilter===p.id?'selected':''}>${escapeHtml(p.name)}</option>`).join('')}
+      </select>
       <select id="compliance-filter" style="max-width:320px;">
         <option value="all" ${state.complianceFilter==='all'?'selected':''}>Tüm SOP'lar</option>
         ${state.sops.filter(s=>state.sopAssignments[s.id]&&state.sopAssignments[s.id].personnelIds&&state.sopAssignments[s.id].personnelIds.length).map(s=>`<option value="${s.id}" ${state.complianceFilter===s.id?'selected':''}>${escapeHtml(s.title)}</option>`).join('')}
       </select>
+      ${CONFIG.sheetsWebhookUrl ? `<button class="btn ghost" data-refresh-cloud-compliance>${state.cloudSyncing?'<div class="spinner light"></div>':''} Bulut Sonuçlarını Yenile</button>` : ''}
     </div>
 
-    ${filtered.length===0 ? `<div class="empty">${ICONS.target}<div class="t">Henüz atama yok</div>"Personel" sekmesinden bir SOP'a personel atayarak başlayın.</div>` : `
+    ${filtered.length===0 ? `<div class="empty">${ICONS.target}<div class="t">${selectedPerson?'Bu kişiye atanmış SOP bulunamadı':'Henüz atama yok'}</div>${selectedPerson?'':'"Personel" sekmesinden bir SOP\'a personel atayarak başlayın.'}</div>` : `
     <div class="panel" style="padding:18px;">
       <div style="display:flex; flex-direction:column; gap:14px;">
         ${filtered.slice().sort((a,b)=>(a.deviationDays==null?999:a.deviationDays)-(b.deviationDays==null?999:b.deviationDays)).map(r => {
@@ -2797,7 +2851,7 @@ function bindEvents(){
   document.querySelectorAll('[data-nav]').forEach(el=>{
     el.onclick = () => {
       state.view = el.getAttribute('data-nav'); state.openSopId=null; render();
-      if(state.view==='results' && CONFIG.sheetsWebhookUrl && !state.cloudSyncing){
+      if((state.view==='results' || state.view==='compliance') && CONFIG.sheetsWebhookUrl && !state.cloudSyncing){
         autoSyncCloudResults();
       }
     };
@@ -2903,9 +2957,11 @@ function bindEvents(){
     qs.forEach((q,i)=>{ if(state.answers[i]===q.correctIndex) score++; });
     const total = qs.length;
     const pct = Math.round((score/total)*100);
+    const currentPersonnel = getCurrentPersonnel();
     const result = {
       id:'res-'+uid(10), sopId: sop.id, sopTitle: sop.title,
       name: state.takerName, dept: state.takerDept,
+      personnelId: (!state.isAdmin && currentPersonnel) ? currentPersonnel.id : null,
       score, total, pct, answers: state.answers.slice(),
       submittedAt: Date.now()
     };
@@ -2979,6 +3035,8 @@ function bindEvents(){
   // personel: giriş/çıkış
   const personnelLoginOpen = document.querySelector('[data-personnel-login-open]');
   if(personnelLoginOpen) personnelLoginOpen.onclick = (e) => { e.preventDefault(); state.showPersonnelLogin=true; state.personnelLoginError=null; render(); };
+  const personnelLoginOpenFromTake = document.querySelector('[data-personnel-login-open-from-take]');
+  if(personnelLoginOpenFromTake) personnelLoginOpenFromTake.onclick = (e) => { e.preventDefault(); state.showPersonnelLogin=true; state.personnelLoginError=null; render(); };
   const personnelLoginCancel = document.querySelector('[data-personnel-login-cancel]');
   if(personnelLoginCancel) personnelLoginCancel.onclick = () => { state.showPersonnelLogin=false; render(); };
   const personnelModalBackdrop = document.querySelector('[data-personnel-modal-backdrop]');
@@ -3110,6 +3168,14 @@ function bindEvents(){
   // uyum takibi
   const complianceFilter = document.getElementById('compliance-filter');
   if(complianceFilter) complianceFilter.onchange = (e) => { state.complianceFilter = e.target.value; render(); };
+  const compliancePersonFilter = document.getElementById('compliance-person-filter');
+  if(compliancePersonFilter) compliancePersonFilter.onchange = (e) => { state.compliancePersonFilter = e.target.value; render(); };
+  const refreshCloudCompliance = document.querySelector('[data-refresh-cloud-compliance]');
+  if(refreshCloudCompliance) refreshCloudCompliance.onclick = async () => {
+    const cloud = await autoSyncCloudResults();
+    if(cloud === null){ showToast('Bulut sonuçları alınamadı.', 'err'); }
+    else{ showToast('Uyum verileri güncellendi.'); }
+  };
 }
 
 boot();
