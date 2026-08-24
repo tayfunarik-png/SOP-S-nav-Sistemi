@@ -437,10 +437,236 @@ Adımlar: 1) Anahtar açılır (Access Level 2). 2) Relay + röle no + On ile de
   { id:'iq8-tarih-saat', title:'Esser IQ8Control M Tarih/Saat Girişi SOP', category:'Yangın Alarm Paneli',
     content:`KAPSAM: Esser IQ8Control M panelinde sistem tarih ve saat bilgisinin girilmesi/güncellenmesi.
 Adımlar: 1) Anahtar açılır (Access Level 2). 2) Ana menüden Time funct. tuşuna basılır, Time/Date ekranına girilir. 3) İmleç tuşlarıyla değiştirilecek alan (saat, dakika, gün, ay, yıl) seçilir. 4) Numerik tuş takımı (0-9) ile değer girilir - tarih GG.AA.YY formatında girildiğinde haftanın günü sistem tarafından otomatik hesaplanır. 5) Function tuşuyla kaydedilir - kaydetmeden çıkmak için Escape tuşuna basılmalı; herhangi bir tuşa basılmadan beklenirse ekran kaydedilmeden önceki menüye otomatik döner. 6) Güncellenen tarih/saatin doğru göründüğü teyit edilir, anahtar tekrar kilitlenir.` },
+
+  { id:'motor-degistirme', title:'Motor Değiştirme (Genel) SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Pompa, fan, konveyör vb. ekipmanları tahrik eden elektrik motorlarının sökülüp yenisiyle değiştirilmesi.
+Adımlar: 1) Motor LOTO-Elektrik'e göre enerjisi kesilir, kilitlenir, gerilim ölçerle teyit edilir. 2) Mekanik bağlantılar (kaplin, kayış, redüktör) LOTO-Mekanik'e göre izole edilir. 3) Bağlantı kabloları klemens numarası not edilerek sökülür - dizilim fotoğraflanmalı, yanlış bağlantı motoru ters yönde çalıştırabilir. 4) Motor kaldırma ekipmanıyla sökülür - ağırlığa uygun ekipman seçilmeli. 5) Yeni motorun etiket bilgileri (güç, devir, gerilim, akım) eskisiyle karşılaştırılır - uyumsuz motor ekipmana zarar verir. 6) Yeni motor yerleştirilir, hizalama yapılır - hizalama hatası titreşim ve erken arızaya yol açar. 7) Elektrik bağlantıları not edilen sıraya göre yapılır. 8) Mekanik bağlantılar takılır. 9) LOTO kaldırılır, bump test ile dönüş yönü kontrol edilir - ters yön zarar verebilir. 10) Tam yükte akım/titreşim/sıcaklık kontrol edilip kayıt formuna işlenir.` },
+
+  { id:'rulman-degistirme', title:'Rulman Değiştirme SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Motor, pompa, fan gibi dönen ekipmanlardaki rulmanların değiştirilmesi.
+Adımlar: 1) Ekipman LOTO-Elektrik ve LOTO-Mekanik'e göre enerjisiz hale getirilir. 2) Ekipman sökülür, mil/gövde temizlenir. 3) Eski rulman bearing puller ile sökülür - çekiçle vurarak sökme mil/gövdeye zarar verir. 4) Mil ve yatak yuvası aşınma yönünden kontrol edilir. 5) Yeni rulmanın tip/ölçüsü eskisiyle karşılaştırılır - yanlış rulman erken arızaya yol açar. 6) Rulman temizlenir, gerekirse ısıtılarak montaj kolaylaştırılır - soğuk zorlama/darbe rulmana zarar verir. 7) Rulman mile/yatağa monte edilir, tolerans kontrol edilir. 8) Gres/yağlama üretici talimatına göre yapılır - aşırı/yetersiz yağlama erken arızaya sebep olur. 9) LOTO kaldırılır, çalıştırılır. 10) İlk çalıştırmada titreşim/ses/sıcaklık izlenir, sonuçlar kayıt formuna işlenir.` },
+
+  { id:'pano-kart-degistirme', title:'Pano İçi Kart Değiştirme SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Elektrik/otomasyon panolarındaki arızalı kontrol kartlarının (PLC modülü, sürücü kartı vb.) değiştirilmesi.
+Adımlar: 1) Pano LOTO-Elektrik'e göre enerjisiz hale getirilir - mümkünse enerjisiz çalışma tercih edilir. 2) ESD (statik önleyici) bileklik takılır, topraklanır - kartlar statik elektriğe hassastır. 3) Arızalı kartın konumu, DIP switch/jumper ayarları ve bağlantı sırası fotoğraflanır/not edilir. 4) Konnektörler/kablolar sökülür. 5) Arızalı kart çıkarılır. 6) Yeni kartın model/versiyon numarası eskisiyle karşılaştırılır - uyumsuz versiyon sistem hatasına yol açar. 7) Yeni karta eski karttaki DIP switch/jumper ayarları aynen uygulanır. 8) Yeni kart takılır, konnektörler bağlanır. 9) Enerji verilir, durum LED'leri/haberleşme kontrol edilir. 10) Sistem fonksiyon testi yapılır, sonuçlar kayıt formuna işlenir.` },
+
+  { id:'sigorta-degistirme', title:'Sigorta Değiştirme SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Elektrik pano/devrelerindeki atmış sigortaların (fuse) güvenli değişimi.
+Adımlar: 1) Devre mümkünse LOTO-Elektrik'e göre enerjisiz hale getirilir. 2) Enerjisiz yapılamıyorsa uygun arc flash KKD ile ve yalnızca yetkili personelce yapılır. 3) Sigortanın atma nedeni araştırılır - neden giderilmeden değiştirilirse tekrar atabilir veya daha büyük hasara yol açar. 4) İzoleli sigorta çekme pensesi ile atmış sigorta çıkarılır. 5) Yeni sigortanın amper/tip değeri eskisiyle birebir aynı olduğu kontrol edilir - yanlış amperaj yangın riski oluşturur. 6) Yeni sigorta takılır. 7) Enerji verilir, devrenin normal çalıştığı teyit edilir. 8) Değişim ve nedeni kayıt formuna işlenir.` },
+
+  { id:'kompanzasyon-kontrol', title:'Kompanzasyon Sistemi Aylık Kontrol SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Güç faktörü düzeltme (kompanzasyon) panosunun aylık periyodik kontrolü.
+Adımlar: 1) Pano genel görsel kontrolü yapılır (sızıntı, ısınma izi, anormal ses/koku) - şişmiş kondansatör tehlike işaretidir. 2) Güç faktörü (cos φ) değeri okunur, hedef aralıkta olduğu kontrol edilir. 3) Kademe kontaktörlerinin devreye girip çıkma sırası gözlemlenir. 4) Kondansatör gövdelerinde şişme/deformasyon kontrol edilir - şişmiş kondansatör derhal değiştirilmelidir. 5) Bağlantı noktalarının sıkılığı ve ısınma izi (termal kamera ile) kontrol edilir. 6) Harmonik filtre (varsa) sigortaları kontrol edilir. 7) Havalandırma fanları ve filtreler kontrol edilir. 8) Sonuçlar kayıt formuna işlenir, anormallikte bakım talebi açılır.` },
+
+  { id:'lamba-ampul-degisimi', title:'Lamba/Ampul Değişimi SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Aydınlatma armatürlerindeki lamba/ampullerin güvenli değişimi.
+Adımlar: 1) Devre mümkünse LOTO-Elektrik'e göre enerjisiz hale getirilir. 2) Yükseklik gerekiyorsa Yüksekte Çalışma SOP'una uygun ekipman kullanılır. 3) Armatür kapağı açılır, eski lamba çıkarılır - sıcak lamba direkt elle tutulmamalı. 4) Yeni lambanın tip/güç/duy uyumu kontrol edilir. 5) Yeni lamba takılır, kapak kapatılır. 6) Enerji verilir, çalıştığı teyit edilir. 7) Eski lamba (cıva içerenler) uygun atık prosedürüne göre bertaraf edilir. 8) İşlem kayıt formuna işlenir.` },
+
+  { id:'sicaklik-sensoru-degisimi', title:'Sıcaklık Sensörü Değişimi SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Proses hatlarındaki sıcaklık sensörlerinin (PT100, termokupl vb.) değiştirilmesi.
+Adımlar: 1) Proses/ekipman durdurulur veya sensör devresi LOTO-Elektrik'e göre enerjisiz hale getirilir. 2) Hatta basınç/sıcaklık varsa hat güvenli hale getirilir (boşaltılır/soğutulur) - aksi halde yanık/yaralanma riski taşır. 3) Sensör kabloları klemens no not edilerek sökülür. 4) Sensör termowell'den sökülür. 5) Yeni sensörün tip/aralık (range) değeri karşılaştırılır - yanlış sensör hatalı okumaya yol açar. 6) Yeni sensör takılır, sızdırmazlık kontrol edilir. 7) Kablo bağlantıları yeniden yapılır. 8) Devreye alınır, okuma referans değerle doğrulanır. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'basinc-sensoru-degisimi', title:'Sıvı Akışkanlı Hatlarda Basınç Sensörü Değişimi SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Sıvı akışkanlı (su, yağ vb.) hatlardaki basınç sensörlerinin (transmitter) değiştirilmesi.
+Adımlar: 1) Sensör devresi LOTO-Elektrik'e göre enerjisiz hale getirilir. 2) Hat izolasyon vanası kapatılır - basınçlı kalırsa sökümde sıvı fışkırması riski oluşur. 3) Tahliye vanasından kalıntı basınç boşaltılır, manometreden sıfır teyit edilir. 4) Kablolar klemens no not edilerek sökülür. 5) Sensör hattan sökülür - sızıntı için toplama kabı hazır bulundurulmalı. 6) Yeni sensörün basınç aralığı ve bağlantı tipi karşılaştırılır. 7) Yeni sensör takılır, sızdırmazlık (conta/teflon bant) sağlanır. 8) Kablo bağlantıları yapılır. 9) Vana kademeli açılır - ani açma su darbesi riski oluşturur. 10) Okuma referansla karşılaştırılır, sonuçlar kayıt formuna işlenir.` },
+
+  { id:'motor-kayis-degisimi', title:'Motor Kayış Değişimi SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Kayış-kasnak tahrikli ekipmanlarda aşınmış/kopmuş kayışların değiştirilmesi.
+Adımlar: 1) Ekipman LOTO-Elektrik ve LOTO-Mekanik'e göre enerjisiz hale getirilir. 2) Kayış koruma muhafazası sökülür. 3) Gerginlik ayar mekanizması gevşetilir. 4) Eski kayış çıkarılır - zorlayarak/aletle çıkarma kayışa/kasnağa zarar verir, gerginlik gevşetilerek çıkarılmalı. 5) Kasnaklar aşınma/hizalama yönünden kontrol edilir - hizasızlık erken aşınmaya yol açar. 6) Yeni kayışın tip/ölçüsü karşılaştırılır. 7) Yeni kayış takılır, gerginlik üretici talimatına göre ayarlanır - aşırı gergin rulman yükünü artırır, gevşek kayma yapar. 8) Muhafaza takılır. 9) LOTO kaldırılır, kayış hizası/sesi/titreşimi kontrol edilir. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'zemin-beton-imalat', title:'Zemin Beton İmalat İşlemleri SOP', category:'İnşaat',
+    content:`KAPSAM: Fabrika sahasında zemin beton döküm/onarım işlemleri.
+Adımlar: 1) Çalışma alanı belirlenir, bariyer ile çevrilir. 2) Zemin hazırlığı yapılır (kırım, sıkıştırma, donatı/hasır çelik). 3) Kalıp kurulur, seviye/eğim kontrol edilir. 4) Beton karışımı şartnameye uygun hazırlanır/temin edilir. 5) Döküm yapılır, mala/şap makinesiyle yüzey düzeltilir. 6) Kür (curing) için yüzey nemli tutulur/kür örtüsü uygulanır - erken kuruma çatlamaya yol açar. 7) Priz süresince alan trafiğe kapalı tutulur, uyarı levhaları asılır. 8) Priz sonrası kalıp sökülür, yüzey kalitesi kontrol edilir. 9) Alan temizlenir, bariyerler kaldırılır. 10) Uygulama detayları kayıt formuna işlenir.` },
+
+  { id:'alcipan-duvar-montaji', title:'Alçıpan Duvar Montajı SOP', category:'İnşaat',
+    content:`KAPSAM: İç mekan bölme duvarlarının alçıpan sistemiyle montajı.
+Adımlar: 1) Duvar güzergahı zemine/tavana işaretlenir. 2) Metal profil iskeleti dübel ile sabitlenir - aralık üretici talimatına uygun olmalı. 3) Dikme profiller monte edilir. 4) Duvar içi elektrik/tesisat hatları (varsa) yerleştirilir. 5) Yalıtım malzemesi (gerekiyorsa) profiller arasına yerleştirilir. 6) Alçıpan levhalar vidalarla sabitlenir - çok sıkılan vida levhayı yırtar. 7) Derzler file bant ve alçı macunla düzeltilir (bantlama-macunlama). 8) Yüzey zımparalanır. 9) Alan temizlenir, atıklar bertaraf edilir. 10) Uygulama kayıt formuna işlenir.` },
+
+  { id:'kapi-montaji', title:'Kapı Montajı SOP', category:'İnşaat',
+    content:`KAPSAM: İç/dış mekan kapı (kasa+kanat) montajı.
+Adımlar: 1) Kapı boşluğu ölçüsü kasa ölçüsüyle karşılaştırılır. 2) Kasa boşluğa yerleştirilir, su terazisiyle hizası kontrol edilir - hizasız kasa açılıp kapanmayı engeller. 3) Kasa takoz/kama ile geçici sabitlenir. 4) Kasa duvara vida/dübel veya köpük ile kalıcı sabitlenir. 5) Kapı kanadı menteşelere takılır, hareketi kontrol edilir. 6) Kilit/kolye mekanizması monte edilir, test edilir. 7) Kasa-duvar boşluğu doldurulur. 8) Pervaz montajı yapılır. 9) Son fonksiyon kontrolü yapılır. 10) Uygulama kayıt formuna işlenir.` },
+
+  { id:'vana-montaji', title:'Vana Montajı SOP', category:'İnşaat',
+    content:`KAPSAM: Proses hatlarına yeni vana (küresel, kelebek, sürgülü vb.) montajı.
+Adımlar: 1) Hat LOTO/izolasyon prosedürüne göre devre dışı bırakılır, boşaltılır. 2) Artık basınç/sıvı tahliye edilir. 3) Vana ölçüsü (flanş/dişli) ve basınç sınıfı (PN) hatla uyumu kontrol edilir - uyumsuz vana sızıntı/patlama riski oluşturur. 4) Bağlantı yüzeyleri temizlenir. 5) Conta uygun tipte yerleştirilir. 6) Vana monte edilir, cıvatalar çapraz sırayla ve belirtilen tork değerinde sıkılır - eşit olmayan sıkma sızıntıya yol açar. 7) Akış yönü hat yönüyle uyumu kontrol edilir. 8) Hat kademeli devreye alınır, sızıntı kontrolü yapılır. 9) Açma-kapama fonksiyonu test edilir. 10) Montaj kayıt formuna işlenir.` },
+
+  { id:'piston-degisimi', title:'Piston Değişimi SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Kompresör, pompa veya hidrolik/pnömatik silindirlerdeki pistonların değiştirilmesi.
+Adımlar: 1) Ekipman LOTO-Elektrik ve LOTO-Mekanik'e göre enerjisiz/basınçsız hale getirilir. 2) Hidrolik/pnömatik hat basıncı tahliye edilir, sıfır teyit edilir. 3) Piston erişimi için kapak/gövde sökülür. 4) Eski piston silindirden sökülür - piston kolu/pim bağlantıları dikkatli sökülmeli. 5) Silindir iç yüzeyi aşınma yönünden kontrol edilir. 6) Yeni pistonun ölçü/tip uyumu karşılaştırılır. 7) Piston segmanları doğru yönde ve sırada takılır - ters segman yağ kaçağına yol açar. 8) Piston monte edilir, tork değerleriyle sabitlenir. 9) Kapak parçaları takılır, sızdırmazlık kontrol edilir. 10) Sistem kademeli devreye alınır, performans kontrol edilip kayıt formuna işlenir.` },
+
+  { id:'pompa-degisimi', title:'Pompa Değişimi SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Proses/yardımcı sistemlerdeki arızalı pompaların komple değiştirilmesi.
+Adımlar: 1) Pompa LOTO-Elektrik ve LOTO-Mekanik'e göre enerjisiz hale getirilir. 2) Emme/basma hattı vanaları kapatılır, hat boşaltılır - boşaltılmazsa sıvı akmasına yol açar. 3) Elektrik bağlantıları klemens no not edilerek sökülür. 4) Kaplin bağlantısı ve mesnet cıvataları sökülür. 5) Eski pompa kaldırma ekipmanıyla alınır. 6) Yeni pompanın debi/basma yüksekliği (H-Q eğrisi) ve bağlantı ölçüleri karşılaştırılır - uyumsuz pompa performansı olumsuz etkiler. 7) Yeni pompa yerleştirilir, hizalama yapılır. 8) Hat bağlantıları yapılır, contalar yenilenir. 9) Elektrik bağlanır, dönüş yönü bump test ile kontrol edilir. 10) Vanalar kademeli açılır, debi/basınç/titreşim kontrol edilip kayıt formuna işlenir.` },
+
+  { id:'solvent-geri-kazanim', title:'Solvent Geri Kazanım Tesisi SOP', category:'Termal Sistemler',
+    content:`KAPSAM: Solvent geri kazanım (recovery) tesisinin periyodik kontrolü ile devreye alma/kapatma işlemleri.
+Adımlar: 1) Tesis dairesi genel görsel kontrolü yapılır; sızıntı, anormal koku, yanıcı buhar birikimi olmadığı teyit edilir - solvent buharı patlayıcı ortam oluşturabilir, iyi havalandırma şarttır. 2) Gaz algılama sensörlerinin (LEL) çalışır ve kalibreli olduğu kontrol edilir. 3) Solvent tank seviyeleri kontrol edilir, taşma/boşalma riski değerlendirilir. 4) Buhar yoğuşturucu (kondenser) soğutma suyu akışı/sıcaklığı kontrol edilir. 5) Aktif karbon adsorbsiyon üniteleri (varsa) doygunluk durumu kontrol edilir - doymuş karbon verim düşüklüğüne yol açar. 6) Devreye alma sırasıyla (fan, kondenser, pompa) üretici prosedürüne göre yapılır. 7) Çalışma basınç/sıcaklık/debi değerleri referansla karşılaştırılır. 8) Kapatma proses durdurulup soğuma/boşaltma sırasına göre yapılır - ani kapatma solvent birikimine yol açar. 9) Acil durdurma butonları kontrol edilir. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'trafo-bakim', title:'Trafo Periyodik Bakım SOP', category:'Elektrik Altyapı',
+    content:`KAPSAM: Güç trafolarının periyodik bakım ve kontrolü.
+Adımlar: 1) Trafo dairesi genel görsel kontrolü (sızıntı, kirlenme, anormal ses/koku). 2) Yağ seviyesi göstergeden kontrol edilir - düşük seviye izolasyon zafiyetine yol açar. 3) Yağ sıcaklığı ve Buchholz rölesi (varsa) kontrol edilir. 4) İzolatör/buşing yüzeyleri kirlenme/çatlak yönünden kontrol edilir. 5) Topraklama bağlantıları kontrol edilir. 6) Termal kamera ile bağlantı noktalarında ısınma kontrolü yapılır. 7) Havalandırma/soğutma fanları kontrol edilir. 8) Trafo odası kapı/kilit güvenliği ve uyarı levhaları kontrol edilir. 9) Periyodik yağ analiz sonuçları (varsa) gözden geçirilir. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'jenerator-test', title:'Jeneratör Periyodik Test SOP', category:'Elektrik Altyapı',
+    content:`KAPSAM: Yedek güç jeneratörünün periyodik test çalıştırması.
+Adımlar: 1) Genel görsel kontrol (sızıntı, hasar). 2) Yakıt seviyesi kontrol edilir, düşükse ikmal talep edilir. 3) Motor yağ ve soğutma suyu seviyesi kontrol edilir. 4) Akü voltajı/şarj durumu kontrol edilir. 5) Panel test moduna alınır veya start butonuna basılır. 6) Motor start alması, voltaj/frekans/RPM'in normal aralıkta olduğu gözlemlenir. 7) Yük altında test edilir. 8) Otomatik transfer switch (ATS) fonksiyonu test edilir - şebeke kesintisinde otomatik devreye girme kontrol edilmeli. 9) Egzoz/gürültü/sızıntı kontrol edilir. 10) Test sonrası durdurulur, panel normal moda alınır, sonuçlar kayıt formuna işlenir.` },
+
+  { id:'ups-test', title:'UPS Periyodik Test SOP', category:'Elektrik Altyapı',
+    content:`KAPSAM: Kesintisiz güç kaynağının (UPS) periyodik test ve bakımı.
+Adımlar: 1) Panel gösterge/ekranı kontrol edilir, arıza uyarısı olmadığı teyit edilir. 2) Akü grubu voltajı/şarj durumu kontrol edilir. 3) Akülerin fiziksel durumu (şişme, sızıntı, korozyon) kontrol edilir - şişmiş akü derhal değiştirilmeli. 4) Yük yüzdesi kontrol edilir, aşırı yüklenme olmadığı teyit edilir. 5) Bypass anahtarı kontrol edilir. 6) Havalandırma/soğutma fanları kontrol edilir. 7) Batarya test fonksiyonu ile yedekleme süresi kontrol edilir - test sırasında yük UPS'e bağımlı olur, dikkatli yapılmalı. 8) Alarm/olay kayıtları (log) gözden geçirilir. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'demir-kaynak-atolyesi', title:'Demir/Kaynak Atölyesi Güvenlik Talimatı', category:'Atölyeler',
+    content:`KAPSAM: Demir/kaynak atölyesinde genel çalışma düzeni ve ekipman güvenlik kuralları.
+Adımlar: 1) Giriş öncesi uygun KKD (kaynak maskesi, önlük, eldiven, çelik burunlu ayakkabı) giyilir. 2) Kaynak makinesi/kesme ekipmanı kablo/hortum hasarı yönünden kontrol edilir. 3) Çevredeki yanıcı malzemeler uzaklaştırılır (bkz. Sıcak Çalışma İzni SOP). 4) Havalandırma (duman aspiratörü) kontrol edilir. 5) Oksi-gaz tüpleri dik, sabitlenmiş ve geri tepme valfli olmalı. 6) Taşlama/kesme işlerinde koruyucu siperlik/gözlük kullanılır, sıçrama alanı kontrol edilir. 7) El aletleri hasar yönünden kontrol edilir. 8) İş bitiminde ekipmanlar kapatılır, tüpler kapatılır, alan temizlenir. 9) Çıkışta yangın riski (kor, sıcak parça) son kez kontrol edilir.` },
+
+  { id:'torna-atolyesi', title:'Torna Atölyesi Güvenlik Talimatı', category:'Atölyeler',
+    content:`KAPSAM: Torna atölyesinde genel çalışma düzeni ve ekipman güvenlik kuralları.
+Adımlar: 1) Giriş öncesi uygun KKD (gözlük, dar/bağlı iş elbisesi) giyilir - bol kıyafet/takı dönen mile takılma riski taşır. 2) Torna tezgahı genel kontrolü yapılır (yağlama, koruma siperleri yerinde). 3) İş parçası punta/ayna ile sağlam bağlanır. 4) Kesme hızı/ilerleme parametreleri malzemeye uygun seçilir. 5) Talaş temizleme sırasında makine durdurulmadan asla elle müdahale edilmez - dönen parçaya elle temas ciddi yaralanmaya yol açar. 6) Talaş fırça/kanca ile, makine dururken temizlenir. 7) Soğutma sıvısı seviyesi/akışı kontrol edilir. 8) Koruyucu siperlik/gözlük her zaman kullanılır - fırlayan talaş göz yaralanmasına yol açabilir. 9) İş bitiminde tezgah kapatılır, talaşlar temizlenir.` },
+
+  { id:'boya-atolyesi', title:'Boya Atölyesi/İşleri Çalışma Talimatı', category:'Atölyeler',
+    content:`KAPSAM: Boya atölyesi ve saha boya işlerinde uyulması gereken güvenlik kuralları.
+Adımlar: 1) Boya öncesi ortam havalandırması sağlanır - boya buharları yanıcı ve sağlığa zararlı olabilir. 2) Boya/tiner orijinal ambalajda, etiketli ve SDS'e uygun saklanır. 3) Ateş kaynağı/sıcak yüzey bulunmadığı kontrol edilir - boya buharları patlayıcı ortam oluşturabilir. 4) Yüzey hazırlığı (temizlik, zımparalama) yapılır. 5) Uygun solunum maskesi (organik buhar filtresi) ve KKD giyilir. 6) Boya karışımı üretici talimatına göre hazırlanır. 7) Uygulama yapılır, çevre yüzeyler örtülerek korunur. 8) Ekipman uygun solventle temizlenir, atık bertaraf edilir. 9) Alan kuruyana kadar erişime kapatılır. 10) İş bitiminde alan havalandırılır, atıklar bertaraf edilir.` },
+
+  { id:'kalip-insaat-isleri', title:'Kalıp/İnşaat İşleri Genel Talimatı', category:'Atölyeler',
+    content:`KAPSAM: Betonarme kalıp kurma/söküm ve genel inşaat destek işleri güvenlik kuralları.
+Adımlar: 1) Alan bariyer ile çevrilir, geçiş güzergahları işaretlenir. 2) Kalıp malzemesi hasar yönünden kontrol edilir, hasarlı malzeme kullanılmaz. 3) Kalıp iskeletinin yeterli desteklenmiş (payanda, dikme) olduğu kontrol edilir - yetersiz destekleme çökme riski taşır. 4) Yükseklik gerektiren işlerde Yüksekte Çalışma SOP'una uygun ekipman kullanılır. 5) Döküm sırasında kalıp basıncı/deformasyonu gözlemlenir. 6) Kalıp söküm zamanı beton priz süresine (mühendis onayına) göre belirlenir - erken söküm çökme riski taşır. 7) Söküm sırasında alt bölge boşaltılır/bariyer edilir. 8) Malzemeler düzenli istiflenir, çivi/keskin uçlar bükülür. 9) İş bitiminde alan temizlenir.` },
+
+  { id:'chiller-bakim', title:'Chiller Periyodik Bakım SOP', category:'Soğutma/İklimlendirme',
+    content:`KAPSAM: Soğutma sistemi chiller ünitesinin periyodik bakımı ile devreye alma/kapatma.
+Adımlar: 1) Genel görsel kontrol (sızıntı, anormal ses/titreşim). 2) Soğutucu akışkan basıncı göstergeden kontrol edilir, referansta olduğu teyit edilir. 3) Kondenser/evaporatör yüzeyleri kirlenme yönünden kontrol edilir, gerekirse temizlenir - kirli yüzey verim kaybına yol açar. 4) Su/glikol devresi basıncı/akışı kontrol edilir. 5) Kompresör yağ seviyesi (varsa) kontrol edilir. 6) Elektrik panosu/kontrol devresi kontrol edilir. 7) Devreye alma: su pompaları önce çalıştırılır, akış sağlanınca kompresör devreye alınır - susuz kompresör çalıştırma ciddi hasara yol açar. 8) Çalışma değerleri referansla karşılaştırılır. 9) Kapatma: kompresör önce durdurulur, su sirkülasyonu bir süre devam eder. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'klima-santralleri', title:'Klima Santralleri (AHU) Periyodik Bakım SOP', category:'Soğutma/İklimlendirme',
+    content:`KAPSAM: Klima santrallerinin (Air Handling Unit) periyodik bakım ve kontrolü.
+Adımlar: 1) AHU LOTO-Elektrik'e göre enerjisiz hale getirilir (bakım gerektiren müdahalelerde). 2) Filtre durumu kontrol edilir, kirli filtreler değiştirilir - tıkalı filtre debiyi düşürür, enerji tüketimini artırır. 3) Fan/motor bağlantıları ve kayış (varsa) kontrol edilir. 4) Isıtıcı/soğutucu batarya yüzeyleri kirlenme yönünden kontrol edilir. 5) Damper mekanizmaları kontrol edilir. 6) Kondens tavası/drenaj hattı tıkanıklık yönünden kontrol edilir - tıkanma su taşmasına yol açar. 7) Nem alma/nemlendirme ünitesi (varsa) kontrol edilir. 8) LOTO kaldırılır, hava debisi/sıcaklığı kontrol edilir. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'soguk-su-pompalari', title:'Soğuk Su Sirkülasyon Pompaları SOP', category:'Soğutma/İklimlendirme',
+    content:`KAPSAM: Soğuk su sistemi sirkülasyon pompalarının periyodik bakımı ve devreye alma.
+Adımlar: 1) Pompa LOTO-Elektrik'e göre enerjisi kesilir, kilitlenir. 2) Gövde/bağlantılar sızıntı, korozyon yönünden kontrol edilir. 3) Salmastra/mekanik keçe kontrol edilir, gerekirse değiştirilir. 4) Motor-pompa akuplasyonu kontrol edilir. 5) Yataklama gres/yağlama durumu kontrol edilir. 6) Motor akım değerleri karşılaştırılır. 7) Bakım sonrası LOTO kaldırılır, vana konumları teyit edilir. 8) Pompa çalıştırılır, sistemin su dolu olduğu teyit edilerek kuru çalıştırma önlenir. 9) Basınç/akış/titreşim kontrol edilir, sonuçlar kayıt formuna işlenir.` },
+
+  { id:'sogutma-kulesi', title:'Soğutma Kulesi Periyodik Bakım SOP', category:'Soğutma/İklimlendirme',
+    content:`KAPSAM: Soğutma kulesinin periyodik bakım ve kontrolü.
+Adımlar: 1) Genel görsel kontrol (yapısal hasar, su sızıntısı). 2) Su seviyesi (havuz) kontrol edilir, otomatik doldurma valfi çalışması teyit edilir. 3) Fan/motor ve kayış (varsa) kontrol edilir. 4) Dolgu malzemesi (fill) kirlenme/tıkanma yönünden kontrol edilir - kirli dolgu soğutma verimini düşürür. 5) Su dağıtım nozulları tıkanıklık yönünden kontrol edilir. 6) Su kalitesi (kimyasal dozaj, Legionella riski açısından biyosit) kontrol edilir - soğutma kuleleri Legionella üremesi için uygun ortam oluşturabilir, düzenli kimyasal muamele şarttır. 7) Blöf (blowdown) sistemi kontrol edilir. 8) Kule çevresi/havuzu periyodik temizlenir. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'kompresor-bakim', title:'Kompresör Periyodik Bakım SOP', category:'Basınçlı Hava',
+    content:`KAPSAM: Basınçlı hava kompresörlerinin (vidalı/pistonlu) periyodik bakım ve kontrolü.
+Adımlar: 1) Kompresör LOTO-Elektrik'e göre enerjisiz hale getirilir (bakım gerektiren müdahalelerde). 2) Hava/yağ filtreleri kontrol edilir, kirli olanlar değiştirilir. 3) Yağ seviyesi/kalitesi kontrol edilir (vidalı tiplerde). 4) Kayış gerginliği (pistonlu tiplerde) kontrol edilir. 5) Emniyet valfi fonksiyonu kontrol edilir - arızalı emniyet valfi aşırı basınç riski oluşturur. 6) Soğutma sistemi temizliği kontrol edilir. 7) Basınç şalteri ayarları kontrol edilir. 8) Kondens tahliye sistemi kontrol edilir. 9) LOTO kaldırılır, basınç/sıcaklık/ses kontrol edilir. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'kurutucu-hava-tanki', title:'Kurutucu ve Hava Tankı Periyodik Kontrol SOP', category:'Basınçlı Hava',
+    content:`KAPSAM: Basınçlı hava kurutucu ve hava tankının periyodik kontrolü.
+Adımlar: 1) Genel görsel kontrol (sızıntı, anormal ses). 2) Çiy noktası (dew point) göstergesi kontrol edilir - yüksek çiy noktası hatlarda yoğuşmaya yol açar. 3) Soğutmalı tiplerde soğutucu akışkan basıncı, adsorbsiyonlu tiplerde kartuş/desikan durumu kontrol edilir. 4) Ön/son filtreler kontrol edilir, kirli olanlar değiştirilir. 5) Hava tankı gövdesi korozyon/hasar yönünden kontrol edilir. 6) Tank emniyet valfi fonksiyonu kontrol edilir. 7) Otomatik kondens tahliye valfi kontrol edilir - tıkalı tahliye tankta su birikimine yol açar. 8) Tank basınç göstergesi doğruluğu kontrol edilir. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'su-yumusatma', title:'Su Yumuşatma Sistemi Periyodik Bakım SOP', category:'Su Sistemleri',
+    content:`KAPSAM: Su yumuşatma (softener) sisteminin periyodik bakımı ve rejenerasyon işlemleri.
+Adımlar: 1) Genel görsel kontrol (sızıntı, reçine tankı durumu). 2) Çıkış suyu sertliği test kitiyle ölçülür, referansın altında olduğu teyit edilir. 3) Tuz (rejenerasyon) tankı seviyesi kontrol edilir, gerekirse tuz ilave edilir. 4) Rejenerasyon döngüsü başlatılır - reçinenin kapasitesini geri kazanması için gereklidir. 5) Geri yıkama, tuzlu su emme, durulama aşamalarının sırayla gerçekleştiği gözlemlenir. 6) Rejenerasyon sonrası çıkış suyu tekrar test edilir. 7) Valf pozisyonları (servis/rejenerasyon) kontrol edilir. 8) Sistem basıncı/akışı kontrol edilir. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'hidrofor-sistemi', title:'Hidrofor Sistemi Periyodik Kontrol SOP', category:'Su Sistemleri',
+    content:`KAPSAM: Hidrofor (basınçlandırma) sisteminin periyodik kontrolü.
+Adımlar: 1) Genel görsel kontrol (sızıntı, anormal ses). 2) Sistem basıncı (start/stop değerleri) manometreden kontrol edilir. 3) Hidrofor tankı hava yastığı basıncı kontrol edilir - yetersiz hava yastığı pompanın sık devreye girmesine yol açar. 4) Pompaların otomatik start/stop döngüsü gözlemlenir. 5) Kuru çalışma koruma (su baskını) sensörü kontrol edilir. 6) Motor akım değerleri kontrol edilir. 7) Vana pozisyonları (emme/basma) kontrol edilir. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'su-deposu-temizlik', title:'Su Deposu Periyodik Temizlik/Kontrol SOP', category:'Su Sistemleri',
+    content:`KAPSAM: Fabrika su depolarının periyodik temizlik ve kontrolü.
+Adımlar: 1) Depo boşaltılmadan önce alternatif su beslemesi/stok değerlendirilir. 2) Giriş/çıkış vanaları kapatılır, depo boşaltılır. 3) Depo içine giriş gerekiyorsa Kapalı Alanda Çalışma SOP'una göre izin alınır, atmosfer testi yapılır. 4) İç yüzeyler (tortu, biyofilm, alg) temizlenir. 5) Yapısal hasar (çatlak, korozyon) kontrol edilir. 6) Depo durulanır, kimyasal kalıntısı kalmadığı teyit edilir. 7) Depo doldurulur, su kalitesi (bulanıklık, klor vb.) test edilir. 8) Vanalar normal işletim konumuna getirilir. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'kimyasal-aritma', title:'Kimyasal Arıtma Periyodik Kontrol SOP', category:'Su Sistemleri',
+    content:`KAPSAM: Proses/atık suyu kimyasal arıtma sisteminin periyodik kontrolü.
+Adımlar: 1) Genel görsel kontrol (sızıntı, kimyasal depolama durumu). 2) Kimyasal dozaj pompalarının çalıştığı ve dozaj oranları kontrol edilir. 3) pH, iletkenlik gibi parametreler ölçülür, referansla karşılaştırılır. 4) Kimyasal tank seviyeleri kontrol edilir, gerekirse ikmal yapılır - kimyasal aktarımında SDS talimatlarına uyulmalı. 5) Karıştırıcı/havalandırıcı ekipmanlar kontrol edilir. 6) Çamur/atık tahliye sistemi kontrol edilir. 7) Numune alınarak laboratuvar analizi (gerekirse) yapılır. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'sicak-su-pompalari', title:'Sıcak Su Sirkülasyon Pompaları SOP', category:'Termal Sistemler',
+    content:`KAPSAM: Sıcak su sistemi sirkülasyon pompalarının periyodik bakımı ve devreye alma.
+Adımlar: 1) Pompa LOTO-Elektrik'e göre enerjisi kesilir, kilitlenir. 2) Gövde/bağlantılar sızıntı yönünden kontrol edilir - sıcak su sızıntısı yanık riski taşır. 3) Salmastra/mekanik keçe kontrol edilir. 4) Motor-pompa akuplasyonu kontrol edilir. 5) Yataklama gres/yağlama durumu kontrol edilir. 6) Motor akım değerleri kontrol edilir. 7) Bakım sonrası LOTO kaldırılır, vana konumları teyit edilir. 8) Pompa çalıştırılır, sistemin su dolu olduğu teyit edilerek kuru çalıştırma önlenir - sıcak su sisteminde kuru çalıştırma ciddi hasara yol açar. 9) Basınç/akış/titreşim/sıcaklık kontrol edilir, sonuçlar kayıt formuna işlenir.` },
+
+  { id:'basincli-hava-sizinti', title:'Basınçlı Hava Hattı Sızıntı Tespiti SOP', category:'Basınçlı Hava',
+    content:`KAPSAM: Fabrika genelindeki basınçlı hava dağıtım hatlarında sızıntı tespiti ve onarımı.
+Adımlar: 1) Sızıntı şüphesi olan bölge/hat belirlenir, saha gözlemi yapılır. 2) Ultrasonik sızıntı dedektörü (varsa) ile hat taranır. 3) Sızıntı noktası işaretlenir. 4) Hat LOTO/izolasyon prosedürüne göre devre dışı bırakılır, basıncı tahliye edilir. 5) Sızıntı kaynağı belirlenir. 6) Arızalı parça/bağlantı değiştirilir veya sızdırmazlık yenilenir. 7) Bağlantı uygun tork ile sıkılır. 8) Hat kademeli devreye alınır, sabunlu su testiyle sızıntı kalmadığı teyit edilir. 9) Onarım kayıt formuna işlenir.` },
+
+  { id:'elektrikli-el-aleti-kontrolu', title:'Elektrikli El Aleti Kullanım Öncesi Kontrol SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Matkap, taşlama, vidalama gibi elektrikli el aletlerinin kullanım öncesi güvenlik kontrolü.
+Adımlar: 1) Alet gövdesi çatlak/kırık yönünden kontrol edilir. 2) Kablo ve fiş hasar yönünden kontrol edilir - hasarlı kablo elektrik çarpması riski taşır. 3) Topraklama hattının (varsa) sağlam olduğu kontrol edilir. 4) Koruma siperi/muhafazası yerinde olduğu kontrol edilir. 5) Çalıştırma/durdurma anahtarı test edilir. 6) Aksesuar (uç, disk) uyumlu ve hasarsız olduğu kontrol edilir - uyumsuz aksesuar fırlama riski taşır. 7) Kaçak akım rölesi (RCD) korumalı priz kullanılır. 8) Hasarlı alet derhal kullanım dışı bırakılıp etiketlenir. 9) Kullanım sonrası alet kapatılır, düzenli saklanır.` },
+
+  { id:'kacis-yolu-kontrolu', title:'Kaçış Yolu ve Acil Çıkış Kapıları Kontrolü SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Fabrika kaçış yolları ve acil çıkış kapılarının periyodik kontrolü.
+Adımlar: 1) Kaçış yolları boyunca engel bulunmadığı kontrol edilir - engel tahliyede ciddi risk oluşturur. 2) Acil çıkış kapılarının kilitli olmadığı, panik bar mekanizmasının çalıştığı kontrol edilir. 3) Kaçış yolu acil aydınlatması çalışır durumda kontrol edilir. 4) Yönlendirme levhaları görünür ve okunaklı kontrol edilir. 5) Kapıların dışarıya doğru açıldığı kontrol edilir. 6) Toplanma alanı işaretlemesi kontrol edilir. 7) Tespit edilen engel/arıza giderilir. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'priz-anahtar-armatur', title:'Priz/Anahtar/Aydınlatma Armatürü Montaj-Değişimi SOP', category:'Elektrik Altyapı',
+    content:`KAPSAM: Priz, anahtar ve aydınlatma armatürlerinin montaj/değişim işlemleri.
+Adımlar: 1) İlgili devre LOTO-Elektrik'e göre enerjisiz hale getirilir. 2) Eski ekipman sökülür, kablo bağlantıları not edilir. 3) Yeni ekipmanın voltaj/akım uyumu kontrol edilir. 4) Kablo bağlantıları (faz, nötr, toprak) doğru yapılır - toprak bağlantısının atlanması ciddi güvenlik riski oluşturur. 5) Ekipman sabitlenir. 6) Bağlantılar enerji verilmeden önce görsel kontrol edilir. 7) Enerji verilir, çalıştığı test edilir. 8) Kapak/pano düzeni toparlanır. 9) İşlem kayıt formuna işlenir.` },
+
+  { id:'kablo-cekimi-kanal', title:'Kablo Çekimi ve Kablo Kanalı Döşeme SOP', category:'Elektrik Altyapı',
+    content:`KAPSAM: Yeni elektrik kablosu çekimi ve kablo kanalı/tavası döşeme işlemleri.
+Adımlar: 1) Güzergah belirlenir, mevcut tesisatlarla çakışma kontrol edilir. 2) Kablo kanalı/tava güzergaha sabitlenir. 3) Kablo kesiti yük hesabına uygun seçilir - yetersiz kesit aşırı ısınma/yangın riski taşır. 4) Kablo çekimi yapılır, aşırı çekme kuvveti uygulanmaz. 5) Büküm yarıçapı üretici toleransına uygun olmalı - aşırı büküm iletkende hasara yol açar. 6) Kablo kanal içinde düzenli dizilir, etiketlenir. 7) Uçlar panoya/klemense enerjisiz ortamda bağlanır. 8) İzolasyon direnci (megger) testi yapılır. 9) Enerji verilir, fonksiyon testi yapılır. 10) Uygulama kayıt formuna işlenir.` },
+
+  { id:'duman-isi-dedektoru', title:'Duman/Isı Dedektörü Fiziksel Temizlik ve Test SOP', category:'Yangın Alarm Paneli',
+    content:`KAPSAM: Yangın alarm sistemi duman/ısı dedektörlerinin fiziksel temizliği ve fonksiyon testi.
+Adımlar: 1) Test öncesi ilgili bölgenin test modunda olduğu panele bildirilir (yanlış alarm önleme). 2) Dedektör dış yüzeyi temizlenir - kirli dedektör hatalı algılamaya yol açabilir. 3) Kapak açılarak iç kısım kontrol edilir. 4) Test spreyi/ısı kaynağı ile fonksiyon testi yapılır. 5) Panelde alarm sinyali verdiği teyit edilir. 6) Test sonrası dedektör resetlenir, panel normal moda alınır. 7) Arızalı dedektör değiştirilir/servis çağrılır. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'hidrolik-unite-bakimi', title:'Hidrolik Ünite Bakımı ve Yağ Analizi SOP', category:'Hidrolik/Pnömatik',
+    content:`KAPSAM: Hidrolik güç ünitelerinin periyodik bakımı ve yağ analizi.
+Adımlar: 1) Ünite LOTO-Elektrik'e göre enerjisiz hale getirilir (müdahale gerektiren bakımlarda). 2) Yağ seviyesi kontrol edilir, tamamlanır. 3) Yağ filtresi kirlilik göstergesi kontrol edilir. 4) Yağ sıcaklığı çalışma aralığında kontrol edilir - aşırı sıcaklık yağ bozulmasını hızlandırır. 5) Numune alınarak periyodik yağ analizi yaptırılır - erken arıza tespiti sağlar. 6) Hortum/boru bağlantılarında sızıntı kontrol edilir. 7) Basınç ayarları (relief valve) kontrol edilir. 8) Pompa/motor titreşim ve sesi kontrol edilir. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'hidrolik-hortum-degisimi', title:'Hidrolik Hortum/Boru Değişimi SOP', category:'Hidrolik/Pnömatik',
+    content:`KAPSAM: Hidrolik sistemlerdeki aşınmış/hasarlı hortum ve boruların değiştirilmesi.
+Adımlar: 1) Sistem LOTO-Mekanik'e göre basınçsız hale getirilir; akümülatör (varsa) boşaltılır. 2) Basıncın sıfır olduğu manometreden teyit edilir - basınçlı hortum sökümü ciddi yaralanmaya yol açabilir. 3) Bağlantılar (fitting) sökülür. 4) Sızan yağ için toplama kabı kullanılır. 5) Yeni hortumun basınç sınıfı/ölçüsü karşılaştırılır. 6) Yeni hortum bağlanır, tork ile sıkılır. 7) Sistem kademeli basınçlandırılır, düşük basınçta sızıntı kontrolü yapılır. 8) Tam basınçta fonksiyon testi yapılır. 9) Atıklar bertaraf edilir. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'hidrolik-silindir-bakimi', title:'Hidrolik Silindir Bakımı SOP', category:'Hidrolik/Pnömatik',
+    content:`KAPSAM: Hidrolik silindirlerin periyodik bakımı ve sızdırmazlık kontrolü.
+Adımlar: 1) Sistem LOTO-Mekanik'e göre basınçsız hale getirilir. 2) Silindir gövdesi/mil yüzeyi hasar yönünden kontrol edilir - çizik mil yüzeyi sızıntıya yol açar. 3) Bağlantı noktalarında sızıntı kontrol edilir. 4) Keçe/conta aşınması kontrol edilir, değiştirilir. 5) Silindir sökülecekse mekanik destekle sabitlenir - kontrolsüz düşme riski taşır. 6) Keçe değişimi üretici sırasına uygun yapılır. 7) Silindir monte edilir, bağlantılar sıkılır. 8) Sistem kademeli basınçlandırılır, sızıntı/hareket testi yapılır. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'pnomatik-valf-silindir', title:'Pnömatik Valf/Silindir Bakımı SOP', category:'Hidrolik/Pnömatik',
+    content:`KAPSAM: Pnömatik valf ve silindirlerin periyodik bakımı.
+Adımlar: 1) Sistem LOTO-Mekanik'e göre basınçsız hale getirilir, hat tahliye edilir. 2) Valf/silindir gövdesi hasar yönünden kontrol edilir. 3) Bağlantılarda sızıntı (sabunlu su testi) kontrol edilir. 4) Silindir keçeleri aşınma yönünden kontrol edilir. 5) Yağlayıcı (varsa) yağ seviyesi kontrol edilir. 6) Filtre-regülatör kontrol edilir, kondens tahliye edilir. 7) Solenoid valf bağlantıları kontrol edilir. 8) Sistem devreye alınır, fonksiyon testi yapılır. 9) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'topraklama-direnc-olcumu', title:'Topraklama Sistemi Periyodik Direnç Ölçümü SOP', category:'Elektrik Altyapı',
+    content:`KAPSAM: Fabrika topraklama sisteminin periyodik direnç ölçümü ve kontrolü.
+Adımlar: 1) Ölçüm yapılacak topraklama noktaları belirlenir. 2) Topraklama megeri ile ölçüm yapılır. 3) Sonuçlar ilgili standarda göre değerlendirilir - yüksek direnç elektrik çarpması/arıza riskini artırır. 4) Bağlantı noktaları korozyon/gevşeklik yönünden kontrol edilir. 5) Süreklilik testi (varsa) yapılır. 6) Referansın üzerinde direnç tespit edilirse elektrot/bağlantı iyileştirilir. 7) Sonuçlar kayıt formuna işlenir. 8) Anormallikte bakım talebi açılır.` },
+
+  { id:'reduktor-yag-degisimi', title:'Redüktör (Dişli Kutusu) Yağ Değişimi/Bakımı SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Redüktörlerin periyodik yağ değişimi ve bakımı.
+Adımlar: 1) Redüktör LOTO-Elektrik ve LOTO-Mekanik'e göre enerjisiz hale getirilir. 2) Gövde sızıntı/hasar yönünden kontrol edilir. 3) Eski yağ tapasından boşaltılır - hafif ısınmışken yağ daha akışkan olur. 4) Boşaltılan yağ görsel incelenir (renk, metal parçacık) - metal parçacık iç aşınma göstergesidir. 5) İç kısım gerekiyorsa temizlenir. 6) Yeni yağ üretici talimatına uygun doldurulur. 7) Yağ seviyesi teyit edilir. 8) LOTO kaldırılır, sızıntı/ses/titreşim kontrol edilir. 9) Eski yağ bertaraf edilir. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'kaplin-degisimi', title:'Kaplin Değişimi SOP', category:'Mekanik/Elektrik Bakım',
+    content:`KAPSAM: Motor-ekipman arasındaki kaplin (coupling) bağlantı elemanının değiştirilmesi.
+Adımlar: 1) Ekipman LOTO-Elektrik ve LOTO-Mekanik'e göre enerjisiz hale getirilir. 2) Koruma muhafazası sökülür. 3) Eski kaplin elemanı sökülür. 4) Mil yüzeyleri/göbekler aşınma yönünden kontrol edilir. 5) Yeni kaplin tip/ölçüsü karşılaştırılır. 6) Yeni kaplin takılır. 7) Hizalama kontrol edilir/yapılır - hizalama hatası titreşime yol açar. 8) Muhafaza takılır. 9) LOTO kaldırılır, titreşim/ses kontrol edilir. 10) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'paratoner-kontrolu', title:'Paratoner (Yıldırımlık) Periyodik Kontrolü SOP', category:'Elektrik Altyapı',
+    content:`KAPSAM: Fabrika paratoner sisteminin periyodik kontrolü.
+Adımlar: 1) Paratoner ucu görsel kontrolü yapılır (yükseklik gerektiriyorsa Yüksekte Çalışma SOP'una uyulur). 2) İniş iletkenleri süreklilik ve bağlantı sağlamlığı kontrol edilir. 3) Topraklama bağlantı noktaları kontrol edilir. 4) Topraklama direnci ölçülür, referansın altında olduğu teyit edilir. 5) Bağlantı klemensleri korozyon yönünden kontrol edilir. 6) Süreklilik testi (varsa) yapılır. 7) Anormallikte derhal bakım talebi açılır. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'kalinlik-olcum-kalibrasyonu', title:'Kalınlık Ölçüm Cihazı Kalibrasyonu SOP', category:'Kalite Ölçüm',
+    content:`KAPSAM: Üretimde kullanılan film/levha kalınlık ölçüm cihazlarının periyodik kalibrasyonu.
+Adımlar: 1) Cihaz üretici talimatındaki süre kadar ısınmaya bırakılır. 2) Sertifikalı referans kalınlık standardı temin edilir. 3) Cihaz sıfır kalibrasyonu yapılır. 4) Referans standart ölçülür, sertifika değeriyle karşılaştırılır. 5) Sapma toleransın dışındaysa cihaz ayarlanır. 6) Farklı aralıkta ikinci referansla doğrulama yapılır. 7) Sonuç (tarih, referans, sapma) kayıt formuna işlenir. 8) Kalibrasyon etiketi cihaza yapıştırılır.` },
+
+  { id:'viskozimetre-kalibrasyonu', title:'Viskozimetre Kalibrasyonu SOP', category:'Kalite Ölçüm',
+    content:`KAPSAM: Mürekkep/kaplama viskozite ölçüm cihazlarının (viskozimetre) periyodik kalibrasyonu.
+Adımlar: 1) Cihaz ve referans belirtilen test sıcaklığına getirilir - sıcaklık viskoziteyi doğrudan etkiler. 2) Cihaz temizliği yapılır. 3) Sertifikalı referans viskozite sıvısı ile ölçüm yapılır. 4) Değer sertifika değeriyle karşılaştırılır. 5) Sapma toleransın dışındaysa ayarlanır/servis çağrılır. 6) Farklı aralıkta ikinci referansla doğrulama yapılır. 7) Sonuç kayıt formuna işlenir. 8) Kalibrasyon etiketi yapıştırılır.` },
+
+  { id:'vinc-kren-yillik-muayene', title:'Vinç/Kren Yıllık Periyodik Muayene SOP', category:'Kaldırma Ekipmanları',
+    content:`KAPSAM: Fabrika vinç/kren ekipmanlarının yasal zorunlu yıllık periyodik muayenesi.
+Adımlar: 1) Yetkili/akredite muayene kuruluşu ile randevu planlanır. 2) Günlük kontrol kayıtları gözden geçirilir. 3) Çalışma alanı/erişim güvenli hale getirilir. 4) Statik yük testi (nominal kapasitenin ~%125'i) muayene elemanı gözetiminde yapılır. 5) Dinamik yük ve fren testi yapılır. 6) Halat/zincir, kanca, limit switch kontrol edilir. 7) Uygunluk raporu ve etiketi düzenlenir. 8) Uygun olmayan bulgularda vinç kullanım dışı bırakılır. 9) Rapor kayıt altına alınır, sonraki muayene tarihi takvime işlenir.` },
+
+  { id:'cati-bakimi-su-yalitimi', title:'Çatı Bakımı ve Su Yalıtımı Kontrolü SOP', category:'Yapısal/Genel Bakım',
+    content:`KAPSAM: Fabrika çatısının periyodik bakımı ve su yalıtımı kontrolü.
+Adımlar: 1) Çatıya çıkışta Yüksekte Çalışma SOP'una uygun önlemler alınır. 2) Çatı yüzeyi görsel kontrolü yapılır (çatlak, şişme, yırtık membran). 3) Dere/oluk ve tahliye ağızları tıkanıklık yönünden kontrol edilir - tıkanıklık su birikmesine/sızıntıya yol açar. 4) Çatı geçişleri etrafındaki yalıtım detayları kontrol edilir. 5) Hasar tespit edilirse onarım yapılır. 6) Yabancı malzeme/birikinti temizlenir. 7) İç mekanda su izi ayrıca kontrol edilir. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'kanalizasyon-drenaj', title:'Kanalizasyon/Yağmur Suyu Drenaj Sistemi Kontrolü SOP', category:'Yapısal/Genel Bakım',
+    content:`KAPSAM: Fabrika saha kanalizasyon ve yağmur suyu drenaj sisteminin periyodik kontrolü.
+Adımlar: 1) Izgara/rögar kapakları görsel kontrolü yapılır. 2) Izgaralardaki yabancı madde temizlenir. 3) Rögar içi tıkanıklık kontrol edilir (girmek gerekiyorsa Kapalı Alanda Çalışma SOP'una uyulur). 4) Hatlarda geriye akış/taşma belirtisi kontrol edilir. 5) Yağ/kum tutucu üniteler doluluk yönünden kontrol edilir. 6) Saha yüzey eğimleri/su birikinti noktaları gözlemlenir. 7) Tıkanıklık/hasar giderilir. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'gaz-tupu-depolama', title:'Gaz Tüpü (LPG/Oksijen/Asetilen) Depolama ve Güvenli Değişim SOP', category:'Atölyeler',
+    content:`KAPSAM: Kaynak/kesme işlerinde kullanılan gaz tüplerinin güvenli depolanması ve değişimi.
+Adımlar: 1) Tüpler dik, sabitlenmiş ve birbirinden ayrı (oksijen-yanıcı gaz) depolanır - birlikte depolama yangın/patlama riskini artırır. 2) Depolama alanı iyi havalandırılan, ateş kaynağından uzak olmalıdır. 3) Değişimde önce vana kapatılır, hat basıncı tahliye edilir. 4) Regülatör sökülür, bağlantı yüzeyi temizlenir. 5) Yeni tüp güvenlik kontrolünden geçirilir. 6) Regülatör takılır, sızdırmazlık sabunlu su ile kontrol edilir. 7) Tüp taşımada uygun tüp arabası kullanılır - yuvarlanarak taşınmaz. 8) Değişim kayıt formuna işlenir. 9) Boş tüpler işaretlenip ayrı alanda depolanır.` },
+
+  { id:'yangin-dolabi-hidrant', title:'Yangın Dolabı (Hidrant) Periyodik Kontrolü SOP', category:'Yangın Sistemleri',
+    content:`KAPSAM: Fabrika içi/dışı yangın dolaplarının (hidrant) periyodik kontrolü.
+Adımlar: 1) Dolap kapısının kolay açılabilir olduğu, önünde engel olmadığı kontrol edilir. 2) Hortum sarılı düzeninin bozulmadığı, hasar olmadığı kontrol edilir. 3) Lans (nozul) bağlantısı/fonksiyonu kontrol edilir. 4) Vananın kolayca açılıp kapandığı test edilir. 5) Hat basıncı (varsa) kontrol edilir. 6) Yılda bir su akış testi yapılır - hattın gerçekten su verdiği teyit edilmelidir. 7) Dolap işaretlemesi (kırmızı renk, tabela) net olduğu kontrol edilir. 8) Sonuçlar kayıt formuna işlenir.` },
+
+  { id:'emniyet-kemeri-muayene', title:'Emniyet Kemeri ve Düşme Önleme Ekipmanları Periyodik Muayene SOP', category:'Temel Güvenlik',
+    content:`KAPSAM: Tam vücut emniyet kemeri, halat, karabina gibi düşme önleme ekipmanlarının periyodik muayenesi.
+Adımlar: 1) Ekipman kullanım öncesi ve periyodik (genelde yılda bir) muayene edilir. 2) Kemer kayışları kesik/aşınma/UV bozulması yönünden kontrol edilir. 3) Dikişlerde sökülme kontrol edilir. 4) Metal parçalar (toka, D-halka, karabina) korozyon yönünden kontrol edilir. 5) Enerji sönümleyici etiketinin aktive olmamış olduğu kontrol edilir. 6) Halat/yaşam hattı hasar yönünden kontrol edilir. 7) Hasarlı ekipman derhal kullanım dışı bırakılıp imha edilir - hasarlı ekipmanla çalışma ciddi düşme riski taşır. 8) Sonuçlar kayıt formuna işlenir, sonraki muayene takvime eklenir.` },
 ];
 
 /* ---------------- Personnel seed ---------------- */
 const PERSONNEL_SEED = [
+  { id:'00010938', name:'SİNAN TIKNAS', dept:'ÇORLU MEKANİK BAKIM', title:'METAL İŞLERİ TEKNİSYENİ' },
+  { id:'00004700', name:'TANJU ORUÇ', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
   { id:'00006752', name:'KERİM TOPRAKLI', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
   { id:'00008364', name:'BÜLENT ÇABUKER', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
   { id:'00009835', name:'BURHAN BAYINDIR', dept:'ÇORLU MEKANİK BAKIM', title:'KIDEMLİ MEKANİK BAKIM TEKNİSYENİ' },
@@ -466,11 +692,11 @@ const PERSONNEL_SEED = [
 ];
 
 /* ---------------- SOP assignment seed (departman bazlı, v2 - önceki hatalı atamaların üzerine yazar) ---------------- */
-const MEK = ['00006752','00008364','00009835','00009876','00009907','00010400']; // Mekanik Bakım
+const MEK = ['00006752','00008364','00009835','00009876','00009907','00010400','00010938','00004700']; // Mekanik Bakım
 const ELK = ['00010220','00000394','00007049','00008597','00008810','00010068','00010089']; // Elektrik Bakım
 const YT  = ['00012747','00011790','00006973','00007285','00007450','00007899']; // Yardımcı Tesisler
 const INS = ['00008625','00008626','00008627']; // İnşaat Proje
-const ASSIGNMENT_SEED_VERSION = 3;
+const ASSIGNMENT_SEED_VERSION = 7;
 const SOP_ASSIGNMENT_SEED = {
   'loto-elektrik': { deadline:'2026-09-22', personnelIds: ELK },
   'elektrik-pano': { deadline:'2026-09-22', personnelIds: ELK },
@@ -493,6 +719,62 @@ const SOP_ASSIGNMENT_SEED = {
   'iq8-dedektor-acma-kapama': { deadline:'2026-09-22', personnelIds: YT },
   'iq8-role-kontrolu': { deadline:'2026-09-22', personnelIds: YT },
   'iq8-tarih-saat': { deadline:'2026-09-22', personnelIds: YT },
+  'motor-degistirme': { deadline:'2026-09-22', personnelIds: [...MEK, ...ELK] },
+  'rulman-degistirme': { deadline:'2026-09-22', personnelIds: MEK },
+  'pano-kart-degistirme': { deadline:'2026-09-22', personnelIds: ELK },
+  'sigorta-degistirme': { deadline:'2026-09-22', personnelIds: ELK },
+  'kompanzasyon-kontrol': { deadline:'2026-09-22', personnelIds: ELK },
+  'lamba-ampul-degisimi': { deadline:'2026-09-22', personnelIds: ELK },
+  'sicaklik-sensoru-degisimi': { deadline:'2026-09-22', personnelIds: ELK },
+  'basinc-sensoru-degisimi': { deadline:'2026-09-22', personnelIds: [...ELK, ...YT] },
+  'motor-kayis-degisimi': { deadline:'2026-09-22', personnelIds: MEK },
+  'zemin-beton-imalat': { deadline:'2026-09-22', personnelIds: INS },
+  'alcipan-duvar-montaji': { deadline:'2026-09-22', personnelIds: INS },
+  'kapi-montaji': { deadline:'2026-09-22', personnelIds: INS },
+  'vana-montaji': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
+  'piston-degisimi': { deadline:'2026-09-22', personnelIds: MEK },
+  'pompa-degisimi': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
+  'solvent-geri-kazanim': { deadline:'2026-09-22', personnelIds: YT },
+  'trafo-bakim': { deadline:'2026-09-22', personnelIds: ELK },
+  'jenerator-test': { deadline:'2026-09-22', personnelIds: ELK },
+  'ups-test': { deadline:'2026-09-22', personnelIds: ELK },
+  'demir-kaynak-atolyesi': { deadline:'2026-09-22', personnelIds: MEK },
+  'torna-atolyesi': { deadline:'2026-09-22', personnelIds: MEK },
+  'boya-atolyesi': { deadline:'2026-09-22', personnelIds: INS },
+  'kalip-insaat-isleri': { deadline:'2026-09-22', personnelIds: INS },
+  'chiller-bakim': { deadline:'2026-09-22', personnelIds: YT },
+  'klima-santralleri': { deadline:'2026-09-22', personnelIds: YT },
+  'soguk-su-pompalari': { deadline:'2026-09-22', personnelIds: YT },
+  'sogutma-kulesi': { deadline:'2026-09-22', personnelIds: YT },
+  'kompresor-bakim': { deadline:'2026-09-22', personnelIds: YT },
+  'kurutucu-hava-tanki': { deadline:'2026-09-22', personnelIds: YT },
+  'su-yumusatma': { deadline:'2026-09-22', personnelIds: YT },
+  'hidrofor-sistemi': { deadline:'2026-09-22', personnelIds: YT },
+  'su-deposu-temizlik': { deadline:'2026-09-22', personnelIds: YT },
+  'kimyasal-aritma': { deadline:'2026-09-22', personnelIds: YT },
+  'sicak-su-pompalari': { deadline:'2026-09-22', personnelIds: YT },
+  'basincli-hava-sizinti': { deadline:'2026-09-22', personnelIds: YT },
+  'elektrikli-el-aleti-kontrolu': { deadline:'2026-09-22', personnelIds: [...MEK, ...ELK, ...YT, ...INS] },
+  'kacis-yolu-kontrolu': { deadline:'2026-09-22', personnelIds: YT },
+  'priz-anahtar-armatur': { deadline:'2026-09-22', personnelIds: ELK },
+  'kablo-cekimi-kanal': { deadline:'2026-09-22', personnelIds: ELK },
+  'duman-isi-dedektoru': { deadline:'2026-09-22', personnelIds: YT },
+  'hidrolik-unite-bakimi': { deadline:'2026-09-22', personnelIds: MEK },
+  'hidrolik-hortum-degisimi': { deadline:'2026-09-22', personnelIds: MEK },
+  'hidrolik-silindir-bakimi': { deadline:'2026-09-22', personnelIds: MEK },
+  'pnomatik-valf-silindir': { deadline:'2026-09-22', personnelIds: MEK },
+  'topraklama-direnc-olcumu': { deadline:'2026-09-22', personnelIds: ELK },
+  'reduktor-yag-degisimi': { deadline:'2026-09-22', personnelIds: MEK },
+  'kaplin-degisimi': { deadline:'2026-09-22', personnelIds: MEK },
+  'paratoner-kontrolu': { deadline:'2026-09-22', personnelIds: ELK },
+  'kalinlik-olcum-kalibrasyonu': { deadline:'2026-09-22', personnelIds: YT },
+  'viskozimetre-kalibrasyonu': { deadline:'2026-09-22', personnelIds: YT },
+  'vinc-kren-yillik-muayene': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT] },
+  'cati-bakimi-su-yalitimi': { deadline:'2026-09-22', personnelIds: INS },
+  'kanalizasyon-drenaj': { deadline:'2026-09-22', personnelIds: YT },
+  'gaz-tupu-depolama': { deadline:'2026-09-22', personnelIds: MEK },
+  'yangin-dolabi-hidrant': { deadline:'2026-09-22', personnelIds: YT },
+  'emniyet-kemeri-muayene': { deadline:'2026-09-22', personnelIds: [...MEK, ...YT, ...INS] },
 };
 
 /* ---------------- Question banks (statik - API gerektirmez) ----------------
@@ -803,6 +1085,846 @@ const QUESTION_BANKS = {
     {q:"İşlem sonunda ne teyit edilmelidir?", o:["Hiçbir şey","Güncellenen tarih/saatin doğru göründüğü","Sadece saat","Sadece tarih"], c:1},
     {q:"Bu SOP'un amacı nedir?", o:["Bölge ayarlamak","Sistem tarih/saat bilgisini girmek/güncellemek","Röle kontrolü","Lamba testi"], c:1},
     {q:"Tarih girişi tamamlandıktan sonra anahtar ne yapılır?", o:["Açık bırakılır","Tekrar kilitlenir","Sökülür","Kaybedilir"], c:1},
+  ],
+
+  'motor-degistirme': [
+    {q:"Motor sökümüne başlamadan önce ilk adım nedir?", o:["Kabloları sökmek","LOTO-Elektrik'e göre enerjiyi kesip kilitlemek","Motoru kaldırmak","Yeni motoru getirmek"], c:1},
+    {q:"Bağlantı kabloları sökülürken neden dikkatli olunmalı?", o:["Kablo pahalı olduğu için","Yanlış bağlantı motoru ters yönde çalıştırabileceği için","Estetik nedenlerle","Hiçbir sebep yok"], c:1},
+    {q:"Yeni motor takılmadan önce ne karşılaştırılmalıdır?", o:["Rengi","Etiket bilgileri (güç, devir, gerilim, akım)","Ağırlığı sadece","Üretici logosu"], c:1},
+    {q:"Hizalama (alignment) hatası neye yol açar?", o:["Hiçbir soruna","Titreşim ve erken arızaya","Enerji tasarrufuna","Daha sessiz çalışmaya"], c:1},
+    {q:"Bump test ne amaçla yapılır?", o:["Sesi kontrol etmek için","Dönüş yönünü kontrol etmek için","Sıcaklığı ölçmek için","Yağ seviyesini kontrol etmek için"], c:1},
+    {q:"Motor kaldırılırken nelere dikkat edilmelidir?", o:["Herhangi bir ekipman kullanılabilir","Ağırlığa uygun kaldırma ekipmanı seçilmeli","Elle kaldırılmalı","Dikkat edilecek bir şey yok"], c:1},
+    {q:"Mekanik bağlantılar hangi SOP'a göre izole edilir?", o:["LOTO-Elektrik","LOTO-Mekanik","Yüksekte Çalışma","Kapalı Alan"], c:1},
+    {q:"Ters yönde çalışan motor ne yapabilir?", o:["Normal çalışır","Bağlı ekipmana zarar verebilir","Daha hızlı çalışır","Hiçbir etkisi olmaz"], c:1},
+    {q:"Tam yükte çalıştırıldıktan sonra hangi değerler kontrol edilir?", o:["Sadece renk","Akım, titreşim, sıcaklık","Sadece ses","Hiçbiri"], c:1},
+    {q:"Bu SOP hangi tip ekipmanları kapsar?", o:["Sadece pompalar","Pompa, fan, konveyör vb. tahrik motorları","Sadece fanlar","Sadece konveyörler"], c:1},
+    {q:"Kablo dizilimi neden fotoğraflanmalıdır?", o:["Gerekli değildir","Doğru yeniden bağlantı için","Sadece arşiv amaçlı","Estetik için"], c:1},
+    {q:"Enerji kesme işlemi hangi SOP referans alınarak yapılır?", o:["Kaldırma Ekipmanları SOP","LOTO-Elektrik SOP","Sıcak Çalışma SOP","Yüksekte Çalışma SOP"], c:1},
+  ],
+
+  'rulman-degistirme': [
+    {q:"Eski rulman nasıl sökülmelidir?", o:["Çekiçle vurarak","Bearing puller (çekme aparatı) ile","Elle çekerek","Kesici aletle"], c:1},
+    {q:"Çekiçle vurarak söküm ne riski taşır?", o:["Risk yoktur","Mil/gövdeye zarar verebilir","Daha hızlı olur","Rulmanı korur"], c:1},
+    {q:"Rulman montajında ısıtma neden kullanılabilir?", o:["Gereksizdir","Montajı kolaylaştırmak için","Rulmanı temizlemek için","Rengini değiştirmek için"], c:1},
+    {q:"Soğuk halde zorlayarak/darbeyle montajın riski nedir?", o:["Risk yoktur","Rulmana zarar verir","Daha sağlam olur","Ömrünü uzatır"], c:1},
+    {q:"Gres/yağlama miktarıyla ilgili ne söylenebilir?", o:["Ne kadar çok o kadar iyi","Aşırı veya yetersiz yağlama erken arızaya sebep olur","Yağlamaya gerek yok","Sadece yılda bir yapılır"], c:1},
+    {q:"Yeni rulman seçerken nelere dikkat edilir?", o:["Sadece renk","Tip/ölçü uyumu","Fiyatı","Ağırlığı"], c:1},
+    {q:"İlk çalıştırmada neler izlenir?", o:["Hiçbir şey","Titreşim, ses, sıcaklık","Sadece renk","Sadece hız"], c:1},
+    {q:"Rulman değişimi öncesi ekipman durumu ne olmalıdır?", o:["Enerjili olmalı","LOTO'ya göre enerjisiz hale getirilmeli","Fark etmez","Yarı enerjili olabilir"], c:1},
+    {q:"Mil ve yatak yuvası neden kontrol edilir?", o:["Gerekli değildir","Aşınma/çizik olup olmadığı için","Sadece renk için","Ağırlık için"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Sadece motorlar","Motor, pompa, fan gibi dönen ekipmanlar","Sadece pompalar","Sadece fanlar"], c:1},
+    {q:"Rulman montaj toleransı neden önemlidir?", o:["Önemli değildir","Yanlış tolerans erken arızaya yol açar","Sadece görünüm için","Renk uyumu için"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada tutulur","Sözlü bildirilir"], c:1},
+  ],
+
+  'pano-kart-degistirme': [
+    {q:"ESD bileklik neden kullanılır?", o:["Estetik amaçlı","Kartları statik elektrikten korumak için","Elektrik çarpmasını önlemek için","Gerekli değildir"], c:1},
+    {q:"Kart değişimi öncesi hangi bilgiler not edilmelidir?", o:["Hiçbiri","DIP switch/jumper ayarları ve bağlantı sırası","Sadece renk","Sadece marka"], c:1},
+    {q:"Yeni kart takılmadan önce ne kontrol edilir?", o:["Fiyatı","Model/versiyon numarası uyumu","Rengi","Ağırlığı"], c:1},
+    {q:"Uyumsuz kart versiyonu ne riski taşır?", o:["Risk yoktur","Sistem hatasına yol açabilir","Daha hızlı çalışır","Otomatik düzelir"], c:1},
+    {q:"Pano çalışmasında hangi yöntem tercih edilir?", o:["Her zaman enerjili","Mümkünse enerjisiz","Fark etmez","Rastgele"], c:1},
+    {q:"Kart takıldıktan sonra ne kontrol edilir?", o:["Hiçbir şey","Durum LED'leri ve haberleşme","Sadece renk","Sadece sıcaklık"], c:1},
+    {q:"DIP switch ayarları neden önemlidir?", o:["Önemli değildir","Yeni kartın doğru çalışması için eski ayarlarla eşleşmeli","Sadece görünüm için","Rastgele ayarlanabilir"], c:1},
+    {q:"İşlem sonunda ne yapılır?", o:["Hiçbir şey","Sistem fonksiyon testi yapılır","Panel kapatılır","Kart saklanır"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Sadece PLC'ler","PLC modülü, sürücü kartı gibi kontrol kartları","Sadece sensörler","Sadece motorlar"], c:1},
+    {q:"Konnektörler nasıl sökülmelidir?", o:["Hızlıca çekilerek","Dikkatlice","Kesilerek","Zorlayarak"], c:1},
+    {q:"ESD bileklik nereye bağlanmalıdır?", o:["Hiçbir yere","Topraklamaya","Enerji hattına","Panoya değil"], c:1},
+    {q:"Kart değişimi hangi tür panolar için geçerlidir?", o:["Sadece güç panoları","Elektrik/otomasyon panoları","Sadece dağıtım panoları","Sadece aydınlatma panoları"], c:1},
+  ],
+
+  'sigorta-degistirme': [
+    {q:"Sigorta değiştirmeden önce en önemli adım nedir?", o:["Hemen değiştirmek","Devreyi mümkünse enerjisiz hale getirmek","Yeni sigorta almak","Hiçbir şey"], c:1},
+    {q:"Sigortanın atma nedeni araştırılmazsa ne olabilir?", o:["Sorun olmaz","Tekrar atabilir veya daha büyük hasara yol açabilir","Sigorta uzun ömürlü olur","Otomatik düzelir"], c:1},
+    {q:"Yeni sigortanın amper değeri nasıl olmalıdır?", o:["Daha yüksek olabilir","Eskisiyle birebir aynı olmalı","Daha düşük olabilir","Önemli değil"], c:1},
+    {q:"Yanlış amperajda sigorta kullanmanın riski nedir?", o:["Risk yoktur","Yangın riski oluşturur","Enerji tasarrufu sağlar","Daha uzun ömürlü olur"], c:1},
+    {q:"Sigorta çıkarmak için hangi alet kullanılır?", o:["Adi pense","İzoleli sigorta çekme pensesi","Çıplak el","Tornavida"], c:1},
+    {q:"Enerjisiz yapılamayan durumlarda ne gereklidir?", o:["Hiçbir önlem","Arc flash KKD ve yetkili personel","Sadece eldiven","Herkes yapabilir"], c:1},
+    {q:"Değişim sonrası ne teyit edilmelidir?", o:["Hiçbir şey","Devrenin normal çalıştığı","Sadece görünüm","Sadece sigorta rengi"], c:1},
+    {q:"Sigorta değişimi kayıt formuna işlenirken ne yazılmalıdır?", o:["Hiçbir şey","Değişim ve atma nedeni","Sadece tarih","Sadece isim"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Motorlar","Elektrik pano/devrelerindeki sigortalar","Pompalar","Vanalar"], c:1},
+    {q:"Sigorta değiştirmeden önce hangi ölçüm yapılabilir?", o:["Gerekmez","Gerilim ölçümü","Sıcaklık ölçümü","Basınç ölçümü"], c:1},
+    {q:"Kim enerjili sigorta değişimi yapabilir?", o:["Herkes","Yalnızca yetkili personel","Sadece stajyerler","Kimse yapamaz"], c:1},
+    {q:"Sigorta atma nedeni giderilmeden değişim yapılırsa ne olur?", o:["Sorun kalmaz","Tekrar atabilir","Sigorta daha güçlü olur","Hiçbir şey"], c:1},
+  ],
+
+  'kompanzasyon-kontrol': [
+    {q:"Bu kontrol hangi sıklıkla yapılır?", o:["Günlük","Aylık","Yıllık","Hiç yapılmaz"], c:1},
+    {q:"Şişmiş kondansatör ne anlama gelir?", o:["Normal durum","Tehlike işareti, derhal değiştirilmeli","İyi çalıştığının göstergesi","Önemsiz"], c:1},
+    {q:"Güç faktörü (cos φ) nereden okunur?", o:["Termometre","Röle/ölçüm cihazı","Manometre","Ampermetre"], c:1},
+    {q:"Kademe kontaktörlerinde ne gözlemlenir?", o:["Renk","Devreye girip çıkma sırası","Ağırlık","Boyut"], c:1},
+    {q:"Bağlantı noktalarında ısınma izi nasıl kontrol edilebilir?", o:["Elle dokunarak","Termal kamera ile","Kontrol edilmez","Sadece gözle"], c:1},
+    {q:"Harmonik filtre varsa ne kontrol edilir?", o:["Hiçbir şey","Sigortaları ve göstergeleri","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Havalandırma fanlarıyla ilgili ne kontrol edilir?", o:["Çalıştığı ve filtrelerin temiz olduğu","Sadece rengi","Sadece sesi","Hiçbir şey"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Panel kapatılır"], c:1},
+    {q:"Bu sistemin amacı nedir?", o:["Aydınlatma","Güç faktörünü düzeltmek (kompanzasyon)","Su arıtma","Isıtma"], c:1},
+    {q:"Kontrol sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Kondansatör şişmesi tespit edilirse ne yapılmalıdır?", o:["Görmezden gelinir","Derhal devre dışı bırakılıp değiştirilmeli","Bir yıl beklenir","Sadece not edilir"], c:1},
+    {q:"Genel görsel kontrolde nelere bakılır?", o:["Sızıntı, ısınma izi, anormal ses/koku","Sadece renk","Sadece boyut","Hiçbir şey"], c:0},
+  ],
+
+  'lamba-ampul-degisimi': [
+    {q:"Sıcak lamba çıkarılırken nelere dikkat edilir?", o:["Direkt elle tutulmamalı, soğuması beklenmeli","Hemen elle tutulabilir","Önemli değil","Hızlıca çıkarılmalı"], c:0},
+    {q:"Yeni lamba takmadan önce ne kontrol edilir?", o:["Rengi","Tip/güç/duy uyumu","Fiyatı","Ağırlığı"], c:1},
+    {q:"Yükseklikte lamba değişiminde hangi SOP referans alınır?", o:["LOTO-Mekanik","Yüksekte Çalışma SOP","Kapalı Alan SOP","Sıcak Çalışma SOP"], c:1},
+    {q:"Cıva içeren lambalar nasıl bertaraf edilir?", o:["Normal çöpe atılır","Uygun atık prosedürüne göre","Yakılır","Geri dönüşüme gerek yok"], c:1},
+    {q:"Lamba değişimi öncesi devre için ne yapılmalıdır?", o:["Hiçbir şey","Mümkünse LOTO-Elektrik'e göre enerjisiz hale getirilmeli","Enerjili bırakılmalı","Fark etmez"], c:1},
+    {q:"Enerji verildikten sonra ne teyit edilir?", o:["Hiçbir şey","Lambanın çalıştığı","Sadece rengi","Sadece parlaklığı"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Sadece LED'ler","Aydınlatma armatürlerindeki lamba/ampuller","Sadece floresanlar","Sadece projektörler"], c:1},
+    {q:"Armatür kapağı ne zaman kapatılır?", o:["Hemen","Yeni lamba takıldıktan sonra","Kapatmaya gerek yok","Enerji verilmeden önce değil"], c:1},
+    {q:"İşlem tamamlandıktan sonra ne yapılır?", o:["Hiçbir şey","Kayıt formuna işlenir","Sadece sözlü bildirilir","Unutulur"], c:1},
+    {q:"Yükseklik gerektirmeyen lamba değişiminde ekstra ekipman gerekir mi?", o:["Her zaman gerekir","Duruma göre değişir, yükseklik yoksa gerekmeyebilir","Asla gerekmez","Sadece merdiven gerekir"], c:1},
+    {q:"Lamba tipi uyumsuzsa ne olur?", o:["Sorun olmaz","Armatüre zarar verebilir veya çalışmaz","Daha parlak olur","Enerji tasarrufu sağlar"], c:1},
+    {q:"Bu işlem kimler tarafından yapılabilir?", o:["Herkes","Yetkili bakım personeli","Sadece yöneticiler","Sadece elektrik mühendisi"], c:1},
+  ],
+
+  'sicaklik-sensoru-degisimi': [
+    {q:"Sensör değişimi öncesi hat basınçlıysa ne yapılmalıdır?", o:["Hiçbir şey","Hat güvenli hale getirilmeli (boşaltılır/soğutulur)","Direkt sökülür","Basınç artırılır"], c:1},
+    {q:"Basınçlı/sıcak hatta sensör sökmenin riski nedir?", o:["Risk yoktur","Yanık/yaralanma riski","Sadece gecikme","Enerji kaybı"], c:1},
+    {q:"Sensör hangi yuvadan sökülür?", o:["Termowell","Flanş","Valf","Pompa gövdesi"], c:0},
+    {q:"Yeni sensör seçerken nelere dikkat edilir?", o:["Sadece rengi","Tip/aralık (range) değeri","Fiyatı","Ağırlığı"], c:1},
+    {q:"Yanlış sensör kullanımının riski nedir?", o:["Risk yoktur","Hatalı okuma/proses riski","Daha hassas ölçüm","Enerji tasarrufu"], c:1},
+    {q:"Kablo bağlantıları nasıl yapılır?", o:["Rastgele","Klemens numarasına göre","Renklerine göre tahmin","Önemli değil"], c:1},
+    {q:"Yeni sensör takıldıktan sonra ne kontrol edilir?", o:["Hiçbir şey","Sızdırmazlık","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Devreye alma sonrası ne yapılır?", o:["Hiçbir şey","Okuma referans değerle doğrulanır","Sensör tekrar sökülür","Beklenir"], c:1},
+    {q:"Bu SOP hangi sensör tiplerini kapsar?", o:["Sadece basınç sensörleri","PT100, termokupl gibi sıcaklık sensörleri","Sadece nem sensörleri","Sadece seviye sensörleri"], c:1},
+    {q:"Sensör devresi için hangi SOP referans alınır?", o:["Kaldırma Ekipmanları","LOTO-Elektrik","Sıcak Çalışma","Yüksekte Çalışma"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Proses durdurulmadan sensör değişimi yapılabilir mi?", o:["Her zaman yapılabilir","Genellikle durdurulmalı veya devre enerjisiz hale getirilmeli","Önemli değil","Yasaktır her koşulda"], c:1},
+  ],
+
+  'basinc-sensoru-degisimi': [
+    {q:"Sensör sökülmeden önce ilk adım nedir?", o:["Direkt sökmek","Hat izolasyon vanasını kapatmak","Enerji vermek","Hiçbir şey"], c:1},
+    {q:"İzolasyon vanası kapatılmazsa ne olur?", o:["Sorun olmaz","Sökümde sıvı fışkırması riski oluşur","Daha kolay sökülür","Enerji tasarrufu sağlar"], c:1},
+    {q:"Kalıntı basınç nasıl boşaltılır?", o:["Doğrudan sökülerek","Tahliye/drenaj vanasından, manometreden sıfır teyit edilerek","Beklenerek","Isıtarak"], c:1},
+    {q:"Sensör sökülürken ne hazır bulundurulmalıdır?", o:["Hiçbir şey","Sızıntı toplama kabı","Yangın söndürücü","İtfaiye"], c:1},
+    {q:"Yeni sensör seçiminde nelere dikkat edilir?", o:["Sadece rengi","Basınç aralığı ve bağlantı tipi","Fiyatı","Ağırlığı"], c:1},
+    {q:"Sızdırmazlık nasıl sağlanır?", o:["Sağlanmasına gerek yok","Conta/teflon bant ile","Yapıştırıcıyla","Kaynak yaparak"], c:1},
+    {q:"İzolasyon vanası nasıl açılmalıdır?", o:["Aniden tam açılmalı","Kademeli olarak açılmalı","Hiç açılmamalı","Yarım açık bırakılmalı"], c:1},
+    {q:"Ani vana açmanın riski nedir?", o:["Risk yoktur","Su darbesi (water hammer) riski","Enerji tasarrufu","Daha hızlı akış"], c:1},
+    {q:"Kablo bağlantıları nasıl sökülür?", o:["Rastgele","Klemens numarası not edilerek","Kesilerek","Önemli değil"], c:1},
+    {q:"Bu SOP hangi tip hatları kapsar?", o:["Gaz hatları","Sıvı akışkanlı (su, yağ vb.) hatlar","Sadece buhar hatları","Sadece hava hatları"], c:1},
+    {q:"Sensör devresi için hangi ön işlem yapılır?", o:["Hiçbir şey","Mümkünse LOTO-Elektrik'e göre enerjisiz hale getirilir","Direkt sökülür","Enerji artırılır"], c:1},
+    {q:"Son adımda ne yapılır?", o:["Hiçbir şey","Okuma referansla karşılaştırılır, kayıt formuna işlenir","Sensör tekrar sökülür","Beklenir"], c:1},
+  ],
+
+  'motor-kayis-degisimi': [
+    {q:"Eski kayış nasıl çıkarılmalıdır?", o:["Zorlayarak/aletle kaldırılarak","Gerginlik ayarından gevşetilerek","Kesilerek","Yakılarak"], c:1},
+    {q:"Zorlayarak kayış çıkarmanın riski nedir?", o:["Risk yoktur","Kayışa veya kasnağa zarar verebilir","Daha hızlı olur","Kayışı korur"], c:1},
+    {q:"Kasnak hizasızlığının etkisi nedir?", o:["Etkisi yoktur","Kayışın erken aşınmasına yol açar","Daha uzun ömürlü olur","Enerji tasarrufu sağlar"], c:1},
+    {q:"Kayış gerginliği nasıl olmalıdır?", o:["Mümkün olduğunca gergin","Üretici talimatına uygun","Mümkün olduğunca gevşek","Önemli değil"], c:1},
+    {q:"Aşırı gergin kayışın etkisi nedir?", o:["Etkisi yoktur","Rulman yükünü artırır","Enerji tasarrufu sağlar","Daha sessiz çalışır"], c:1},
+    {q:"Gevşek kayışın etkisi nedir?", o:["Etkisi yoktur","Kaymaya sebep olur","Daha güçlü çalışır","Ömrünü uzatır"], c:1},
+    {q:"Kayış değişimi öncesi ekipman durumu ne olmalıdır?", o:["Enerjili olmalı","LOTO'ya göre enerjisiz hale getirilmeli","Fark etmez","Yarı enerjili"], c:1},
+    {q:"Koruma muhafazası (guard) ne zaman sökülür?", o:["Hiç sökülmez","Kayış değişimi için, işlem sonunda tekrar takılır","Kalıcı olarak sökülür","Önemli değil"], c:1},
+    {q:"LOTO kaldırıldıktan sonra ne kontrol edilir?", o:["Hiçbir şey","Kayış hizası, sesi, titreşimi","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Sadece motorlar","Kayış-kasnak tahrikli ekipmanlar (fan, pompa vb.)","Sadece kompresörler","Sadece vanalar"], c:1},
+    {q:"Yeni kayış seçerken nelere dikkat edilir?", o:["Sadece rengi","Tip/ölçü uyumu","Fiyatı","Markası"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+  ],
+
+  'zemin-beton-imalat': [
+    {q:"Beton dökümü öncesi çalışma alanı için ne yapılır?", o:["Hiçbir şey","Bariyer ile çevrilir, geçiş güzergahları işaretlenir","Direkt dökülür","Sadece uyarılır"], c:1},
+    {q:"Erken kuruma neye yol açar?", o:["Daha sağlam betona","Çatlamaya","Hiçbir soruna","Daha hızlı işe"], c:1},
+    {q:"Kür (curing) işlemi ne amaçla yapılır?", o:["Gereksizdir","Erken kurumayı önlemek için yüzeyi nemli tutmak","Betonu boyamak için","Hızlandırmak için"], c:1},
+    {q:"Priz süresince alan nasıl olmalıdır?", o:["Trafiğe açık","Trafiğe kapalı, uyarı levhaları asılı","Önemli değil","Sadece gece kapalı"], c:1},
+    {q:"Zemin hazırlığında neler yapılır?", o:["Hiçbir şey","Eski beton kırımı, sıkıştırma, donatı yerleştirme","Sadece temizlik","Sadece boyama"], c:1},
+    {q:"Kalıp kurulumunda ne kontrol edilir?", o:["Rengi","Seviye/eğim","Kokusu","Ağırlığı"], c:1},
+    {q:"Beton karışımı nasıl hazırlanmalıdır?", o:["Rastgele oranlarla","Proje/şartname değerlerine uygun","Sadece su ile","Önemli değil"], c:1},
+    {q:"Yüzey düzeltme hangi ekipmanla yapılır?", o:["Sadece elle","Mala/şap makinesi","Fırça","Süpürge"], c:1},
+    {q:"Kalıp ne zaman sökülür?", o:["Hemen dökümden sonra","Priz sonrası","Hiç sökülmez","Bir hafta sonra kesin"], c:1},
+    {q:"İş bitiminde ne yapılır?", o:["Hiçbir şey","Alan temizlenir, bariyerler kaldırılır","Direkt terk edilir","Sadece kayıt tutulur"], c:1},
+    {q:"Bu SOP hangi işlemleri kapsar?", o:["Sadece boyama","Zemin beton döküm/onarım işlemleri","Sadece temizlik","Sadece elektrik"], c:1},
+    {q:"Uygulama detayları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna (beton sınıfı, tarih, alan)","Sadece hafızada","Sözlü bildirilir"], c:1},
+  ],
+
+  'alcipan-duvar-montaji': [
+    {q:"Metal profil iskeleti nasıl sabitlenir?", o:["Yapıştırıcıyla","Dübel ile","Bantla","Kaynakla"], c:1},
+    {q:"Profil sabitleme aralığı neye göre olmalıdır?", o:["Rastgele","Üretici talimatına uygun","Sadece göz kararı","Önemli değil"], c:1},
+    {q:"Alçıpan levhalar nasıl sabitlenir?", o:["Çivi ile","Vidalarla","Yapıştırıcıyla","Bantla"], c:1},
+    {q:"Çok sıkılan vidanın etkisi nedir?", o:["Etkisi yoktur","Levhayı yırtar","Daha sağlam olur","Daha hızlı iş yapılır"], c:1},
+    {q:"Derz birleşimleri nasıl düzeltilir?", o:["Düzeltilmez","File bant ve alçı macunla (bantlama-macunlama)","Sadece boyayla","Çimento ile"], c:1},
+    {q:"Duvar içi elektrik hatları ne zaman yerleştirilir?", o:["Levha kapatıldıktan sonra","Profil montajı sırasında, levha kapatılmadan önce","Hiç yerleştirilmez","İşin sonunda"], c:1},
+    {q:"Yalıtım malzemesi nereye yerleştirilir?", o:["Levhaların üzerine","Profiller arasına","Yerleştirilmez","Tavan boşluğuna"], c:1},
+    {q:"Yüzey işleminin son adımı nedir?", o:["Zımparalama","Direkt boyama","Hiçbir işlem","Sadece temizlik"], c:1},
+    {q:"Bu SOP hangi işlemi kapsar?", o:["Beton döküm","İç mekan alçıpan bölme duvar montajı","Kapı montajı","Vana montajı"], c:1},
+    {q:"İş bitiminde atık malzemeler ne yapılır?", o:["Bırakılır","Uygun şekilde bertaraf edilir","Yakılır","Önemli değil"], c:1},
+    {q:"Dikme profiller ne zaman monte edilir?", o:["Levha takıldıktan sonra","İskelet kurulduktan sonra, levha takılmadan önce","Hiç monte edilmez","İşin en sonunda"], c:1},
+    {q:"Uygulama nereye kayıt edilir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+  ],
+
+  'kapi-montaji': [
+    {q:"Kapı kasası yerleştirilirken ne kontrol edilir?", o:["Rengi","Su terazisi ile düşey/yatay hizası","Ağırlığı","Kokusu"], c:1},
+    {q:"Hizasız kasa neye yol açar?", o:["Hiçbir soruna","Kapının düzgün açılıp kapanmasını engeller","Daha güzel görünüme","Enerji tasarrufuna"], c:1},
+    {q:"Kasa geçici olarak nasıl sabitlenir?", o:["Çivi ile","Takoz/kama ile","Yapıştırıcıyla","Bantla"], c:1},
+    {q:"Kasa kalıcı olarak nasıl sabitlenir?", o:["Sadece takozla","Vida/dübel veya köpük ile","Sadece köpükle mecburi","Bantla"], c:1},
+    {q:"Kapı kanadı nereye takılır?", o:["Doğrudan duvara","Menteşelere","Kasaya yapıştırılır","Zemine"], c:1},
+    {q:"Kilit/kolye mekanizması takıldıktan sonra ne yapılır?", o:["Hiçbir şey","Fonksiyon testi yapılır","Direkt kullanıma açılır","Söküp tekrar takılır"], c:1},
+    {q:"Kasa-duvar boşluğu nasıl doldurulur?", o:["Boş bırakılır","Uygun malzemeyle (köpük/dolgu)","Çimento ile","Boyayla"], c:1},
+    {q:"Son adımda ne kontrol edilir?", o:["Hiçbir şey","Açma-kapama-kilit fonksiyonu","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Bu SOP hangi işlemi kapsar?", o:["Vana montajı","İç/dış mekan kapı (kasa+kanat) montajı","Beton döküm","Elektrik montajı"], c:1},
+    {q:"Kapı boşluğu ölçüsü neyle karşılaştırılır?", o:["Kapı rengiyle","Kapı kasası ölçüsüyle","Duvar rengiyle","Zemin malzemesiyle"], c:1},
+    {q:"Pervaz montajı ne zaman yapılır?", o:["İlk adımda","Kasa-duvar boşluğu doldurulduktan sonra","Hiç yapılmaz","Kapı kanadından önce"], c:1},
+    {q:"Uygulama nereye kayıt edilir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+  ],
+
+  'vana-montaji': [
+    {q:"Vana montajı öncesi hat için ne yapılır?", o:["Hiçbir şey","LOTO/izolasyon prosedürüne göre devre dışı bırakılıp boşaltılır","Basınç artırılır","Direkt sökülür"], c:1},
+    {q:"Vana seçerken nelere dikkat edilir?", o:["Sadece rengi","Ölçü (flanş/dişli) ve basınç sınıfı (PN) uyumu","Fiyatı","Markası"], c:1},
+    {q:"Uyumsuz vananın riski nedir?", o:["Risk yoktur","Sızıntı/patlama riski","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Cıvatalar nasıl sıkılmalıdır?", o:["Rastgele sırayla","Çapraz sırayla ve belirtilen tork değerinde","Tek seferde maksimum","Hiç sıkılmaz"], c:1},
+    {q:"Eşit olmayan sıkmanın etkisi nedir?", o:["Etkisi yoktur","Sızıntıya yol açar","Daha sağlam olur","Enerji tasarrufu sağlar"], c:1},
+    {q:"Conta (gasket) ne zaman yerleştirilir?", o:["Vana takıldıktan sonra","Bağlantı yüzeyleri temizlendikten sonra, vana takılmadan önce","Hiç yerleştirilmez","İşin sonunda"], c:1},
+    {q:"Vananın akış yönü neyle kontrol edilir?", o:["Tahmin ile","Üzerindeki ok işareti ile","Renk ile","Boyut ile"], c:1},
+    {q:"Hat devreye alınırken nasıl yapılır?", o:["Aniden tam açılır","Kademeli olarak açılır","Hiç açılmaz","Yarı açık bırakılır"], c:1},
+    {q:"Montaj sonrası ne test edilir?", o:["Hiçbir şey","Açma-kapama fonksiyonu","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Bu SOP hangi vana tiplerini kapsar?", o:["Sadece küresel","Küresel, kelebek, sürgülü vb.","Sadece kelebek","Sadece sürgülü"], c:1},
+    {q:"Basınç altında sızıntı kontrolü ne zaman yapılır?", o:["Hat devreye alınmadan önce","Hat kademeli devreye alındıktan sonra","Hiç yapılmaz","Yalnızca yılda bir"], c:1},
+    {q:"Montaj sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+  ],
+
+  'piston-degisimi': [
+    {q:"Piston değişimi öncesi sistem nasıl hale getirilir?", o:["Enerjili/basınçlı bırakılır","LOTO'ya göre enerjisiz/basınçsız hale getirilir","Fark etmez","Sadece basınç düşürülür"], c:1},
+    {q:"Hidrolik/pnömatik hat basıncı nasıl teyit edilir?", o:["Tahmin ile","Tahliye edilip manometreden sıfır teyit edilerek","Dokunarak","Sesle"], c:1},
+    {q:"Piston kolu/pim bağlantıları nasıl sökülmelidir?", o:["Zorlayarak","Dikkatlice","Kesilerek","Kırılarak"], c:1},
+    {q:"Zorlama sökümün riski nedir?", o:["Risk yoktur","Parçalara zarar verebilir","Daha hızlı olur","Parçaları korur"], c:1},
+    {q:"Piston segmanları nasıl takılmalıdır?", o:["Rastgele yönde","Doğru yönde ve sırada","Ters yönde","Önemli değil"], c:1},
+    {q:"Ters takılan segmanın etkisi nedir?", o:["Etkisi yoktur","Yağ kaçağı/performans kaybına yol açar","Daha iyi performans sağlar","Enerji tasarrufu sağlar"], c:1},
+    {q:"Silindir iç yüzeyi neden kontrol edilir?", o:["Gerekli değildir","Aşınma/çizik yönünden","Sadece renk için","Ağırlık için"], c:1},
+    {q:"Yeni piston takılırken ne kullanılır?", o:["Rastgele kuvvet","Tork anahtarı ile belirtilen değerler","Çekiç","Sadece el gücü"], c:1},
+    {q:"Kapak/gövde takıldıktan sonra ne kontrol edilir?", o:["Hiçbir şey","Sızdırmazlık","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Sadece motorlar","Kompresör, pompa, hidrolik/pnömatik silindirler","Sadece vanalar","Sadece sensörler"], c:1},
+    {q:"Sistem devreye alınırken nasıl yapılır?", o:["Aniden tam yükte","Kademeli olarak","Hiç devreye alınmaz","Rastgele"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+  ],
+
+  'pompa-degisimi': [
+    {q:"Pompa sökümü öncesi hat için ne yapılır?", o:["Hiçbir şey","Emme/basma vanaları kapatılır, hat boşaltılır","Basınç artırılır","Direkt sökülür"], c:1},
+    {q:"Hat boşaltılmazsa ne olur?", o:["Sorun olmaz","Sıvı akmasına yol açar","Daha kolay sökülür","Enerji tasarrufu sağlar"], c:1},
+    {q:"Yeni pompa seçerken nelere dikkat edilir?", o:["Sadece rengi","Debi/basma yüksekliği (H-Q eğrisi) ve bağlantı ölçüleri","Fiyatı","Markası"], c:1},
+    {q:"Uyumsuz pompanın etkisi nedir?", o:["Etkisi yoktur","Proses performansını olumsuz etkiler","Daha iyi performans sağlar","Enerji tasarrufu sağlar"], c:1},
+    {q:"Pompa yerleştirildikten sonra ne yapılır?", o:["Hiçbir şey","Hizalama (alignment) yapılır","Direkt çalıştırılır","Kaplin sökülür"], c:1},
+    {q:"Elektrik bağlantısı sonrası hangi test yapılır?", o:["Hiçbir test","Bump test ile dönüş yönü kontrolü","Sadece görsel kontrol","Basınç testi"], c:1},
+    {q:"Emme/basma hattı bağlantılarında ne yenilenir?", o:["Hiçbir şey","Contalar","Vanalar","Motor"], c:1},
+    {q:"Vanalar nasıl açılmalıdır?", o:["Aniden tam açılır","Kademeli olarak açılır","Hiç açılmaz","Yarı açık bırakılır"], c:1},
+    {q:"Devreye alma sonrası hangi değerler kontrol edilir?", o:["Sadece renk","Debi, basınç, titreşim","Sadece ses","Hiçbiri"], c:1},
+    {q:"Pompa elektrik bağlantıları sökülürken ne yapılır?", o:["Rastgele sökülür","Klemens numarası not edilir","Kesilir","Önemli değil"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Sadece motorlar","Proses/yardımcı sistemlerdeki pompalar","Sadece vanalar","Sadece sensörler"], c:1},
+    {q:"Kaplin ve mesnet cıvataları ne zaman sökülür?", o:["Elektrik bağlantısından önce","Elektrik bağlantıları sökülüp hat boşaltıldıktan sonra","Hiç sökülmez","İşin en sonunda"], c:1},
+  ],
+
+  'solvent-geri-kazanim': [
+    {q:"Solvent buharının en büyük riski nedir?", o:["Koku","Patlayıcı ortam oluşturması","Renk değişimi","Hiçbir risk yoktur"], c:1},
+    {q:"Gaz algılama sensörleri (LEL) hangi durumda olmalıdır?", o:["Önemli değil","Çalışır durumda ve kalibreli olmalı","Kapalı tutulmalı","Yılda bir kontrol edilir"], c:1},
+    {q:"Aktif karbon doygunluğa ulaşırsa ne olur?", o:["Verim artar","Verim düşüklüğü oluşur","Hiçbir etkisi olmaz","Otomatik yenilenir"], c:1},
+    {q:"Devreye alma sırası nasıl olmalıdır?", o:["Rastgele","Fan, kondenser, pompa sırasıyla üretici prosedürüne göre","Hepsi aynı anda","Önemli değil"], c:1},
+    {q:"Ani kapatmanın riski nedir?", o:["Risk yoktur","Sistem içinde solvent birikimi","Enerji tasarrufu","Daha hızlı soğuma"], c:1},
+    {q:"Buhar yoğuşturucuda ne kontrol edilir?", o:["Rengi","Soğutma suyu akışı ve sıcaklığı","Sadece boyutu","Hiçbir şey"], c:1},
+    {q:"Acil durdurma butonları neden kontrol edilir?", o:["Gerekli değildir","Acil durumda çalışır olması gerektiği için","Sadece görünüm için","Yılda bir yeterlidir"], c:1},
+    {q:"Solvent tank seviyeleri neden kontrol edilir?", o:["Gerekli değildir","Taşma/boşalma riski için","Sadece rapor için","Renk için"], c:1},
+    {q:"Bu tesisin amacı nedir?", o:["Su arıtma","Solvent geri kazanımı (recovery)","Hava kurutma","Isıtma"], c:1},
+    {q:"Kontrol sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Tesis dairesinde havalandırma neden önemlidir?", o:["Önemli değildir","Yanıcı buhar birikimini önlemek için","Sadece konfor için","Isı için"], c:1},
+    {q:"Kapatma işlemi nasıl yapılmalıdır?", o:["Aniden","Soğuma/boşaltma sırasına göre kademeli","Hiç kapatılmaz","Rastgele"], c:1},
+  ],
+
+  'trafo-bakim': [
+    {q:"Yağ seviyesinin düşük olması ne riski taşır?", o:["Risk yoktur","İzolasyon zafiyeti","Daha iyi soğutma","Enerji tasarrufu"], c:1},
+    {q:"Termal kamera ile ne kontrol edilir?", o:["Renk","Bağlantı noktalarında ısınma","Ses","Koku"], c:1},
+    {q:"Buchholz rölesi neyle ilgilidir?", o:["Yağlı trafolarda arıza tespiti","Aydınlatma","Havalandırma","Su seviyesi"], c:0},
+    {q:"İzolatör/buşing yüzeyleri neden kontrol edilir?", o:["Gerekli değildir","Kirlenme/çatlak yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Topraklama bağlantıları neden önemlidir?", o:["Önemli değildir","Güvenlik için sağlam olmalı","Sadece görünüm için","Enerji tasarrufu için"], c:1},
+    {q:"Trafo odası için ne kontrol edilir?", o:["Hiçbir şey","Kapı/kilit güvenliği ve uyarı levhaları","Sadece renk","Sadece boyut"], c:1},
+    {q:"Yağ analizi sonuçları ne için kullanılır?", o:["Kullanılmaz","Trafo sağlığını değerlendirmek için","Sadece arşiv için","Estetik için"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Jeneratörler","Güç trafoları","Kompresörler","Pompalar"], c:1},
+    {q:"Havalandırma/soğutma fanları neden kontrol edilir?", o:["Gerekli değildir","Trafonun aşırı ısınmasını önlemek için","Sadece ses için","Estetik için"], c:1},
+    {q:"Kontrol sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu kontrol hangi sıklıkla yapılır?", o:["Günlük","Periyodik (düzenli aralıklarla)","Hiç yapılmaz","Sadece arıza olunca"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Trafo hemen kapatılır her zaman"], c:1},
+  ],
+
+  'jenerator-test': [
+    {q:"Yakıt seviyesi neden düzenli kontrol edilir?", o:["Gerekli değildir","Jeneratörün her an tam kapasitede çalışabilmesi için","Sadece maliyet takibi için","Estetik için"], c:1},
+    {q:"ATS ne işe yarar?", o:["Yakıt seviyesini ölçer","Şebeke kesintisinde otomatik transfer sağlar","Yağ seviyesini ölçer","Sesi azaltır"], c:1},
+    {q:"Akü kontrolünde nelere bakılır?", o:["Sadece rengi","Voltaj ve şarj durumu","Sadece boyutu","Markası"], c:1},
+    {q:"Motor start almazsa ne yapılmalıdır?", o:["Görmezden gelinir","Arıza kaydı açılır, nedeni araştırılır","Zorla çalıştırılır","Bir hafta beklenir"], c:1},
+    {q:"Test sırasında hangi parametreler gözlemlenir?", o:["Sadece renk","Voltaj, frekans, RPM","Sadece ses","Hiçbiri"], c:1},
+    {q:"Yük altında test neden yapılır?", o:["Gerekli değildir","Gerçek çalışma koşullarını doğrulamak için","Sadece ses için","Estetik için"], c:1},
+    {q:"Test sonrası panel hangi moda alınmalıdır?", o:["Manuel","Normal/otomatik moda","Kapalı","Fark etmez"], c:1},
+    {q:"Bu SOP'un amacı nedir?", o:["Sürekli çalıştırmak","Yedek güç jeneratörünün periyodik testi","Yakıt tasarrufu","Gürültü azaltma"], c:1},
+    {q:"Motor yağ ve soğutma suyu ne zaman kontrol edilir?", o:["Hiç kontrol edilmez","Her testte","Yalnızca arızada","Yılda bir"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Test sırasında neler izlenir?", o:["Hiçbir şey","Egzoz, gürültü, sızıntı","Sadece renk","Sadece boyut"], c:1},
+    {q:"ATS testi neden dikkatli yapılmalıdır?", o:["Önemli değildir","Şebeke/jeneratör geçişi kritik bir fonksiyon olduğu için","Sadece gürültü için","Estetik için"], c:1},
+  ],
+
+  'ups-test': [
+    {q:"Şişmiş akü tespit edilirse ne yapılmalıdır?", o:["Görmezden gelinir","Derhal değiştirilmeli","Bir yıl beklenir","Sadece not edilir"], c:1},
+    {q:"Bypass anahtarı ne işe yarar?", o:["Aküyü şarj eder","Yükü UPS'i devre dışı bırakarak doğrudan beslemeye alır","Sesi azaltır","Yakıt tasarrufu sağlar"], c:1},
+    {q:"Batarya test fonksiyonu sırasında nelere dikkat edilir?", o:["Hiçbir şey","Yük UPS'e bağımlı hale geldiği için dikkatli yapılmalı","Test yapılmamalı","Otomatik güvenlidir"], c:1},
+    {q:"Yük yüzdesi neden kontrol edilir?", o:["Gerekli değildir","Aşırı yüklenme olmadığını teyit etmek için","Sadece rapor için","Estetik için"], c:1},
+    {q:"UPS'in temel işlevi nedir?", o:["Enerji üretmek","Kesintisiz güç sağlamak","Isıtma yapmak","Su pompalamak"], c:1},
+    {q:"Havalandırma/soğutma fanları neden önemlidir?", o:["Önemli değildir","Aşırı ısınmayı önlemek için","Sadece ses için","Estetik için"], c:1},
+    {q:"Alarm/olay kayıtları (log) ne için incelenir?", o:["Gereksizdir","Geçmiş sorunları tespit etmek için","Sadece arşiv için","Estetik için"], c:1},
+    {q:"Akülerin fiziksel kontrolünde nelere bakılır?", o:["Sadece rengi","Şişme, sızıntı, korozyon","Sadece boyutu","Markası"], c:1},
+    {q:"Panel ekranında ne kontrol edilir?", o:["Hiçbir şey","Arıza uyarısı olup olmadığı","Sadece saat","Sadece tarih"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"UPS akü grubunda ne ölçülür?", o:["Sadece sıcaklık","Voltaj ve şarj durumu","Sadece renk","Sadece ağırlık"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Hiçbir şey"], c:1},
+  ],
+
+  'demir-kaynak-atolyesi': [
+    {q:"Atölyeye girişte hangi KKD giyilir?", o:["Sadece eldiven","Kaynak maskesi, önlük, eldiven, çelik burunlu ayakkabı","Hiçbiri gerekmez","Sadece gözlük"], c:1},
+    {q:"Oksi-gaz tüpleri nasıl bulundurulmalıdır?", o:["Yatık","Dik, sabitlenmiş ve geri tepme valfli","Herhangi bir konumda","Kapalı dolapta"], c:1},
+    {q:"Taşlama/kesme işlerinde ne kullanılır?", o:["Hiçbir koruma","Koruyucu siperlik/gözlük","Sadece eldiven","Kulaklık yeterlidir"], c:1},
+    {q:"Havalandırma (duman aspiratörü) neden önemlidir?", o:["Önemli değildir","Kaynak dumanının uzaklaştırılması için","Sadece serinlik için","Estetik için"], c:1},
+    {q:"Çevredeki yanıcı malzemeler ne yapılmalıdır?", o:["Olduğu gibi bırakılır","Uzaklaştırılmalı","Sadece işaretlenir","Önemli değil"], c:1},
+    {q:"El aletleri kullanım öncesi nasıl kontrol edilir?", o:["Kontrol edilmez","Hasar yönünden","Sadece rengi","Sadece markası"], c:1},
+    {q:"Kaynak makinesi kullanım öncesi ne kontrol edilir?", o:["Hiçbir şey","Kablo/hortum hasarı","Sadece rengi","Sadece markası"], c:1},
+    {q:"İş bitiminde ne yapılır?", o:["Hemen ayrılınır","Ekipmanlar kapatılır, tüpler kapatılır, alan temizlenir","Ekipman açık bırakılır","Hiçbir şey"], c:1},
+    {q:"Çıkışta son kez ne kontrol edilir?", o:["Hiçbir şey","Yangın riski (kor, sıcak parça)","Sadece kapı kilidi","Sadece ışıklar"], c:1},
+    {q:"Bu talimat hangi çalışma için referans verir?", o:["Yüksekte Çalışma SOP","Sıcak Çalışma İzni SOP","Kapalı Alan SOP","LOTO SOP"], c:1},
+    {q:"Bu SOP hangi atölyeyi kapsar?", o:["Torna atölyesi","Demir/kaynak atölyesi","Boya atölyesi","Elektrik atölyesi"], c:1},
+    {q:"Geri tepme valfi ne işe yarar?", o:["Gazı renklendirir","Alevin tüpe geri kaçmasını önler","Basıncı artırır","Sesi azaltır"], c:1},
+  ],
+
+  'torna-atolyesi': [
+    {q:"Torna tezgahında çalışırken kıyafet nasıl olmalıdır?", o:["Bol ve rahat","Dar/bağlı, takı olmadan","Fark etmez","Renkli olmalı"], c:1},
+    {q:"Bol kıyafet/takının riski nedir?", o:["Risk yoktur","Dönen mile takılma riski","Daha rahat çalışma","Estetik sorun"], c:1},
+    {q:"Talaş temizliği nasıl yapılmalıdır?", o:["Makine çalışırken elle","Makine dururken fırça/kanca ile","Hiç temizlenmez","Üfleyerek"], c:1},
+    {q:"Dönen parçaya elle temasın riski nedir?", o:["Risk yoktur","Ciddi yaralanma","Sadece kirlenme","Hiçbir etkisi yoktur"], c:1},
+    {q:"İş parçası nasıl bağlanmalıdır?", o:["Gevşek","Punta/ayna ile sağlam şekilde","Bağlanmasına gerek yok","Elle tutularak"], c:1},
+    {q:"Koruyucu siperlik/gözlük neden kullanılır?", o:["Gerekli değildir","Fırlayan talaşa karşı göz koruması için","Sadece estetik için","Isınmayı önlemek için"], c:1},
+    {q:"Kesme hızı/ilerleme parametreleri neye göre seçilir?", o:["Rastgele","İş parçası ve malzemeye uygun","Her zaman maksimum","Önemli değil"], c:1},
+    {q:"Soğutma sıvısı neden kontrol edilir?", o:["Gerekli değildir","Seviyesi ve akışı için","Sadece renk için","Estetik için"], c:1},
+    {q:"Tezgah kullanım öncesi ne kontrol edilir?", o:["Hiçbir şey","Yağlama ve koruma siperlerinin yerinde olması","Sadece rengi","Sadece markası"], c:1},
+    {q:"İş bitiminde ne yapılır?", o:["Hemen ayrılınır","Tezgah kapatılır, talaşlar temizlenir, alan düzenlenir","Tezgah açık bırakılır","Hiçbir şey"], c:1},
+    {q:"Bu SOP hangi atölyeyi kapsar?", o:["Kaynak atölyesi","Torna atölyesi","Boya atölyesi","Elektrik atölyesi"], c:1},
+    {q:"Talaş çekilirken hangi kural geçerlidir?", o:["Makine çalışırken yapılabilir","Makine durdurulmadan asla elle müdahale edilmez","Serbestçe yapılabilir","Sadece eldiven yeterlidir"], c:1},
+  ],
+
+  'boya-atolyesi': [
+    {q:"Boya buharlarının riski nedir?", o:["Risk yoktur","Yanıcı ve sağlığa zararlı olabilir","Sadece koku","Estetik sorun"], c:1},
+    {q:"Boya/tiner nasıl saklanmalıdır?", o:["Herhangi bir kapta","Orijinal ambalajda, etiketli ve SDS'e uygun","Açık kapta","Önemli değil"], c:1},
+    {q:"Çalışma alanında ne bulunmamalıdır?", o:["Fırça","Ateş kaynağı/sıcak yüzey","Boya kutusu","Merdiven"], c:1},
+    {q:"Boya uygulaması sırasında hangi KKD kullanılır?", o:["Hiçbiri","Solunum maskesi (organik buhar filtresi), gözlük, eldiven, tulum","Sadece eldiven","Sadece gözlük"], c:1},
+    {q:"Boya karışımı nasıl hazırlanmalıdır?", o:["Rastgele oranlarla","Üretici talimatına göre","Göz kararı","Önemli değil"], c:1},
+    {q:"Uygulama sırasında çevre yüzeyler ne yapılır?", o:["Korunmaz","Örtülerek korunur","Boyanır","Önemli değil"], c:1},
+    {q:"Boyanan alan kuruyana kadar ne yapılmalıdır?", o:["Serbest bırakılır","Erişime kapatılır, uyarı levhası asılır","Hemen kullanılır","Önemli değil"], c:1},
+    {q:"Ekipman temizliği nasıl yapılır?", o:["Su ile","Uygun solventle","Temizlenmez","Ateşle"], c:1},
+    {q:"İş bitiminde alan için ne yapılır?", o:["Hiçbir şey","Havalandırılır, atıklar bertaraf edilir","Hemen kapatılır","Kilitlenir sadece"], c:1},
+    {q:"Uygulama öncesi yüzey için ne yapılır?", o:["Hiçbir hazırlık","Temizlik ve zımparalama","Direkt boyanır","Islatılır"], c:1},
+    {q:"Bu SOP hangi işi kapsar?", o:["Kaynak işleri","Boya atölyesi/işleri","Torna işleri","Elektrik işleri"], c:1},
+    {q:"Boya buharları neden patlama riski taşır?", o:["Taşımaz","Yanıcı buhar birikimi patlayıcı ortam oluşturabilir","Sadece koku yapar","Renk değiştirir"], c:1},
+  ],
+
+  'kalip-insaat-isleri': [
+    {q:"Kalıp iskeleti için ne kontrol edilir?", o:["Rengi","Statik olarak yeterli desteklenmiş (payanda, dikme) olması","Boyutu","Markası"], c:1},
+    {q:"Yetersiz destekleme ne riski taşır?", o:["Risk yoktur","Çökme riski","Daha sağlam yapı","Estetik sorun"], c:1},
+    {q:"Kalıp söküm zamanı neye göre belirlenir?", o:["Rastgele","Beton priz süresine (mühendis onayına) göre","Hava durumuna göre","Hiçbir kurala göre"], c:1},
+    {q:"Erken sökümün riski nedir?", o:["Risk yoktur","Çökme riski","Daha hızlı iş","Enerji tasarrufu"], c:1},
+    {q:"Yükseklik gerektiren kalıp işlerinde ne kullanılır?", o:["Hiçbir ekipman","Yüksekte Çalışma SOP'una uygun ekipman","Sadece merdiven yeterlidir","Önemli değil"], c:1},
+    {q:"Söküm sırasında alt bölge için ne yapılır?", o:["Serbest bırakılır","Boşaltılır/bariyer edilir","Önemli değil","Doldurulur"], c:1},
+    {q:"Kalıp malzemesi kullanım öncesi nasıl kontrol edilir?", o:["Kontrol edilmez","Hasar yönünden","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Çivi/keskin uçlar için ne yapılmalıdır?", o:["Olduğu gibi bırakılır","Bükülür","Önemli değil","Kesilir"], c:1},
+    {q:"Çalışma alanı için ilk adım nedir?", o:["Hiçbir şey","Bariyer ile çevrilir, geçiş güzergahları işaretlenir","Direkt çalışılır","Sadece uyarılır"], c:1},
+    {q:"Döküm sırasında ne gözlemlenir?", o:["Hiçbir şey","Kalıp basıncı/deformasyonu","Sadece renk","Sadece hava durumu"], c:1},
+    {q:"Bu SOP hangi işleri kapsar?", o:["Sadece boyama","Betonarme kalıp kurma/söküm ve genel inşaat destek işleri","Sadece elektrik işleri","Sadece kaynak işleri"], c:1},
+    {q:"İş bitiminde ne yapılır?", o:["Hiçbir şey","Alan temizlenir, atık malzemeler bertaraf edilir","Malzemeler bırakılır","Sadece kayıt tutulur"], c:1},
+  ],
+
+  'chiller-bakim': [
+    {q:"Devreye alma sırasında ilk önce ne çalıştırılır?", o:["Kompresör","Su pompaları","Fan","Elektrik panosu"], c:1},
+    {q:"Susuz kompresör çalıştırmanın riski nedir?", o:["Risk yoktur","Ciddi hasar","Enerji tasarrufu","Daha hızlı soğuma"], c:1},
+    {q:"Kirli kondenser/evaporatör yüzeylerinin etkisi nedir?", o:["Etkisi yoktur","Verim kaybı","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Kapatma sırasında ne yapılır?", o:["Her şey aynı anda durdurulur","Kompresör önce durdurulur, su sirkülasyonu bir süre devam eder","Su pompaları önce durdurulur","Fark etmez"], c:1},
+    {q:"Soğutucu akışkan basıncı nereden kontrol edilir?", o:["Termometreden","Basınç göstergesinden","Ampermetreden","Gözle tahmin"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Kompresörler (hava)","Soğutma sistemi chiller ünitesi","Trafo","Jeneratör"], c:1},
+    {q:"Su/glikol devresinde ne kontrol edilir?", o:["Hiçbir şey","Basınç ve akış","Sadece renk","Sadece sıcaklık"], c:1},
+    {q:"Elektrik panosu/kontrol devresi ne zaman kontrol edilir?", o:["Hiç kontrol edilmez","Periyodik bakımda","Sadece arızada","Yılda bir"], c:1},
+    {q:"Kompresör yağ seviyesi hangi tip chillerlerde kontrol edilir?", o:["Hiçbirinde","Yağ gerektiren tiplerde (varsa)","Sadece yeni chillerlerde","Her zaman gereksizdir"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Genel görsel kontrolde nelere bakılır?", o:["Sızıntı, anormal ses/titreşim","Sadece renk","Sadece boyut","Hiçbir şey"], c:0},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Chiller hemen sökülür"], c:1},
+  ],
+
+  'klima-santralleri': [
+    {q:"Kirli filtrenin etkisi nedir?", o:["Etkisi yoktur","Debiyi düşürür, enerji tüketimini artırır","Enerji tasarrufu sağlar","Hava kalitesini artırır"], c:1},
+    {q:"Kondens tavası/drenaj hattı tıkanırsa ne olur?", o:["Sorun olmaz","Su taşmasına yol açar","Daha iyi çalışır","Enerji tasarrufu sağlar"], c:1},
+    {q:"AHU bakımı öncesi ne yapılır?", o:["Hiçbir şey","LOTO-Elektrik'e göre enerjisiz hale getirilir (gerekiyorsa)","Direkt müdahale edilir","Enerji artırılır"], c:1},
+    {q:"Damper mekanizmaları ne işe yarar?", o:["Filtreleme","Taze hava/egzoz akış kontrolü","Isıtma","Aydınlatma"], c:1},
+    {q:"Isıtıcı/soğutucu batarya yüzeyleri neden kontrol edilir?", o:["Gerekli değildir","Kirlenme yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Chiller","Klima santralleri (AHU)","Kompresör","Trafo"], c:1},
+    {q:"LOTO kaldırıldıktan sonra ne kontrol edilir?", o:["Hiçbir şey","Hava debisi/sıcaklığı","Sadece renk","Sadece ses"], c:1},
+    {q:"Nem alma/nemlendirme ünitesi ne zaman kontrol edilir?", o:["Hiç kontrol edilmez","Varsa periyodik bakımda","Sadece yazın","Sadece kışın"], c:1},
+    {q:"Fan/motor bağlantılarıyla birlikte ne kontrol edilir?", o:["Hiçbir şey","Kayış (varsa)","Sadece renk","Sadece ses"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"AHU açılımı nedir?", o:["Automatic Heating Unit","Air Handling Unit","Air Heating Utility","Automatic Humidity Unit"], c:1},
+    {q:"Filtre durumu ne sıklıkla kontrol edilir?", o:["Hiç kontrol edilmez","Periyodik bakımda","Sadece arızada","10 yılda bir"], c:1},
+  ],
+
+  'soguk-su-pompalari': [
+    {q:"Bakım öncesi pompa nasıl hale getirilir?", o:["Enerjili bırakılır","LOTO-Elektrik'e göre enerjisi kesilir, kilitlenir","Fark etmez","Yarı enerjili"], c:1},
+    {q:"Kuru çalıştırmanın riski nedir?", o:["Risk yoktur","Pompaya ciddi hasar verir","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Pompa çalıştırılmadan önce ne teyit edilir?", o:["Hiçbir şey","Sistemin su ile dolu olduğu","Sadece rengi","Sadece sesi"], c:1},
+    {q:"Salmastra/mekanik keçe durumu neden kontrol edilir?", o:["Gerekli değildir","Aşınma/sızıntı için","Sadece renk için","Estetik için"], c:1},
+    {q:"Yataklama bakımı için ne yapılır?", o:["Hiçbir şey","Gres/yağlama üretici talimatına göre yapılır","Sadece temizlenir","Değiştirilmez"], c:1},
+    {q:"Bakım sonrası LOTO kaldırılmadan önce ne kontrol edilir?", o:["Hiçbir şey","Vana konumlarının doğru olduğu","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Sıcak su","Soğuk su sirkülasyon pompaları","Yangın suyu","İçme suyu"], c:1},
+    {q:"Motor akım değerleri ne ile karşılaştırılır?", o:["Rastgele değerlerle","Referans değerlerle","Hava sıcaklığıyla","Karşılaştırma yapılmaz"], c:1},
+    {q:"İlk çalıştırmada neler kontrol edilir?", o:["Hiçbir şey","Basınç, akış, titreşim","Sadece renk","Sadece ses"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Pompa gövdesi/bağlantılar neden kontrol edilir?", o:["Gerekli değildir","Sızıntı, korozyon yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Motor-pompa akuplasyonu ne zaman kontrol edilir?", o:["Hiç kontrol edilmez","Periyodik bakımda","Sadece arızada","10 yılda bir"], c:1},
+  ],
+
+  'sogutma-kulesi': [
+    {q:"Legionella riski neden önemlidir?", o:["Önemli değildir","Soğutma kuleleri Legionella üremesi için uygun ortam oluşturabilir","Sadece koku yapar","Renk değiştirir"], c:1},
+    {q:"Legionella riskini azaltmak için ne yapılır?", o:["Hiçbir şey","Düzenli kimyasal (biyosit) muamele","Su boşaltılır kalıcı olarak","Kule kapatılır"], c:1},
+    {q:"Kirli dolgu malzemesinin (fill) etkisi nedir?", o:["Etkisi yoktur","Soğutma verimini düşürür","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Su seviyesi neyle kontrol edilir?", o:["Tahmin ile","Otomatik doldurma (make-up) valfi ile","Kontrol edilmez","Elle ölçülerek her gün"], c:1},
+    {q:"Blöf (blowdown) sistemi ne işe yarar?", o:["Su ekler","Konsantre olan suyu tahliye eder","Isıtma yapar","Aydınlatma sağlar"], c:1},
+    {q:"Su dağıtım nozulları neden kontrol edilir?", o:["Gerekli değildir","Tıkanıklık yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Chiller","Soğutma kulesi","Kompresör","Trafo"], c:1},
+    {q:"Fan/motor ile birlikte ne kontrol edilir?", o:["Hiçbir şey","Kayış (varsa)","Sadece renk","Sadece ses"], c:1},
+    {q:"Su kalitesi testi neyi ölçer?", o:["Sadece sıcaklık","Kimyasal dozaj ve biyolojik risk göstergeleri","Sadece renk","Sadece debi"], c:1},
+    {q:"Kule çevresi/havuzu ne sıklıkla temizlenir?", o:["Hiç temizlenmez","Periyodik olarak","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Yapısal hasar kontrolü ne için yapılır?", o:["Gerekli değildir","Su sızıntısı/hasar tespiti için","Sadece renk için","Estetik için"], c:1},
+  ],
+
+  'kompresor-bakim': [
+    {q:"Emniyet valfi arızalıysa ne riski oluşur?", o:["Risk yoktur","Aşırı basınç riski","Enerji tasarrufu","Daha sessiz çalışma"], c:1},
+    {q:"Vidalı kompresörlerde ne kontrol edilir?", o:["Kayış gerginliği","Yağ seviyesi ve kalitesi","Sadece renk","Sadece ses"], c:1},
+    {q:"Pistonlu kompresörlerde ek olarak ne kontrol edilir?", o:["Yağ kalitesi","Kayış gerginliği","Hiçbir şey","Sadece renk"], c:1},
+    {q:"Kirli hava/yağ filtrelerinin etkisi nedir?", o:["Etkisi yoktur","Performans düşüşü","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Kondens tahliye sistemi neden kontrol edilir?", o:["Gerekli değildir","Suyun sistemden düzenli tahliyesi için","Sadece renk için","Estetik için"], c:1},
+    {q:"Bakım öncesi kompresör nasıl hale getirilir?", o:["Enerjili bırakılır","LOTO-Elektrik'e göre enerjisiz hale getirilir (gerekiyorsa)","Fark etmez","Basınç artırılır"], c:1},
+    {q:"LOTO kaldırıldıktan sonra ne kontrol edilir?", o:["Hiçbir şey","Basınç, sıcaklık, ses","Sadece renk","Sadece boyut"], c:1},
+    {q:"Basınç şalteri ayarları neden kontrol edilir?", o:["Gerekli değildir","Doğru basınç aralığında çalışması için","Sadece renk için","Estetik için"], c:1},
+    {q:"Bu SOP hangi kompresör tiplerini kapsar?", o:["Sadece vidalı","Vidalı ve pistonlu","Sadece pistonlu","Sadece santrifüj"], c:1},
+    {q:"Soğutma sistemi temizliği neden önemlidir?", o:["Önemli değildir","Kompresörün aşırı ısınmasını önlemek için","Sadece görünüm için","Estetik için"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Soğutma sistemi","Basınçlı hava kompresörleri","Su sistemi","Yangın sistemi"], c:1},
+  ],
+
+  'kurutucu-hava-tanki': [
+    {q:"Yüksek çiy noktasının etkisi nedir?", o:["Etkisi yoktur","Hatlarda yoğuşmaya yol açar","Daha kuru hava sağlar","Enerji tasarrufu"], c:1},
+    {q:"Adsorbsiyonlu kurutucularda ne kontrol edilir?", o:["Soğutucu akışkan basıncı","Kartuş/desikan durumu","Kayış gerginliği","Yağ seviyesi"], c:1},
+    {q:"Soğutmalı kurutucularda ne kontrol edilir?", o:["Kartuş durumu","Soğutucu akışkan basıncı","Desikan durumu","Kayış"], c:1},
+    {q:"Tıkalı otomatik kondens tahliye valfinin etkisi nedir?", o:["Etkisi yoktur","Tankta su birikimine yol açar","Daha iyi çalışma","Enerji tasarrufu"], c:1},
+    {q:"Hava tankı gövdesi neden kontrol edilir?", o:["Gerekli değildir","Korozyon/hasar yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Tank emniyet valfi ne işe yarar?", o:["Basıncı artırır","Aşırı basınçta tahliye sağlar","Sesi azaltır","Rengi değiştirir"], c:1},
+    {q:"Ön/son filtreler ne zaman değiştirilir?", o:["Hiç değiştirilmez","Kirlendiğinde","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Kompresör ve motor","Kurutucu ve hava tankı","Trafo ve jeneratör","Pompa ve vana"], c:1},
+    {q:"Tank basınç göstergesi doğruluğu neden kontrol edilir?", o:["Gerekli değildir","Doğru basınç bilgisi için","Sadece renk için","Estetik için"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Çiy noktası göstergesi neyi ölçer?", o:["Sıcaklığı","Havadaki nem/yoğuşma noktasını","Basıncı","Debiyi"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Sistem hemen sökülür"], c:1},
+  ],
+
+  'su-yumusatma': [
+    {q:"Rejenerasyon işlemi ne amaçla yapılır?", o:["Suyu ısıtmak için","Reçinenin sertlik giderme kapasitesini geri kazanması için","Su renklendirmek için","Debiyi artırmak için"], c:1},
+    {q:"Rejenerasyon aşamaları hangi sırayla gerçekleşir?", o:["Rastgele","Geri yıkama, tuzlu su emme, durulama","Sadece durulama","Sadece tuzlu su emme"], c:1},
+    {q:"Çıkış suyu sertliği neyle ölçülür?", o:["Termometre","Su sertlik test kiti","Manometre","Ampermetre"], c:1},
+    {q:"Tuz tankı seviyesi düşükse ne yapılır?", o:["Görmezden gelinir","Tuz ilave edilir","Sistem kapatılır kalıcı olarak","Su eklenir"], c:1},
+    {q:"Bu sistemin amacı nedir?", o:["Suyu ısıtmak","Su sertliğini gidermek (yumuşatmak)","Suyu soğutmak","Suyu renklendirmek"], c:1},
+    {q:"Valf pozisyonları (servis/rejenerasyon) neden kontrol edilir?", o:["Gerekli değildir","Doğru modda çalıştığını teyit için","Sadece renk için","Estetik için"], c:1},
+    {q:"Rejenerasyon sonrası ne yapılır?", o:["Hiçbir şey","Çıkış suyu tekrar test edilir","Sistem kapatılır kalıcı olarak","Su boşaltılır"], c:1},
+    {q:"Sistem basıncı/akışı ne zaman kontrol edilir?", o:["Hiç kontrol edilmez","Periyodik bakımda","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Reçine tankı durumu neden kontrol edilir?", o:["Gerekli değildir","Genel görsel kontrol için","Sadece renk için","Estetik için"], c:1},
+    {q:"Su sertliği referans değerin üzerindeyse ne anlama gelir?", o:["Sistem iyi çalışıyor","Rejenerasyon veya bakım gerekebilir","Hiçbir anlamı yoktur","Su içilebilir"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Hidrofor","Su yumuşatma (softener) sistemi","Kimyasal arıtma","Soğutma kulesi"], c:1},
+  ],
+
+  'hidrofor-sistemi': [
+    {q:"Hidrofor tankındaki hava yastığı yetersizse ne olur?", o:["Sorun olmaz","Pompanın sık devreye girmesine yol açar","Daha iyi çalışır","Enerji tasarrufu sağlar"], c:1},
+    {q:"Sistem basıncı nereden kontrol edilir?", o:["Termometreden","Manometreden","Ampermetreden","Gözle tahmin"], c:1},
+    {q:"Kuru çalışma koruma sensörü ne işe yarar?", o:["Basıncı artırır","Su olmadan pompanın çalışmasını önler","Sesi azaltır","Rengi değiştirir"], c:1},
+    {q:"Pompaların otomatik döngüsünde ne gözlemlenir?", o:["Hiçbir şey","Start/stop çalışması","Sadece renk","Sadece ses"], c:1},
+    {q:"Bu sistemin amacı nedir?", o:["Su ısıtmak","Su basınçlandırmak","Su soğutmak","Su arıtmak"], c:1},
+    {q:"Motor akım değerleri ne zaman kontrol edilir?", o:["Hiç kontrol edilmez","Periyodik kontrolde","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Vana pozisyonları (emme/basma) neden kontrol edilir?", o:["Gerekli değildir","Doğru akış yönü için","Sadece renk için","Estetik için"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Genel görsel kontrolde nelere bakılır?", o:["Sızıntı, anormal ses","Sadece renk","Sadece boyut","Hiçbir şey"], c:0},
+    {q:"Start/stop basınç değerleri neyi belirler?", o:["Rengi","Pompanın ne zaman devreye gireceğini/duracağını","Sesi","Boyutu"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Sistem hemen sökülür"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Su yumuşatma","Hidrofor (basınçlandırma) sistemi","Kimyasal arıtma","Soğutma kulesi"], c:1},
+  ],
+
+  'su-deposu-temizlik': [
+    {q:"Depo temizliği öncesi ne değerlendirilir?", o:["Hiçbir şey","Alternatif su beslemesi/stok durumu","Sadece hava durumu","Personel sayısı"], c:1},
+    {q:"Depo içine giriş gerekiyorsa hangi SOP referans alınır?", o:["LOTO-Elektrik","Kapalı Alanda Çalışma SOP","Yüksekte Çalışma SOP","Sıcak Çalışma SOP"], c:1},
+    {q:"Depo içine girmeden önce ne yapılır?", o:["Hiçbir şey","Atmosfer testi yapılır","Direkt girilir","Sadece izin alınır yeterlidir"], c:1},
+    {q:"İç yüzeylerde neler temizlenir?", o:["Hiçbir şey","Tortu, biyofilm, alg","Sadece toz","Sadece paslar"], c:1},
+    {q:"Temizlik sonrası depo durulanırken ne teyit edilir?", o:["Hiçbir şey","Kimyasal kalıntısı kalmadığı","Sadece rengi","Sadece kokusu"], c:1},
+    {q:"Depo doldurulduktan sonra ne test edilir?", o:["Hiçbir şey","Su kalitesi (bulanıklık, klor vb.)","Sadece sıcaklık","Sadece basınç"], c:1},
+    {q:"Yapısal hasar kontrolünde nelere bakılır?", o:["Hiçbir şey","Çatlak, korozyon","Sadece renk","Sadece boyut"], c:1},
+    {q:"Bu SOP hangi işlemi kapsar?", o:["Su yumuşatma","Su deposu periyodik temizlik/kontrol","Kimyasal arıtma","Hidrofor kontrolü"], c:1},
+    {q:"Vanalar temizlik sonrası ne yapılır?", o:["Kapalı bırakılır","Normal işletim konumuna getirilir","Sökülür","Önemli değil"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Depo boşaltılmadan önce vanalar için ne yapılır?", o:["Açık bırakılır","Giriş/çıkış vanaları kapatılır","Sökülür","Önemli değil"], c:1},
+    {q:"Kapalı alan girişinde hangi KKD gerekebilir?", o:["Hiçbiri","Kapalı Alan SOP'undaki KKD","Sadece gözlük","Sadece eldiven"], c:1},
+  ],
+
+  'kimyasal-aritma': [
+    {q:"Kimyasal aktarımında hangi belgeye uyulmalıdır?", o:["Hiçbir belgeye gerek yok","Güvenlik Bilgi Formu (SDS)","Sadece sözlü talimat","Fatura"], c:1},
+    {q:"Proses parametreleri olarak neler ölçülür?", o:["Sadece sıcaklık","pH, iletkenlik gibi parametreler","Sadece renk","Sadece koku"], c:1},
+    {q:"Kimyasal dozaj pompaları neden kontrol edilir?", o:["Gerekli değildir","Doğru oranda dozajlama için","Sadece renk için","Estetik için"], c:1},
+    {q:"Karıştırıcı/havalandırıcı ekipmanlar ne için kontrol edilir?", o:["Gerekli değildir","Çalışır durumda olduklarını teyit için","Sadece renk için","Estetik için"], c:1},
+    {q:"Çamur/atık tahliye sistemi neden kontrol edilir?", o:["Gerekli değildir","Düzenli tahliye için","Sadece renk için","Estetik için"], c:1},
+    {q:"Numune alınarak ne yapılır?", o:["Hiçbir şey","Laboratuvar analizi (gerekirse)","Sadece saklanır","Dökülür"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Su yumuşatma","Proses/atık suyu kimyasal arıtma sistemi","Hidrofor","Soğutma kulesi"], c:1},
+    {q:"Kimyasal tank seviyeleri düşükse ne yapılır?", o:["Görmezden gelinir","İkmal yapılır","Sistem kapatılır kalıcı olarak","Su eklenir"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Sistem hemen sökülür"], c:1},
+    {q:"Genel görsel kontrolde nelere bakılır?", o:["Sızıntı, kimyasal depolama durumu","Sadece renk","Sadece boyut","Hiçbir şey"], c:0},
+    {q:"pH ölçümü hangi cihazla yapılır?", o:["Termometre","pH metre","Ampermetre","Manometre"], c:1},
+  ],
+
+  'sicak-su-pompalari': [
+    {q:"Sıcak su sızıntısının riski nedir?", o:["Risk yoktur","Yanık riski","Enerji tasarrufu","Daha iyi performans"], c:1},
+    {q:"Kuru çalıştırmanın sıcak su sisteminde etkisi nedir?", o:["Etkisi yoktur","Ciddi hasara yol açar","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Bakım öncesi pompa nasıl hale getirilir?", o:["Enerjili bırakılır","LOTO-Elektrik'e göre enerjisi kesilir, kilitlenir","Fark etmez","Yarı enerjili"], c:1},
+    {q:"Pompa çalıştırılmadan önce ne teyit edilir?", o:["Hiçbir şey","Sistemin su ile dolu olduğu","Sadece rengi","Sadece sesi"], c:1},
+    {q:"İlk çalıştırmada hangi değerler kontrol edilir?", o:["Sadece renk","Basınç, akış, titreşim, sıcaklık","Sadece ses","Hiçbiri"], c:1},
+    {q:"Salmastra/mekanik keçe durumu neden kontrol edilir?", o:["Gerekli değildir","Aşınma/sızıntı için","Sadece renk için","Estetik için"], c:1},
+    {q:"Yataklama bakımı için ne yapılır?", o:["Hiçbir şey","Gres/yağlama üretici talimatına göre yapılır","Sadece temizlenir","Değiştirilmez"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Soğuk su","Sıcak su sirkülasyon pompaları","İçme suyu","Yangın suyu"], c:1},
+    {q:"Motor akım değerleri ne zaman kontrol edilir?", o:["Hiç kontrol edilmez","Periyodik bakımda","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Pompa gövdesi/bağlantılar neden kontrol edilir?", o:["Gerekli değildir","Sızıntı yönünden (yanık riski)","Sadece renk için","Estetik için"], c:1},
+    {q:"Bakım sonrası LOTO kaldırılmadan önce ne kontrol edilir?", o:["Hiçbir şey","Vana konumlarının doğru olduğu","Sadece rengi","Sadece boyutu"], c:1},
+  ],
+
+  'basincli-hava-sizinti': [
+    {q:"Sızıntı tespiti için hangi ekipman kullanılabilir?", o:["Termometre","Ultrasonik sızıntı dedektörü","Manometre","Ampermetre"], c:1},
+    {q:"Onarım öncesi hat için ne yapılır?", o:["Hiçbir şey","LOTO/izolasyon prosedürüne göre devre dışı bırakılır","Basınç artırılır","Direkt müdahale edilir"], c:1},
+    {q:"Sızıntı testi için ne kullanılır?", o:["Su","Sabunlu su solüsyonu","Yağ","Alkol"], c:1},
+    {q:"Hat devreye alınırken nasıl yapılır?", o:["Aniden tam açılır","Kademeli olarak","Hiç açılmaz","Yarı açık bırakılır"], c:1},
+    {q:"Bu SOP'un amacı nedir?", o:["Yeni hat döşemek","Basınçlı hava hatlarındaki sızıntıları tespit edip onarmak","Kompresör bakımı","Vana montajı"], c:1},
+    {q:"Sızıntı kaynağı olarak neler görülebilir?", o:["Sadece motor arızası","Rakor, contasız bağlantı, çatlak boru","Sadece filtre","Sadece vana"], c:1},
+    {q:"Bağlantı sıkma işleminde neye dikkat edilir?", o:["Rastgele sıkılır","Uygun tork değeri","Maksimum kuvvetle sıkılır","Sıkılmaz"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Sızıntı şüphesi nasıl tespit edilebilir?", o:["Sadece dedektörle","Saha gözlemi (ses, hava akımı hissi) ve dedektörle","Sadece tahminle","Tespit edilemez"], c:1},
+    {q:"Basınçlı hava sızıntısının işletmeye etkisi nedir?", o:["Etkisi yoktur","Enerji/hava kaybına yol açar","Enerji tasarrufu sağlar","Daha iyi performans"], c:1},
+    {q:"Onarım sonrası ne yapılır?", o:["Hiçbir şey","Sabunlu su testiyle sızıntı kalmadığı teyit edilir","Direkt kullanılır","Beklenir"], c:1},
+    {q:"Sızıntı noktası tespit edildikten sonra ilk adım nedir?", o:["Hemen sökülür","İşaretlenir","Görmezden gelinir","Basınç artırılır"], c:1},
+  ],
+
+  'elektrikli-el-aleti-kontrolu': [
+    {q:"Hasarlı kablo tespit edilirse ne yapılmalıdır?", o:["Kullanılmaya devam edilir","Alet derhal kullanım dışı bırakılıp etiketlenir","Bantla sarılır kullanılır","Görmezden gelinir"], c:1},
+    {q:"Hasarlı kablonun riski nedir?", o:["Risk yoktur","Elektrik çarpması riski","Enerji tasarrufu","Daha iyi performans"], c:1},
+    {q:"Nemli ortamlarda ne kullanılmalıdır?", o:["Herhangi bir priz","Kaçak akım rölesi (RCD) korumalı priz","Uzatma kablosu","Hiçbir önlem gerekmez"], c:1},
+    {q:"Aksesuar (uç, disk) seçerken nelere dikkat edilir?", o:["Herhangi biri kullanılabilir","Alete uyumlu ve hasarsız olmalı","Sadece ucuz olan seçilir","Önemli değil"], c:1},
+    {q:"Uyumsuz/hasarlı aksesuarın riski nedir?", o:["Risk yoktur","Fırlama riski","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Koruma siperi/muhafazası neden kontrol edilir?", o:["Gerekli değildir","Yerinde ve sağlam olması için","Sadece görünüm için","Estetik için"], c:1},
+    {q:"Kullanım sonrası alet için ne yapılır?", o:["Açık bırakılır","Kapatılır, kablosu düzenli sarılır, uygun yerde saklanır","Herhangi bir yere atılır","Hiçbir şey"], c:1},
+    {q:"Bu SOP hangi aletleri kapsar?", o:["Sadece matkap","Matkap, taşlama, vidalama gibi elektrikli el aletleri","Sadece taşlama","Sadece testere"], c:1},
+    {q:"Alet gövdesi kontrolünde nelere bakılır?", o:["Rengi","Çatlak/kırık olup olmadığı","Markası","Ağırlığı"], c:1},
+    {q:"Topraklama hattı neden kontrol edilir?", o:["Gerekli değildir","Sağlam olduğunu teyit için","Sadece renk için","Estetik için"], c:1},
+    {q:"Çalıştırma/durdurma anahtarı ne zaman test edilir?", o:["Hiç test edilmez","Kullanım öncesi","Sadece arızada","Yılda bir"], c:1},
+    {q:"Bu kontrol ne sıklıkla yapılmalıdır?", o:["Yılda bir","Her kullanım öncesi","Hiç yapılmaz","10 yılda bir"], c:1},
+  ],
+
+  'kacis-yolu-kontrolu': [
+    {q:"Kaçış yolu üzerinde engel bulunmasının riski nedir?", o:["Risk yoktur","Tahliye sırasında ciddi risk oluşturur","Daha güvenli olur","Enerji tasarrufu sağlar"], c:1},
+    {q:"Acil çıkış kapıları hangi yöne açılmalıdır?", o:["İçeriye","Dışarıya","Yana","Fark etmez"], c:1},
+    {q:"Panik bar mekanizması ne işe yarar?", o:["Kapıyı kilitler","Kapının kolayca açılmasını sağlar","Alarm çalar","Aydınlatmayı açar"], c:1},
+    {q:"Kaçış yolu aydınlatması neden önemlidir?", o:["Önemli değildir","Acil durumda görüş sağlamak için","Sadece estetik için","Enerji tüketimi için"], c:1},
+    {q:"Yönlendirme levhaları nasıl olmalıdır?", o:["Gizli","Görünür ve okunaklı","Küçük ve fark edilmez","Önemli değil"], c:1},
+    {q:"Toplanma alanı için ne kontrol edilir?", o:["Hiçbir şey","İşaretleme ve erişim yolu","Sadece büyüklüğü","Sadece rengi"], c:1},
+    {q:"Bu kontrol hangi sıklıkla yapılmalıdır?", o:["Hiç yapılmaz","Periyodik olarak","Sadece tatbikatta","10 yılda bir"], c:1},
+    {q:"Tespit edilen engel/arıza için ne yapılır?", o:["Görmezden gelinir","Derhal giderilir veya bakım talebi açılır","Bir sonraki kontrole bırakılır","Önemli değil"], c:1},
+    {q:"Bu SOP'un temel amacı nedir?", o:["Estetik kontrol","Acil durumda güvenli tahliyeyi sağlamak","Enerji tasarrufu","Ekipman bakımı"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Acil çıkış kapılarının kilitli olması ne anlama gelir?", o:["Normal durumdur","Ciddi güvenlik açığıdır","Enerji tasarrufu sağlar","Önemli değildir"], c:1},
+    {q:"Bu SOP hangi alanları kapsar?", o:["Sadece ofisler","Fabrika kaçış yolları ve acil çıkış kapıları","Sadece üretim alanı","Sadece depo"], c:1},
+  ],
+
+  'priz-anahtar-armatur': [
+    {q:"Montaj öncesi devre için ne yapılır?", o:["Enerjili bırakılır","LOTO-Elektrik'e göre enerjisiz hale getirilir","Fark etmez","Basınç artırılır"], c:1},
+    {q:"Toprak bağlantısının atlanmasının riski nedir?", o:["Risk yoktur","Ciddi güvenlik riski oluşturur","Enerji tasarrufu sağlar","Daha iyi performans"], c:1},
+    {q:"Yeni ekipman seçerken nelere dikkat edilir?", o:["Sadece rengi","Voltaj/akım uyumu","Fiyatı","Markası"], c:1},
+    {q:"Enerji verilmeden önce ne kontrol edilir?", o:["Hiçbir şey","Bağlantıların görsel kontrolü","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Eski ekipman sökülürken ne yapılır?", o:["Rastgele sökülür","Kablo bağlantıları not edilir","Kesilir","Önemli değil"], c:1},
+    {q:"Enerji verildikten sonra ne test edilir?", o:["Hiçbir şey","Ekipmanın doğru çalıştığı","Sadece rengi","Sadece sesi"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Sadece prizler","Priz, anahtar ve aydınlatma armatürleri","Sadece anahtarlar","Sadece lambalar"], c:1},
+    {q:"Kablo bağlantıları nasıl yapılır?", o:["Rastgele","Faz, nötr, toprak doğru şekilde","Sadece faz bağlanır","Önemli değil"], c:1},
+    {q:"İşlem sonunda ne yapılır?", o:["Hiçbir şey","Kayıt formuna işlenir","Unutulur","Sadece sözlü bildirilir"], c:1},
+    {q:"Kapak/pano düzeni ne zaman toparlanır?", o:["Hiç toparlanmaz","İşlem sonunda","İşlem başında","Önemli değil"], c:1},
+    {q:"Ekipman nasıl sabitlenir?", o:["Sabitlenmez","Kutuya/yüzeye","Elle tutularak","Bantla"], c:1},
+    {q:"Bu işlem kim tarafından yapılmalıdır?", o:["Herkes","Yetkili elektrik personeli","Sadece yöneticiler","Stajyerler"], c:1},
+  ],
+
+  'kablo-cekimi-kanal': [
+    {q:"Kablo kesiti neye göre seçilir?", o:["Rastgele","Yük hesabına uygun","Sadece renk","Fiyata göre"], c:1},
+    {q:"Yetersiz kesit kablonun riski nedir?", o:["Risk yoktur","Aşırı ısınma/yangın riski","Enerji tasarrufu","Daha iyi performans"], c:1},
+    {q:"Kablo büküm yarıçapı neye uygun olmalıdır?", o:["Rastgele","Üretici toleransına","Sadece göz kararı","Önemli değil"], c:1},
+    {q:"Aşırı bükümün etkisi nedir?", o:["Etkisi yoktur","İç iletkende hasara yol açar","Daha esnek olur","Enerji tasarrufu sağlar"], c:1},
+    {q:"İzolasyon direnci testi hangi cihazla yapılır?", o:["Ampermetre","Megger","Termometre","Manometre"], c:1},
+    {q:"Kablo uçları bağlanırken devre nasıl olmalıdır?", o:["Enerjili","Enerjisiz (LOTO-Elektrik'e göre)","Fark etmez","Yarı enerjili"], c:1},
+    {q:"Kablo kanal içinde nasıl dizilir?", o:["Rastgele","Düzenli ve etiketli","Karışık","Önemli değil"], c:1},
+    {q:"Güzergah belirlenirken ne kontrol edilir?", o:["Hiçbir şey","Mevcut tesisatlarla çakışma","Sadece uzunluk","Sadece renk"], c:1},
+    {q:"Bu SOP hangi işlemleri kapsar?", o:["Sadece kablo çekimi","Kablo çekimi ve kablo kanalı döşeme","Sadece kanal döşeme","Sadece pano montajı"], c:1},
+    {q:"Fonksiyon testi ne zaman yapılır?", o:["Enerji verilmeden önce","Enerji verildikten sonra","Hiç yapılmaz","Kablo çekiminden önce"], c:1},
+    {q:"Aşırı çekme kuvvetinin etkisi nedir?", o:["Etkisi yoktur","Kabloya zarar verebilir","Daha hızlı çekim sağlar","Enerji tasarrufu"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+  ],
+
+  'duman-isi-dedektoru': [
+    {q:"Test öncesi panele ne bildirilir?", o:["Hiçbir şey","İlgili bölgenin test modunda olduğu","Sadece tarih","Personel sayısı"], c:1},
+    {q:"Test modu bildirilmemesinin riski nedir?", o:["Risk yoktur","Yanlış alarm tetiklenebilir","Daha hızlı test","Enerji tasarrufu"], c:1},
+    {q:"Kirli dedektörün etkisi nedir?", o:["Etkisi yoktur","Hatalı algılamaya yol açabilir","Daha hassas olur","Enerji tasarrufu sağlar"], c:1},
+    {q:"Fonksiyon testi nasıl yapılır?", o:["Sadece görsel kontrol","Test spreyi veya ısı kaynağı ile","Dokunarak","Test yapılmaz"], c:1},
+    {q:"Test sonrası panelde ne teyit edilir?", o:["Hiçbir şey","Alarm sinyali verdiği","Sadece rengi","Sadece sesi"], c:1},
+    {q:"Test tamamlandıktan sonra dedektör ne yapılır?", o:["Sökülür","Resetlenir, panel normal moda alınır","Kapatılır kalıcı olarak","Hiçbir şey"], c:1},
+    {q:"Arızalı dedektör tespit edilirse ne yapılır?", o:["Görmezden gelinir","Değiştirilir veya servis çağrılır","Sökülüp atılır","Hiçbir şey"], c:1},
+    {q:"Dedektör temizliği için ne kullanılır?", o:["Su","Yumuşak fırça","Sert fırça","Deterjan"], c:1},
+    {q:"Bu SOP hangi dedektörleri kapsar?", o:["Sadece duman","Duman ve ısı dedektörleri","Sadece ısı","Sadece gaz"], c:1},
+    {q:"Yüksekte bulunan dedektörler için ne gerekir?", o:["Hiçbir şey","Yüksekte Çalışma SOP'undaki önlemler","Sadece merdiven","Önemli değil"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu SOP hangi sistemin parçasıdır?", o:["Su sistemi","Yangın alarm sistemi","Elektrik sistemi","Havalandırma sistemi"], c:1},
+  ],
+
+  'hidrolik-unite-bakimi': [
+    {q:"Yağ analizi neden önemlidir?", o:["Önemli değildir","Erken arıza tespiti sağlar","Sadece rapor için","Estetik için"], c:1},
+    {q:"Aşırı yağ sıcaklığının etkisi nedir?", o:["Etkisi yoktur","Yağ bozulmasını hızlandırır","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Yağ filtresi ne zaman değiştirilir?", o:["Hiç değiştirilmez","Kirlilik göstergesine göre","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Relief valve neyi kontrol eder?", o:["Sıcaklığı","Basınç ayarlarını","Yağ rengini","Sesi"], c:1},
+    {q:"Yağ analizi için ne yapılır?", o:["Hiçbir şey","Numune alınıp analiz yaptırılır","Yağ boşaltılır kalıcı olarak","Sistem kapatılır"], c:1},
+    {q:"Pompa/motor kontrolünde nelere bakılır?", o:["Sadece renk","Titreşim ve ses","Sadece boyut","Sadece ağırlık"], c:1},
+    {q:"Bakım öncesi ünite nasıl hale getirilir?", o:["Enerjili bırakılır","LOTO-Elektrik'e göre enerjisiz hale getirilir (gerekiyorsa)","Fark etmez","Basınç artırılır"], c:1},
+    {q:"Hortum/boru bağlantılarında ne kontrol edilir?", o:["Hiçbir şey","Sızıntı","Sadece renk","Sadece boyut"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Pnömatik sistemler","Hidrolik güç üniteleri","Elektrik panoları","Su pompaları"], c:1},
+    {q:"Yağ seviyesi nereden kontrol edilir?", o:["Tahmin ile","Gösterge ile","Kontrol edilmez","Ses ile"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Ünite hemen sökülür"], c:1},
+  ],
+
+  'hidrolik-hortum-degisimi': [
+    {q:"Hortum sökümü öncesi en kritik adım nedir?", o:["Direkt sökmek","Basıncın sıfır olduğunu manometreden teyit etmek","Enerji vermek","Hiçbir şey"], c:1},
+    {q:"Basınçlı hortum sökümünün riski nedir?", o:["Risk yoktur","Ciddi yaralanma","Enerji tasarrufu","Daha hızlı iş"], c:1},
+    {q:"Akümülatör neden boşaltılır?", o:["Gerekli değildir","Depolanmış enerjiyi boşaltmak için","Sadece renk için","Estetik için"], c:1},
+    {q:"Yeni hortum seçerken nelere dikkat edilir?", o:["Sadece rengi","Basınç sınıfı ve ölçüsü","Fiyatı","Markası"], c:1},
+    {q:"Sistem devreye alınırken nasıl yapılır?", o:["Aniden tam basınç","Kademeli olarak basınçlandırma","Hiç basınçlandırılmaz","Rastgele"], c:1},
+    {q:"Sızan yağ için ne kullanılır?", o:["Hiçbir şey","Toplama kabı","Kağıt havlu yeterlidir","Doğrudan yere akıtılır"], c:1},
+    {q:"Bağlantılar nasıl sıkılır?", o:["Rastgele kuvvetle","Uygun tork ile","Maksimum kuvvetle","Sıkılmaz"], c:1},
+    {q:"Test hangi aşamalarda yapılır?", o:["Sadece tam basınçta","Düşük basınçta ve tam basınçta","Hiç yapılmaz","Sadece düşük basınçta"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Pnömatik","Hidrolik","Elektrik","Su"], c:1},
+    {q:"Eski hortum/yağ atıkları nasıl bertaraf edilir?", o:["Çöpe atılır","Uygun şekilde bertaraf edilir","Yakılır","Önemli değil"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Sistem hangi SOP'a göre basınçsız hale getirilir?", o:["LOTO-Elektrik","LOTO-Mekanik","Yüksekte Çalışma","Kapalı Alan"], c:1},
+  ],
+
+  'hidrolik-silindir-bakimi': [
+    {q:"Silindir sökülürken ne kullanılır?", o:["Hiçbir şey","Mekanik destek (askı/blok)","Sadece el gücü","İp"], c:1},
+    {q:"Mekanik destek kullanılmamasının riski nedir?", o:["Risk yoktur","Kontrolsüz düşme riski","Daha hızlı iş","Enerji tasarrufu"], c:1},
+    {q:"Mil yüzeyindeki çiziğin etkisi nedir?", o:["Etkisi yoktur","Sızıntıya yol açar","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Keçe değişimi nasıl yapılır?", o:["Rastgele sırayla","Üretici talimatına uygun sırayla","Herhangi bir sırayla","Değiştirilmez"], c:1},
+    {q:"Montaj sonrası ne test edilir?", o:["Hiçbir şey","Sızıntı ve hareket","Sadece renk","Sadece boyut"], c:1},
+    {q:"Bakım öncesi sistem nasıl hale getirilir?", o:["Basınçlı bırakılır","LOTO-Mekanik'e göre basınçsız hale getirilir","Fark etmez","Enerji artırılır"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Pnömatik valfler","Hidrolik silindirler","Elektrik motorları","Su pompaları"], c:1},
+    {q:"Silindir gövdesi kontrolünde nelere bakılır?", o:["Sadece renk","Hasar/çizik","Sadece boyut","Markası"], c:1},
+    {q:"Sistem devreye alınırken nasıl yapılır?", o:["Aniden","Kademeli olarak","Hiç devreye alınmaz","Rastgele"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bağlantı noktalarında ne kontrol edilir?", o:["Hiçbir şey","Sızıntı","Sadece renk","Sadece boyut"], c:1},
+    {q:"Keçe/conta ne zaman değiştirilir?", o:["Hiç değiştirilmez","Aşınma tespit edilince","Sadece arızada","10 yılda bir"], c:1},
+  ],
+
+  'pnomatik-valf-silindir': [
+    {q:"Bakım öncesi sistem için ne yapılır?", o:["Basınçlı bırakılır","LOTO-Mekanik'e göre basınçsız hale getirilir, hat tahliye edilir","Fark etmez","Enerji artırılır"], c:1},
+    {q:"Sızıntı testi için ne kullanılır?", o:["Su","Sabunlu su solüsyonu","Yağ","Alkol"], c:1},
+    {q:"Yağlayıcı (lubrikatör) neden kontrol edilir?", o:["Gerekli değildir","Yağ seviyesi için","Sadece renk için","Estetik için"], c:1},
+    {q:"Filtre-regülatör ünitesinde ne yapılır?", o:["Hiçbir şey","Kondens tahliye edilir","Sadece temizlenir","Değiştirilmez"], c:1},
+    {q:"Solenoid valf bağlantıları hangi tip için kontrol edilir?", o:["Manuel valfler","Elektrikli/pilot kontrollü valfler","Hiçbiri","Sadece silindirler"], c:1},
+    {q:"Silindir keçeleri ne zaman değiştirilir?", o:["Hiç değiştirilmez","Aşınma tespit edilince","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Devreye alma sonrası ne test edilir?", o:["Hiçbir şey","Valf/silindir fonksiyonu","Sadece renk","Sadece boyut"], c:1},
+    {q:"Bu SOP hangi sistemleri kapsar?", o:["Hidrolik","Pnömatik","Elektrik","Su"], c:1},
+    {q:"Valf/silindir gövdesi kontrolünde nelere bakılır?", o:["Sadece renk","Hasar","Sadece boyut","Markası"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Hat tahliyesi neden gereklidir?", o:["Gerekli değildir","Kalıntı basıncı boşaltmak için","Sadece görünüm için","Enerji tasarrufu için"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Sistem hemen sökülür"], c:1},
+  ],
+
+  'topraklama-direnc-olcumu': [
+    {q:"Ölçüm hangi cihazla yapılır?", o:["Ampermetre","Topraklama megeri (earth tester)","Termometre","Manometre"], c:1},
+    {q:"Yüksek topraklama direncinin riski nedir?", o:["Risk yoktur","Elektrik çarpması/arıza riskini artırır","Enerji tasarrufu sağlar","Daha iyi performans"], c:1},
+    {q:"Ölçüm sonuçları neye göre değerlendirilir?", o:["Rastgele","İlgili standart/yönetmelik limitine göre","Sadece tahmin","Önemli değil"], c:1},
+    {q:"Bağlantı noktalarında ne kontrol edilir?", o:["Hiçbir şey","Korozyon/gevşeklik","Sadece renk","Sadece boyut"], c:1},
+    {q:"Referansın üzerinde direnç tespit edilirse ne yapılır?", o:["Görmezden gelinir","Elektrot/bağlantı iyileştirilir","Sistem kapatılır kalıcı olarak","Hiçbir şey"], c:1},
+    {q:"Hangi noktalar ölçülür?", o:["Sadece pano","Pano, ekipman, paratoner vb.","Sadece paratoner","Sadece motor"], c:1},
+    {q:"Süreklilik testi ne için yapılır?", o:["Gerekli değildir","İletken bütünlüğünü kontrol için","Sadece renk için","Estetik için"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Su sistemi","Topraklama sistemi","Havalandırma","Basınçlı hava"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna (nokta, tarih, değer)","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu kontrol ne sıklıkla yapılmalıdır?", o:["Hiç yapılmaz","Periyodik olarak","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Anormallikte ne açılır?", o:["Hiçbir şey","Bakım/iyileştirme talebi","Sadece not","Dava"], c:1},
+    {q:"Topraklama sisteminin amacı nedir?", o:["Estetik","Elektrik güvenliğini sağlamak","Enerji üretmek","Isıtma"], c:1},
+  ],
+
+  'reduktor-yag-degisimi': [
+    {q:"Yağ boşaltılırken redüktör hangi durumda olmalıdır?", o:["Soğuk","Hafif ısınmış (yağ akışkanlığı için)","Çok sıcak","Fark etmez"], c:1},
+    {q:"Boşaltılan yağda metal parçacık görülmesi ne anlama gelir?", o:["Normal durum","İç aşınma göstergesi","Yağ kalitesizliği","Hiçbir anlamı yok"], c:1},
+    {q:"Yeni yağ nasıl seçilir/doldurulur?", o:["Rastgele","Üretici talimatına uygun tip ve miktarda","Herhangi bir yağ","Önemli değil"], c:1},
+    {q:"Bakım öncesi redüktör nasıl hale getirilir?", o:["Enerjili bırakılır","LOTO-Elektrik ve LOTO-Mekanik'e göre enerjisiz hale getirilir","Fark etmez","Basınç artırılır"], c:1},
+    {q:"LOTO kaldırıldıktan sonra ne kontrol edilir?", o:["Hiçbir şey","Sızıntı/ses/titreşim","Sadece renk","Sadece boyut"], c:1},
+    {q:"Eski yağ nasıl bertaraf edilir?", o:["Çöpe atılır","Uygun atık prosedürüne göre","Toprağa dökülür","Önemli değil"], c:1},
+    {q:"Yağ seviyesi nasıl teyit edilir?", o:["Tahmin ile","Gösterge/tapa seviyesinden","Kontrol edilmez","Ses ile"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Motorlar","Redüktörler (dişli kutuları)","Pompalar","Vanalar"], c:1},
+    {q:"Redüktör gövdesi neden kontrol edilir?", o:["Gerekli değildir","Sızıntı/hasar yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"İç kısım ne zaman temizlenir?", o:["Hiç temizlenmez","Gerekiyorsa yağ boşaltıldıktan sonra","Her zaman zorunlu","Yağ doldurulmadan önce değil"], c:1},
+    {q:"Bu bakım hangi sıklıkla yapılır?", o:["Günlük","Periyodik olarak","Hiç yapılmaz","10 yılda bir"], c:1},
+  ],
+
+  'kaplin-degisimi': [
+    {q:"Kaplin değişimi sonrası ne yapılması gerekir?", o:["Hiçbir şey","Hizalama (alignment) kontrol edilir/yapılır","Direkt çalıştırılır","Kaplin sökülür"], c:1},
+    {q:"Hizalama hatasının etkisi nedir?", o:["Etkisi yoktur","Titreşime yol açar","Daha iyi performans","Enerji tasarrufu"], c:1},
+    {q:"Yeni kaplin seçerken nelere dikkat edilir?", o:["Sadece rengi","Tip/ölçü uyumu","Fiyatı","Markası"], c:1},
+    {q:"Mil yüzeyleri neden kontrol edilir?", o:["Gerekli değildir","Hasar/aşınma yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Bakım öncesi ekipman nasıl hale getirilir?", o:["Enerjili bırakılır","LOTO-Elektrik ve LOTO-Mekanik'e göre enerjisiz hale getirilir","Fark etmez","Basınç artırılır"], c:1},
+    {q:"Koruma muhafazası ne zaman takılır?", o:["Hiç takılmaz","Yeni kaplin takıldıktan sonra","Kaplin sökülmeden önce","Önemli değil"], c:1},
+    {q:"LOTO kaldırıldıktan sonra ne kontrol edilir?", o:["Hiçbir şey","Titreşim/ses","Sadece renk","Sadece boyut"], c:1},
+    {q:"Bu SOP neyi kapsar?", o:["Motor değişimi","Motor-ekipman arasındaki kaplin değişimi","Rulman değişimi","Kayış değişimi"], c:1},
+    {q:"Eski kaplin elemanı nasıl sökülür?", o:["Zorlayarak kırılarak","Dikkatlice","Kesilerek","Önemli değil"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Kaplin koruma muhafazası ilk hangi adımda sökülür?", o:["En son","Enerji kesildikten sonraki ilk adımlarda","Hiç sökülmez","Kaplin takıldıktan sonra"], c:1},
+    {q:"Kaplin elemanı tipik olarak neyden yapılır?", o:["Sadece metal","Lastik/elastomer parça veya disk","Sadece plastik","Sadece ahşap"], c:1},
+  ],
+
+  'paratoner-kontrolu': [
+    {q:"Paratoner ucu kontrolü yükseklik gerektiriyorsa hangi SOP'a uyulur?", o:["LOTO-Elektrik","Yüksekte Çalışma SOP","Kapalı Alan SOP","Sıcak Çalışma SOP"], c:1},
+    {q:"İniş iletkenlerinde ne kontrol edilir?", o:["Sadece renk","Süreklilik ve bağlantı sağlamlığı","Sadece boyut","Markası"], c:1},
+    {q:"Topraklama direnci nasıl ölçülür?", o:["Tahmin ile","Topraklama megeri ile","Ölçülmez","Ses ile"], c:1},
+    {q:"Bağlantı klemenslerinde ne kontrol edilir?", o:["Hiçbir şey","Korozyon/gevşeklik","Sadece renk","Sadece boyut"], c:1},
+    {q:"Anormallik (kopukluk, yüksek direnç) tespit edilirse ne yapılır?", o:["Görmezden gelinir","Derhal bakım/onarım talebi açılır","Bir yıl beklenir","Hiçbir şey"], c:1},
+    {q:"Paratonerin amacı nedir?", o:["Aydınlatma","Yıldırım darbelerinden koruma","Isıtma","Havalandırma"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu kontrol ne sıklıkla yapılmalıdır?", o:["Hiç yapılmaz","Periyodik olarak","Sadece arızada","10 yılda bir"], c:1},
+    {q:"Air terminal (paratoner ucu) neyle ilgilidir?", o:["Topraklama","Paratonerin yıldırımı yakalayan üst kısmı","Elektrik panosu","Havalandırma"], c:1},
+    {q:"Süreklilik testi hangi amaçla yapılır?", o:["Gerekli değildir","İletken bütünlüğünü doğrulamak için","Sadece renk için","Estetik için"], c:1},
+    {q:"Topraklama direnci referansın üzerindeyse ne anlama gelir?", o:["Sistem iyi çalışıyor","İyileştirme gerekebilir","Hiçbir anlamı yoktur","Paratoner çalışmaz artık"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["Aydınlatma sistemi","Paratoner (yıldırımlık) sistemi","Havalandırma sistemi","Su sistemi"], c:1},
+  ],
+
+  'kalinlik-olcum-kalibrasyonu': [
+    {q:"Kalibrasyon öncesi cihaz ne yapılmalıdır?", o:["Hemen kullanılır","Üretici talimatındaki süre kadar ısınmaya bırakılır","Kapatılır","Sökülür"], c:1},
+    {q:"Referans standart olarak ne kullanılır?", o:["Herhangi bir malzeme","Sertifikalı referans kalınlık standardı (shim/folyo)","Tahmini değer","Kullanılmaz"], c:1},
+    {q:"Sıfır kalibrasyonu nasıl yapılır?", o:["Dolu ortamda","Hava/boşlukta","Su içinde","Yapılmaz"], c:1},
+    {q:"Sapma toleransın dışındaysa ne yapılır?", o:["Görmezden gelinir","Cihaz kalibrasyon menüsünden ayarlanır","Cihaz atılır","Hiçbir şey"], c:1},
+    {q:"Kalibrasyon sonrası cihaza ne yapıştırılır?", o:["Hiçbir şey","Kalibrasyon etiketi (sonraki tarih ile)","Sadece isim","Fiyat etiketi"], c:1},
+    {q:"Çok noktalı kalibrasyon için ne yapılır?", o:["Tek nokta yeterlidir","Farklı kalınlık aralığında ikinci referansla doğrulama","Gerekli değildir","Cihaz değiştirilir"], c:1},
+    {q:"Bu cihaz ne ölçer?", o:["Sıcaklık","Film/levha kalınlığı","Basınç","Viskozite"], c:1},
+    {q:"Sonuç nereye işlenir?", o:["Kaydedilmez","Kayıt formuna (tarih, referans, sapma)","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Referans standart ölçüldükten sonra ne yapılır?", o:["Hiçbir şey","Gösterilen değer sertifika değeriyle karşılaştırılır","Cihaz kapatılır","Standart atılır"], c:1},
+    {q:"Bu kalibrasyon hangi amaçla yapılır?", o:["Estetik","Ölçüm doğruluğunu sağlamak","Enerji tasarrufu","Hız artırmak"], c:1},
+    {q:"Kalibrasyon işlemi için özel KKD gerekir mi?", o:["Evet, kapsamlı KKD gerekir","Genellikle gerekli değildir (ölçüm işlemi)","Sadece baret gerekir","Sadece maske gerekir"], c:1},
+    {q:"Bu SOP hangi cihazları kapsar?", o:["Viskozimetreler","Film/levha kalınlık ölçüm cihazları","Basınç sensörleri","Sıcaklık sensörleri"], c:1},
+  ],
+
+  'viskozimetre-kalibrasyonu': [
+    {q:"Sıcaklığın viskozite ölçümüne etkisi nedir?", o:["Etkisi yoktur","Viskoziteyi doğrudan etkiler","Sadece rengi etkiler","Sadece hızı etkiler"], c:1},
+    {q:"Kalibrasyon öncesi cihaz temizliği neden yapılır?", o:["Gerekli değildir","Önceki ölçüm kalıntısı olmaması için","Sadece görünüm için","Estetik için"], c:1},
+    {q:"Referans olarak ne kullanılır?", o:["Su","Sertifikalı referans viskozite sıvısı","Herhangi bir sıvı","Hava"], c:1},
+    {q:"Sapma toleransın dışındaysa ne yapılır?", o:["Görmezden gelinir","Cihaz ayarlanır veya servis çağrılır","Cihaz atılır","Hiçbir şey"], c:1},
+    {q:"Doğrulama için kaç referans kullanılır?", o:["Sadece bir","İki (farklı viskozite aralığında)","Hiç kullanılmaz","On"], c:1},
+    {q:"Bu cihaz ne ölçer?", o:["Kalınlık","Viskozite (mürekkep/kaplama)","Basınç","Sıcaklık"], c:1},
+    {q:"Kalibrasyon sonrası ne yapılır?", o:["Hiçbir şey","Kalibrasyon etiketi yapıştırılır","Cihaz atılır","Beklenir"], c:1},
+    {q:"Referans sıvı ile temas riski nedir?", o:["Risk yoktur","Cilt/göz tahrişi olabilir, uygun KKD gerekir","Sadece koku","Önemli değil"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Bu kalibrasyon hangi amaçla yapılır?", o:["Estetik","Ölçüm doğruluğunu sağlamak","Enerji tasarrufu","Hız artırmak"], c:1},
+    {q:"Cihaz ve referans hangi sıcaklığa getirilmelidir?", o:["Rastgele","Belirtilen test sıcaklığına","Her zaman 0°C","Önemli değil"], c:1},
+    {q:"Bu SOP hangi alanda kullanılır?", o:["Elektrik bakım","Mürekkep/kaplama kalite kontrolü","İnşaat","Su sistemleri"], c:1},
+  ],
+
+  'vinc-kren-yillik-muayene': [
+    {q:"Yıllık muayene kimin tarafından yapılır?", o:["Herhangi bir personel","Yetkili/akredite muayene kuruluşu","Operatör kendisi","Yönetici"], c:1},
+    {q:"Statik yük testi genelde hangi oranda yapılır?", o:["Nominal kapasitenin %50'si","Nominal kapasitenin ~%125'i","Nominal kapasitenin %10'u","Test yapılmaz"], c:1},
+    {q:"Muayenede neler kontrol edilir?", o:["Sadece renk","Halat/zincir, kanca, limit switch","Sadece boyut","Sadece marka"], c:1},
+    {q:"Uygun olmayan bulgu tespit edilirse ne yapılır?", o:["Görmezden gelinir","Vinç kullanım dışı bırakılır","Kullanıma devam edilir","Hiçbir şey"], c:1},
+    {q:"Muayene sonucunda ne düzenlenir?", o:["Hiçbir şey","Uygunluk raporu ve etiketi","Sadece sözlü onay","Fatura"], c:1},
+    {q:"Bu muayene yasal olarak nasıldır?", o:["İsteğe bağlı","Zorunlu","Gereksiz","Sadece tavsiye"], c:1},
+    {q:"Bir sonraki muayene tarihi nereye işlenir?", o:["Unutulur","Takvime işlenir","Hiçbir yere","Sözlü hatırlanır"], c:1},
+    {q:"Muayene öncesi ne hazırlanır?", o:["Hiçbir şey","Çalışma alanı ve erişim güvenli hale getirilir","Sadece vinç boyanır","Personel izne çıkarılır"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Forkliftler","Vinç/kren ekipmanları","Kompresörler","Pompalar"], c:1},
+    {q:"Dinamik yük testi ile birlikte ne test edilir?", o:["Hiçbir şey","Fren sistemi","Sadece renk","Sadece ses"], c:1},
+    {q:"Günlük kontrol kayıtları muayene öncesi ne için kullanılır?", o:["Kullanılmaz","Gözden geçirilir","Silinir","Önemli değil"], c:1},
+    {q:"Muayene raporu ne için önemlidir?", o:["Önemli değildir","Yasal uygunluk ve kayıt için","Sadece arşiv için","Estetik için"], c:1},
+  ],
+
+  'cati-bakimi-su-yalitimi': [
+    {q:"Çatıya çıkışta hangi SOP'a uyulur?", o:["LOTO-Elektrik","Yüksekte Çalışma SOP","Kapalı Alan SOP","Sıcak Çalışma SOP"], c:1},
+    {q:"Tıkalı dere/oluk neye yol açar?", o:["Hiçbir soruna","Su birikmesine ve sızıntıya","Daha iyi drenaja","Enerji tasarrufuna"], c:1},
+    {q:"Membran/kaplamada hasar tespit edilirse ne yapılır?", o:["Görmezden gelinir","Onarım (yama/kaplama) yapılır","Çatı yeniden yapılır her zaman","Hiçbir şey"], c:1},
+    {q:"İç mekanda ayrıca ne kontrol edilir?", o:["Hiçbir şey","Tavan/duvarda su izi","Sadece zemin","Sadece pencereler"], c:1},
+    {q:"Çatı geçişleri (baca vb.) etrafında ne kontrol edilir?", o:["Hiçbir şey","Yalıtım detayları","Sadece renk","Sadece boyut"], c:1},
+    {q:"Bu kontrol ne sıklıkla yapılmalıdır?", o:["Hiç yapılmaz","Periyodik olarak","Sadece sızıntı olunca","10 yılda bir"], c:1},
+    {q:"Çatı üzerindeki yabancı malzeme ne yapılır?", o:["Bırakılır","Temizlenir","Önemli değil","Sabitlenir"], c:1},
+    {q:"Bu SOP hangi işlemleri kapsar?", o:["Sadece boyama","Çatı bakımı ve su yalıtımı kontrolü","Sadece temizlik","Sadece elektrik"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Çatıda çalışırken hangi KKD gereklidir?", o:["Hiçbiri","Emniyet kemeri, yaşam hattı, baret","Sadece eldiven","Sadece gözlük"], c:1},
+    {q:"Çatı yüzeyi görsel kontrolünde nelere bakılır?", o:["Sadece renk","Çatlak, şişme, yırtık membran","Sadece boyut","Markası"], c:1},
+    {q:"Su yalıtımı kontrolü neden önemlidir?", o:["Önemli değildir","Bina/ekipman hasarını önlemek için","Sadece estetik için","Enerji tasarrufu için"], c:1},
+  ],
+
+  'kanalizasyon-drenaj': [
+    {q:"Rögara girmek gerekiyorsa hangi SOP'a uyulur?", o:["LOTO-Elektrik","Kapalı Alanda Çalışma SOP","Yüksekte Çalışma SOP","Sıcak Çalışma SOP"], c:1},
+    {q:"Izgaralardaki yabancı madde ne yapılır?", o:["Bırakılır","Temizlenir","Önemli değil","Gömülür"], c:1},
+    {q:"Yağ tutucu üniteler ne için kontrol edilir?", o:["Gerekli değildir","Doluluk yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Geriye akış/taşma belirtisi neyi gösterebilir?", o:["Normal durum","Tıkanıklık olabileceğini","Sistem iyi çalışıyor","Hiçbir şey"], c:1},
+    {q:"Saha yüzey eğimleri neden gözlemlenir?", o:["Gerekli değildir","Su birikinti noktalarını tespit için","Sadece estetik için","Enerji tasarrufu için"], c:1},
+    {q:"Tespit edilen tıkanıklık/hasar için ne yapılır?", o:["Görmezden gelinir","Giderilir veya bakım talebi açılır","Bir yıl beklenir","Hiçbir şey"], c:1},
+    {q:"Bu SOP hangi sistemi kapsar?", o:["İçme suyu","Kanalizasyon/yağmur suyu drenaj sistemi","Yangın suyu","Soğutma suyu"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Izgara/rögar kapakları neden kontrol edilir?", o:["Gerekli değildir","Kırık/tıkanıklık yönünden","Sadece renk için","Estetik için"], c:1},
+    {q:"Bu kontrol ne sıklıkla yapılmalıdır?", o:["Hiç yapılmaz","Periyodik olarak","Sadece taşma olunca","10 yılda bir"], c:1},
+    {q:"Rögar içine girmeden önce ne yapılmalıdır?", o:["Direkt girilir","Atmosfer testi yapılır (Kapalı Alan SOP'una göre)","Hiçbir şey","Sadece izin alınır"], c:1},
+    {q:"Kanalizasyon sisteminin bakımsız kalmasının riski nedir?", o:["Risk yoktur","Taşma ve çevre kirliliği riski","Enerji tasarrufu","Daha iyi performans"], c:1},
+  ],
+
+  'gaz-tupu-depolama': [
+    {q:"Oksijen ve yanıcı gaz tüpleri nasıl depolanmalıdır?", o:["Birlikte","Birbirinden ayrı","Fark etmez","Aynı dolapta"], c:1},
+    {q:"Birlikte depolamanın riski nedir?", o:["Risk yoktur","Yangın/patlama riskini artırır","Daha kolay yönetim sağlar","Enerji tasarrufu"], c:1},
+    {q:"Tüpler nasıl bulundurulmalıdır?", o:["Yatık","Dik, sabitlenmiş","Herhangi bir konumda","Kapalı dolapta"], c:1},
+    {q:"Tüp değişiminde ilk adım nedir?", o:["Regülatörü sökmek","Vanayı kapatıp hat basıncını tahliye etmek","Direkt tüpü değiştirmek","Hiçbir şey"], c:1},
+    {q:"Sızdırmazlık testi için ne kullanılır?", o:["Su","Sabunlu su solüsyonu","Yağ","Alkol"], c:1},
+    {q:"Tüp taşımada ne kullanılmalıdır?", o:["Yuvarlayarak taşınır","Uygun tüp arabası","Sürükleyerek","Elde taşınır"], c:1},
+    {q:"Boş tüpler nasıl işaretlenir?", o:["İşaretlenmez","BOŞ olarak işaretlenip ayrı alanda depolanır","Dolu tüplerle karıştırılır","Atılır"], c:1},
+    {q:"Depolama alanı nasıl olmalıdır?", o:["Kapalı ve havasız","İyi havalandırılan, ateş kaynağından uzak","Önemli değil","Sıcak bir alan"], c:1},
+    {q:"Yeni tüp takılmadan önce ne kontrol edilir?", o:["Hiçbir şey","Hasar ve son test tarihi","Sadece rengi","Sadece markası"], c:1},
+    {q:"Bu SOP hangi tüpleri kapsar?", o:["Sadece LPG","LPG, oksijen, asetilen tüpleri","Sadece oksijen","Sadece asetilen"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Regülatör bağlantı yüzeyi neden temizlenir?", o:["Gerekli değildir","Sağlıklı bağlantı ve sızdırmazlık için","Sadece görünüm için","Estetik için"], c:1},
+  ],
+
+  'yangin-dolabi-hidrant': [
+    {q:"Yangın dolabı kapısının önünde ne olmamalıdır?", o:["Hiçbir kısıtlama yok","Engel","Sadece tabela","Işık"], c:1},
+    {q:"Hortum kontrolünde nelere bakılır?", o:["Sadece rengi","Sarılı düzeni ve hasar/çürüme","Sadece uzunluğu","Markası"], c:1},
+    {q:"Su akış testi ne sıklıkla yapılır?", o:["Hiç yapılmaz","Yılda bir","Günlük","10 yılda bir"], c:1},
+    {q:"Su akış testi neden önemlidir?", o:["Önemli değildir","Hattın gerçekten su verdiğini teyit etmek için","Sadece görünüm için","Estetik için"], c:1},
+    {q:"Vana kontrolünde ne test edilir?", o:["Hiçbir şey","Kolayca açılıp kapandığı","Sadece rengi","Sadece boyutu"], c:1},
+    {q:"Dolap işaretlemesi nasıl olmalıdır?", o:["Gizli","Net (kırmızı renk, tabela)","Küçük ve fark edilmez","Önemli değil"], c:1},
+    {q:"Lans (nozul) bağlantısı ne için kontrol edilir?", o:["Gerekli değildir","Fonksiyonu için","Sadece renk için","Estetik için"], c:1},
+    {q:"Bu SOP hangi ekipmanı kapsar?", o:["Yangın söndürme tüpleri","Yangın dolabı (hidrant)","Sprinkler sistemi","Duman dedektörleri"], c:1},
+    {q:"Hat basıncı nereden kontrol edilir?", o:["Tahmin ile","Manometreden (varsa)","Kontrol edilmez","Ses ile"], c:1},
+    {q:"Sonuçlar nereye işlenir?", o:["Kaydedilmez","Kayıt formuna","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Anormallik tespit edilirse ne yapılır?", o:["Görmezden gelinir","Bakım talebi açılır","Sadece not edilir","Dolap kaldırılır"], c:1},
+    {q:"Bu kontrol hangi sıklıkla (genel) yapılmalıdır?", o:["Hiç yapılmaz","Periyodik olarak","Sadece yangında","10 yılda bir"], c:1},
+  ],
+
+  'emniyet-kemeri-muayene': [
+    {q:"Hasarlı ekipman tespit edilirse ne yapılmalıdır?", o:["Kullanılmaya devam edilir","Derhal kullanım dışı bırakılıp imha edilir","Onarılır kullanılır","Görmezden gelinir"], c:1},
+    {q:"Hasarlı ekipmanla çalışmanın riski nedir?", o:["Risk yoktur","Ciddi düşme riski","Daha güvenli olur","Enerji tasarrufu"], c:1},
+    {q:"Kemer kayışlarında ne kontrol edilir?", o:["Sadece rengi","Kesik, aşınma, kimyasal hasar, UV bozulması","Sadece markası","Sadece uzunluğu"], c:1},
+    {q:"Enerji sönümleyici etiketi ne için kontrol edilir?", o:["Gerekli değildir","Aktive olmamış olduğunu teyit için","Sadece renk için","Estetik için"], c:1},
+    {q:"Metal parçalar (toka, karabina) neyle kontrol edilir?", o:["Sadece renk","Korozyon/deformasyon","Sadece boyut","Markası"], c:1},
+    {q:"Muayene ne sıklıkla yapılır?", o:["Hiç yapılmaz","Kullanım öncesi ve periyodik (genelde yılda bir)","Sadece 10 yılda bir","Sadece kazadan sonra"], c:1},
+    {q:"Dikişlerde ne kontrol edilir?", o:["Hiçbir şey","Sökülme/kopma","Sadece renk","Sadece uzunluk"], c:1},
+    {q:"Bu SOP hangi ekipmanları kapsar?", o:["Sadece kasklar","Emniyet kemeri, halat, karabina gibi düşme önleme ekipmanları","Sadece eldivenler","Sadece gözlükler"], c:1},
+    {q:"Muayene sonuçları nereye işlenir?", o:["Kaydedilmez","Kayıt formuna (ekipman no, tarih, sonuç)","Sadece hafızada","Sözlü bildirilir"], c:1},
+    {q:"Halat/yaşam hattında ne kontrol edilir?", o:["Sadece renk","Aşınma ve hasar","Sadece uzunluk","Markası"], c:1},
+    {q:"Bir sonraki muayene tarihi ne yapılır?", o:["Unutulur","Takvime eklenir","Hiçbir yere kaydedilmez","Sözlü hatırlanır"], c:1},
+    {q:"Bu ekipmanlar hangi çalışmalarda kullanılır?", o:["Kapalı alan çalışması","Yükseklikte çalışma","Sıcak çalışma","Elektrik çalışması"], c:1},
   ],
 };
 
