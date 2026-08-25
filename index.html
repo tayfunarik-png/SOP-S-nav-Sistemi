@@ -2689,8 +2689,9 @@ function renderLibrary(){
           <span class="pill">${sop.category||'Genel'}</span>
           <h2 style="font-family:var(--font-display);margin:12px 0 4px;">${escapeHtml(sop.title)}</h2>
           <div style="white-space:pre-wrap; font-size:13px; color:var(--text-1); line-height:1.7; margin-top:10px;">${escapeHtml(sop.content)}</div>
-          <div style="margin-top:20px; display:flex; gap:10px;">
+          <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
             <button class="btn primary" data-goto-generate="${sop.id}">${ICONS.generate} Bu SOP için sınav oluştur</button>
+            <a class="btn ghost" href="sop-excel/${sop.id}.xlsx" download target="_blank" rel="noopener">${ICONS.download} SOP Excel</a>
           </div>
         </div>
       `;
@@ -2730,8 +2731,9 @@ function renderLibrary(){
             <div class="card tag-amber">
               <h3>${escapeHtml(sop.title)}</h3>
               <p>${escapeHtml(sop.content.slice(0, 130))}...</p>
-              <div class="row">
+              <div class="row" style="flex-wrap:wrap; gap:6px;">
                 <button class="btn sm ghost" data-open-sop="${sop.id}">Detay</button>
+                <a class="btn sm ghost" href="sop-excel/${sop.id}.xlsx" download target="_blank" rel="noopener" title="Orijinal Excel dosyasını indir">${ICONS.download} SOP Excel</a>
                 <button class="btn sm primary" data-goto-generate="${sop.id}">${ICONS.generate} Sınav</button>
               </div>
             </div>
