@@ -84,6 +84,8 @@
   }
   .topbar h1{ font-family:var(--font-display); font-size:18px; font-weight:600; margin:0; letter-spacing:.3px;}
   .topbar .sub{ font-size:11.5px; color:var(--text-2); margin-top:2px;}
+  .topbar-actions{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+  .topbar-actions .btn.sm{ padding:6px 10px; font-size:11.5px; white-space:nowrap; }
   .content{ flex:1; overflow-y:auto; padding:26px; }
 
   .pill{ display:inline-flex; align-items:center; gap:6px; font-size:10.5px; font-weight:600; letter-spacing:.6px; text-transform:uppercase;
@@ -239,10 +241,13 @@
     .sidebar{ display:none; }
     .content{ padding:14px 14px 76px; }
     .bottomnav{ display:grid; }
-    .topbar{ padding:0 14px; height:54px; }
+    .topbar{ padding:0 14px; height:auto; min-height:54px; flex-wrap:wrap; gap:6px; padding-top:8px; padding-bottom:8px; }
     .topbar h1{ font-size:15.5px; }
     .topbar .sub{ display:none; }
     .topbar .pill{ display:none; }
+    .topbar-actions{ width:100%; justify-content:flex-start; }
+    .topbar-actions .pill{ display:inline-flex; }
+    .topbar-actions .btn.sm{ padding:5px 8px; font-size:10.5px; }
     .grid{ grid-template-columns:1fr; }
     .stat-row{ gap:8px; }
     .stat{ min-width:0; flex:1 1 100px; padding:10px 12px; }
@@ -276,7 +281,7 @@ const CONFIG = {
   sheetsWebhookUrl: 'https://script.google.com/macros/s/AKfycbzqPm1B8ey8Nd87Pf21WLBw9MoKYIK7TxuPMWVwe4nk44Go1NTAtiZ_AgCa52nMo-I8Ew/exec',
   // Yönetici şifresi - yalnızca istemci tarafı bir engel (gerçek güvenlik değil, bkz. sohbet).
   // Google Apps Script'teki ADMIN_PASSWORD sabitiyle AYNI olmalı (sunucu tarafı gerçek kontrol orada).
-  adminPassword: 'KorozoSOP2026!',
+  adminPassword: 'Bakim2026',
 };
 
 function syncDeleteToSheets(id){
@@ -286,7 +291,7 @@ function syncDeleteToSheets(id){
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'delete', id, password: CONFIG.adminPassword }),
+      body: JSON.stringify({ action: 'delete', id, passwordHash: state.adminPasswordHash }),
     }).catch(()=>{});
   }catch(e){}
 }
@@ -315,6 +320,77 @@ function jsonpRequest(url, timeoutMs){
     script.onerror = () => { if(done) return; done=true; clearTimeout(timer); cleanup(); reject(new Error('script load error')); };
     document.head.appendChild(script);
   });
+}
+
+/* ---------------- Şifre / kimlik doğrulama altyapısı ----------------
+   Şifreler SHA-256 ile hashlenip Google E-Tablo'daki ayrı bir "Kimlik
+   Bilgileri" sayfasında saklanır - düz metin hiçbir yerde tutulmaz.
+   Kullanıcı adı: personel için sicil no'nun başındaki sıfırlar atılmış
+   hali (00006752 -> 6752), yönetici için sabit 'admin'. */
+const DEFAULT_PERSONNEL_PASSWORD = '123456';
+
+async function sha256Hex(text){
+  const enc = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function sicilToUsername(sicilNo){
+  const n = parseInt(String(sicilNo||'').replace(/\D/g,''), 10);
+  return isNaN(n) ? String(sicilNo||'') : String(n);
+}
+
+async function fetchCredentials(){
+  if(!CONFIG.sheetsWebhookUrl) return null;
+  try{
+    const url = CONFIG.sheetsWebhookUrl + (CONFIG.sheetsWebhookUrl.indexOf('?')>=0?'&':'?') + 'type=credentials';
+    const data = await jsonpRequest(url, 10000);
+    if(!Array.isArray(data)) return null;
+    return data; // [{username, hash, mustChange}]
+  }catch(e){ return null; }
+}
+
+// Cihaz içi yedek (bulut olmadan da tek cihazda çalışsın diye)
+async function getLocalCredentials(){
+  const c = await storGet('credentials');
+  return Array.isArray(c) ? c : [];
+}
+async function setLocalCredential(username, hash){
+  const list = await getLocalCredentials();
+  const i = list.findIndex(c=>c.username===username);
+  if(i>=0) list[i].hash = hash; else list.push({username, hash});
+  await storSet('credentials', list);
+}
+
+async function findCredential(username){
+  let cloudList = null;
+  if(CONFIG.sheetsWebhookUrl) cloudList = await fetchCredentials();
+  if(Array.isArray(cloudList)){
+    const found = cloudList.find(c=>String(c.username)===String(username));
+    if(found) return found;
+  }
+  const localList = await getLocalCredentials();
+  return localList.find(c=>String(c.username)===String(username)) || null;
+}
+
+// Şifre günceller: bulut varsa gönderir (fire-and-forget), sonra doğrulamak için
+// kısa bir süre sonra tekrar okuyup gerçekten değiştiğini teyit eder.
+async function saveCredential(username, oldHash, newHash){
+  await setLocalCredential(username, newHash);
+  if(!CONFIG.sheetsWebhookUrl) return true;
+  try{
+    fetch(CONFIG.sheetsWebhookUrl, {
+      method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action:'set-password', username, oldPasswordHash: oldHash, newPasswordHash: newHash }),
+    }).catch(()=>{});
+  }catch(e){}
+  await new Promise(r=>setTimeout(r, 1500));
+  const check = await fetchCredentials();
+  if(Array.isArray(check)){
+    const row = check.find(c=>String(c.username)===String(username));
+    if(row && row.hash === newHash) return true;
+    if(row && row.hash !== newHash) return false; // sunucu reddetti (eski şifre hatalı)
+  }
+  return true; // bulutta doğrulanamadıysa da (ör. offline) yerel değişikliği kabul et
 }
 
 async function fetchCloudResults(){
@@ -352,6 +428,8 @@ const ICONS = {
   target: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>`,
   trash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>`,
   search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
+  key: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="8" cy="15" r="4"/><path d="M10.5 12.5 19 4"/><path d="M16 7l2 2"/><path d="M13 10l2 2"/></svg>`,
+  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
 };
 
 /* ---------------- SOP seed data ---------------- */
@@ -2422,6 +2500,7 @@ const state = {
   resultsFilter:'all',
   cloudSyncing:false,
   isAdmin: (function(){ try{ return sessionStorage.getItem('sop-sinav-admin')==='1'; }catch(e){ return false; } })(),
+  adminPasswordHash: (function(){ try{ return sessionStorage.getItem('sop-sinav-admin-hash')||null; }catch(e){ return null; } })(),
   showAdminLogin:false,
   adminLoginError:null,
   personnel: [],
@@ -2437,6 +2516,14 @@ const state = {
   librarySearch:'',
   complianceFilter:'all',
   compliancePersonFilter:'all',
+  // ilk kullanımda zorunlu şifre değiştirme akışı
+  pendingLogin:null, // {type:'admin'|'personnel', username, personnelId, oldHash}
+  pendingLoginError:null,
+  pendingLoginBusy:false,
+  // giriş yapılmış kullanıcının kendi isteğiyle şifre değiştirmesi
+  showChangePassword:false,
+  changePasswordError:null,
+  changePasswordBusy:false,
 };
 
 function showToast(msg, type){
@@ -2527,6 +2614,10 @@ function render(){
       <div class="content" id="content">${renderView()}</div>
     </div>
     ${renderBottomNav()}
+    ${state.showAdminLogin ? renderAdminLoginModal() : ''}
+    ${state.showPersonnelLogin ? renderPersonnelLoginModal() : ''}
+    ${state.pendingLogin ? renderForcePasswordChangeModal() : ''}
+    ${state.showChangePassword ? renderChangePasswordModal() : ''}
     ${state.toast ? `<div class="toast ${state.toast.type==='err'?'err':'ok'}">${state.toast.msg}</div>` : ''}
   `;
   bindEvents();
@@ -2580,20 +2671,8 @@ function renderSidebar(){
     `).join('')}
     <div class="sidebar-foot">
       ${state.sops.length} SOP &middot; ${state.results.length} sonuç kaydı
-      <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--line-soft); display:flex; flex-direction:column; gap:6px;">
-        ${currentPersonnel ? `
-          <div><span style="color:var(--blue);">&#9679;</span> Merhaba, ${escapeHtml(currentPersonnel.name)} &middot; <a href="#" data-personnel-logout style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Çıkış</a></div>
-        ` : `
-          <a href="#" data-personnel-login-open style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Personel Girişi</a>
-        `}
-        ${state.isAdmin
-          ? `<div><span style="color:var(--green);">&#9679;</span> Yönetici modu &middot; <a href="#" data-admin-logout style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Çıkış</a></div>`
-          : `<a href="#" data-admin-login-open style="color:var(--text-2); text-decoration:underline; cursor:pointer;">Yönetici Girişi</a>`}
-      </div>
     </div>
-  </div>
-  ${state.showAdminLogin ? renderAdminLoginModal() : ''}
-  ${state.showPersonnelLogin ? renderPersonnelLoginModal() : ''}`;
+  </div>`;
 }
 
 function renderAdminLoginModal(){
@@ -2607,7 +2686,7 @@ function renderAdminLoginModal(){
       </div>
       ${state.adminLoginError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.adminLoginError)}</div>` : ''}
       <div style="display:flex; gap:10px;">
-        <button class="btn primary" data-admin-login-submit>Giriş Yap</button>
+        <button class="btn primary" data-admin-login-submit ${state.pendingLoginBusy?'disabled':''}>${state.pendingLoginBusy?'Kontrol ediliyor...':'Giriş Yap'}</button>
         <button class="btn ghost" data-admin-login-cancel>Vazgeç</button>
       </div>
     </div>
@@ -2619,19 +2698,66 @@ function renderPersonnelLoginModal(){
   <div style="position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:998; display:flex; align-items:center; justify-content:center;" data-personnel-modal-backdrop>
     <div class="panel" style="max-width:320px; width:90%;" onclick="event.stopPropagation()">
       <div class="panel-title">Personel Girişi</div>
-      <div class="panel-sub">Sicil numaranızı hem kullanıcı adı hem şifre olarak girin.</div>
+      <div class="panel-sub">Kullanıcı adınız sicil numaranızın başındaki sıfırlar olmadan halidir (örn. 00006752 → 6752).</div>
       <div class="field">
-        <label class="field-label">Sicil No</label>
-        <input type="text" id="personnel-id-input" placeholder="Örn. 00006752" autocomplete="off"/>
+        <label class="field-label">Kullanıcı Adı</label>
+        <input type="text" id="personnel-id-input" placeholder="Örn. 6752" inputmode="numeric" autocomplete="off"/>
       </div>
       <div class="field">
         <label class="field-label">Şifre</label>
-        <input type="password" id="personnel-password-input" placeholder="Sicil numaranız" autocomplete="off"/>
+        <input type="password" id="personnel-password-input" placeholder="Şifre" autocomplete="off"/>
       </div>
       ${state.personnelLoginError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.personnelLoginError)}</div>` : ''}
       <div style="display:flex; gap:10px;">
-        <button class="btn primary" data-personnel-login-submit>Giriş Yap</button>
+        <button class="btn primary" data-personnel-login-submit ${state.pendingLoginBusy?'disabled':''}>${state.pendingLoginBusy?'Kontrol ediliyor...':'Giriş Yap'}</button>
         <button class="btn ghost" data-personnel-login-cancel>Vazgeç</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderForcePasswordChangeModal(){
+  const isAdmin = state.pendingLogin.type==='admin';
+  return `
+  <div style="position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:999; display:flex; align-items:center; justify-content:center;">
+    <div class="panel" style="max-width:340px; width:90%;">
+      <div class="panel-title">İlk Kullanım - Şifre Belirleyin</div>
+      <div class="panel-sub">${isAdmin?'Yönetici hesabı':'Hesabınız'} varsayılan şifreyle giriş yaptı. Devam etmeden önce kendi şifrenizi belirlemelisiniz.</div>
+      <div class="field">
+        <label class="field-label">Yeni Şifre</label>
+        <input type="password" id="force-new-password-input" placeholder="En az 4 karakter" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Yeni Şifre (Tekrar)</label>
+        <input type="password" id="force-new-password-confirm-input" placeholder="Yeni şifreyi tekrar girin" autocomplete="off"/>
+      </div>
+      ${state.pendingLoginError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.pendingLoginError)}</div>` : ''}
+      <button class="btn primary block" data-force-password-submit ${state.pendingLoginBusy?'disabled':''}>${state.pendingLoginBusy?'Kaydediliyor...':'Şifreyi Belirle ve Giriş Yap'}</button>
+    </div>
+  </div>`;
+}
+
+function renderChangePasswordModal(){
+  return `
+  <div style="position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:998; display:flex; align-items:center; justify-content:center;" data-change-password-backdrop>
+    <div class="panel" style="max-width:340px; width:90%;" onclick="event.stopPropagation()">
+      <div class="panel-title">Şifremi Değiştir</div>
+      <div class="field">
+        <label class="field-label">Mevcut Şifre</label>
+        <input type="password" id="change-old-password-input" placeholder="Mevcut şifre" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Yeni Şifre</label>
+        <input type="password" id="change-new-password-input" placeholder="En az 4 karakter" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Yeni Şifre (Tekrar)</label>
+        <input type="password" id="change-new-password-confirm-input" placeholder="Yeni şifreyi tekrar girin" autocomplete="off"/>
+      </div>
+      ${state.changePasswordError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.changePasswordError)}</div>` : ''}
+      <div style="display:flex; gap:10px;">
+        <button class="btn primary" data-change-password-submit ${state.changePasswordBusy?'disabled':''}>${state.changePasswordBusy?'Kaydediliyor...':'Kaydet'}</button>
+        <button class="btn ghost" data-change-password-cancel>Vazgeç</button>
       </div>
     </div>
   </div>`;
@@ -2651,13 +2777,33 @@ function viewMeta(){
 
 function renderTopbar(){
   const m = viewMeta();
+  const currentPersonnel = getCurrentPersonnel();
+  let rightHtml = '';
+  if(state.isAdmin || currentPersonnel){
+    const parts = [];
+    if(state.isAdmin){
+      parts.push(`<span class="pill live" style="white-space:nowrap;">Yönetici</span>`);
+    }
+    if(currentPersonnel){
+      parts.push(`<span class="pill live" style="white-space:nowrap;">${escapeHtml(currentPersonnel.name)}</span>`);
+    }
+    parts.push(`<button class="btn sm ghost" data-open-change-password>${ICONS.key||''} Şifremi Değiştir</button>`);
+    if(state.isAdmin) parts.push(`<a href="#" data-admin-logout class="btn sm ghost">Çıkış</a>`);
+    if(currentPersonnel) parts.push(`<a href="#" data-personnel-logout class="btn sm ghost">Çıkış</a>`);
+    rightHtml = `<div class="topbar-actions">${parts.join('')}</div>`;
+  }else{
+    rightHtml = `<div class="topbar-actions">
+      <button class="btn sm ghost" data-personnel-login-open>${ICONS.users||''} Personel Girişi</button>
+      <button class="btn sm ghost" data-admin-login-open>${ICONS.lock||''} Yönetici Girişi</button>
+    </div>`;
+  }
   return `
   <div class="topbar">
     <div>
       <h1>${m.h}</h1>
       <div class="sub">${m.s}</div>
     </div>
-    <div class="pill">${new Date().toLocaleDateString('tr-TR', {day:'2-digit', month:'long', year:'numeric'})}</div>
+    ${rightHtml}
   </div>`;
 }
 
@@ -3375,6 +3521,7 @@ function bindEvents(){
   };
 
   // admin: giriş/çıkış
+  // yönetici: giriş/çıkış
   const adminLoginOpen = document.querySelector('[data-admin-login-open]');
   if(adminLoginOpen) adminLoginOpen.onclick = (e) => { e.preventDefault(); state.showAdminLogin=true; state.adminLoginError=null; render(); };
   const adminLoginCancel = document.querySelector('[data-admin-login-cancel]');
@@ -3382,14 +3529,31 @@ function bindEvents(){
   const adminModalBackdrop = document.querySelector('[data-admin-modal-backdrop]');
   if(adminModalBackdrop) adminModalBackdrop.onclick = () => { state.showAdminLogin=false; render(); };
   const adminLoginSubmit = document.querySelector('[data-admin-login-submit]');
-  const doAdminLogin = () => {
+  const doAdminLogin = async () => {
     const pw = document.getElementById('admin-password-input').value;
-    if(pw === CONFIG.adminPassword){
-      state.isAdmin = true; state.showAdminLogin=false; state.adminLoginError=null;
-      try{ sessionStorage.setItem('sop-sinav-admin','1'); }catch(e){}
-      showToast('Yönetici girişi yapıldı.');
+    if(!pw){ state.adminLoginError='Şifre girin.'; render(); return; }
+    state.pendingLoginBusy = true; render();
+    const enteredHash = await sha256Hex(pw);
+    const cred = await findCredential('admin');
+    state.pendingLoginBusy = false;
+    if(cred){
+      if(cred.hash === enteredHash){
+        state.isAdmin = true; state.adminPasswordHash = enteredHash; state.showAdminLogin=false; state.adminLoginError=null;
+        try{ sessionStorage.setItem('sop-sinav-admin','1'); sessionStorage.setItem('sop-sinav-admin-hash', enteredHash); }catch(e){}
+        showToast('Yönetici girişi yapıldı.');
+      }else{
+        state.adminLoginError = 'Şifre yanlış.';
+      }
     }else{
-      state.adminLoginError = 'Şifre yanlış.';
+      // Henüz özel şifre belirlenmemiş - varsayılan (kurulum) şifreyle kontrol edilir.
+      if(pw === CONFIG.adminPassword){
+        state.showAdminLogin=false; state.adminLoginError=null;
+        const defaultHash = await sha256Hex(CONFIG.adminPassword);
+        state.pendingLogin = { type:'admin', username:'admin', oldHash: defaultHash };
+        state.pendingLoginError = null;
+      }else{
+        state.adminLoginError = 'Şifre yanlış.';
+      }
     }
     render();
   };
@@ -3399,8 +3563,8 @@ function bindEvents(){
   const adminLogout = document.querySelector('[data-admin-logout]');
   if(adminLogout) adminLogout.onclick = (e) => {
     e.preventDefault();
-    state.isAdmin = false;
-    try{ sessionStorage.removeItem('sop-sinav-admin'); }catch(err){}
+    state.isAdmin = false; state.adminPasswordHash = null;
+    try{ sessionStorage.removeItem('sop-sinav-admin'); sessionStorage.removeItem('sop-sinav-admin-hash'); }catch(err){}
     render();
   };
 
@@ -3414,16 +3578,34 @@ function bindEvents(){
   const personnelModalBackdrop = document.querySelector('[data-personnel-modal-backdrop]');
   if(personnelModalBackdrop) personnelModalBackdrop.onclick = () => { state.showPersonnelLogin=false; render(); };
   const personnelLoginSubmit = document.querySelector('[data-personnel-login-submit]');
-  const doPersonnelLogin = () => {
-    const idInput = document.getElementById('personnel-id-input').value.trim();
-    const pwInput = document.getElementById('personnel-password-input').value.trim();
-    const person = state.personnel.find(p => p.id === idInput);
-    if(person && pwInput === person.id){
-      state.currentPersonnelId = person.id; state.showPersonnelLogin=false; state.personnelLoginError=null;
-      try{ sessionStorage.setItem('sop-sinav-personnel-id', person.id); }catch(e){}
-      showToast(`Hoş geldiniz, ${person.name}.`);
+  const doPersonnelLogin = async () => {
+    const usernameInput = document.getElementById('personnel-id-input').value.trim();
+    const pwInput = document.getElementById('personnel-password-input').value;
+    if(!usernameInput || !pwInput){ state.personnelLoginError='Kullanıcı adı ve şifre girin.'; render(); return; }
+    const person = state.personnel.find(p => sicilToUsername(p.id) === usernameInput);
+    if(!person){ state.personnelLoginError = 'Kullanıcı adı veya şifre hatalı.'; render(); return; }
+    state.pendingLoginBusy = true; render();
+    const enteredHash = await sha256Hex(pwInput);
+    const cred = await findCredential(usernameInput);
+    state.pendingLoginBusy = false;
+    if(cred){
+      if(cred.hash === enteredHash){
+        state.currentPersonnelId = person.id; state.showPersonnelLogin=false; state.personnelLoginError=null;
+        try{ sessionStorage.setItem('sop-sinav-personnel-id', person.id); }catch(e){}
+        showToast(`Hoş geldiniz, ${person.name}.`);
+      }else{
+        state.personnelLoginError = 'Kullanıcı adı veya şifre hatalı.';
+      }
     }else{
-      state.personnelLoginError = 'Sicil no veya şifre hatalı.';
+      // Henüz hiç şifre belirlenmemiş - yalnızca varsayılan şifreyle ilk girişe izin verilir.
+      if(pwInput === DEFAULT_PERSONNEL_PASSWORD){
+        state.showPersonnelLogin=false; state.personnelLoginError=null;
+        const defaultHash = await sha256Hex(DEFAULT_PERSONNEL_PASSWORD);
+        state.pendingLogin = { type:'personnel', username: usernameInput, personnelId: person.id, oldHash: defaultHash };
+        state.pendingLoginError = null;
+      }else{
+        state.personnelLoginError = 'Kullanıcı adı veya şifre hatalı.';
+      }
     }
     render();
   };
@@ -3436,6 +3618,71 @@ function bindEvents(){
     state.currentPersonnelId = null;
     try{ sessionStorage.removeItem('sop-sinav-personnel-id'); }catch(err){}
     if(state.view==='generate' || state.view==='personnel' || state.view==='compliance') state.view='library';
+    render();
+  };
+
+  // ilk kullanım - zorunlu şifre belirleme (varsayılan şifreyle giriş sonrası)
+  const forcePasswordSubmit = document.querySelector('[data-force-password-submit]');
+  if(forcePasswordSubmit) forcePasswordSubmit.onclick = async () => {
+    const p1 = document.getElementById('force-new-password-input').value;
+    const p2 = document.getElementById('force-new-password-confirm-input').value;
+    if(!p1 || p1.length < 4){ state.pendingLoginError = 'Şifre en az 4 karakter olmalı.'; render(); return; }
+    if(p1 !== p2){ state.pendingLoginError = 'Şifreler eşleşmiyor.'; render(); return; }
+    state.pendingLoginBusy = true; state.pendingLoginError = null; render();
+    const newHash = await sha256Hex(p1);
+    const ok = await saveCredential(state.pendingLogin.username, state.pendingLogin.oldHash, newHash);
+    state.pendingLoginBusy = false;
+    if(!ok){ state.pendingLoginError = 'Şifre güncellenemedi, tekrar deneyin.'; render(); return; }
+    if(state.pendingLogin.type === 'admin'){
+      state.isAdmin = true; state.adminPasswordHash = newHash;
+      try{ sessionStorage.setItem('sop-sinav-admin','1'); sessionStorage.setItem('sop-sinav-admin-hash', newHash); }catch(e){}
+      showToast('Şifreniz belirlendi, yönetici girişi yapıldı.');
+    }else{
+      state.currentPersonnelId = state.pendingLogin.personnelId;
+      try{ sessionStorage.setItem('sop-sinav-personnel-id', state.pendingLogin.personnelId); }catch(e){}
+      const person = state.personnel.find(p=>p.id===state.pendingLogin.personnelId);
+      showToast(`Şifreniz belirlendi. Hoş geldiniz, ${person?person.name:''}.`);
+    }
+    state.pendingLogin = null;
+    render();
+  };
+
+  // giriş yapmış kullanıcının kendi isteğiyle şifre değiştirmesi
+  const openChangePassword = document.querySelector('[data-open-change-password]');
+  if(openChangePassword) openChangePassword.onclick = () => { state.showChangePassword = true; state.changePasswordError = null; render(); };
+  const changePasswordCancel = document.querySelector('[data-change-password-cancel]');
+  if(changePasswordCancel) changePasswordCancel.onclick = () => { state.showChangePassword = false; render(); };
+  const changePasswordBackdrop = document.querySelector('[data-change-password-backdrop]');
+  if(changePasswordBackdrop) changePasswordBackdrop.onclick = () => { state.showChangePassword = false; render(); };
+  const changePasswordSubmit = document.querySelector('[data-change-password-submit]');
+  if(changePasswordSubmit) changePasswordSubmit.onclick = async () => {
+    const oldPw = document.getElementById('change-old-password-input').value;
+    const p1 = document.getElementById('change-new-password-input').value;
+    const p2 = document.getElementById('change-new-password-confirm-input').value;
+    if(!oldPw){ state.changePasswordError = 'Mevcut şifrenizi girin.'; render(); return; }
+    if(!p1 || p1.length < 4){ state.changePasswordError = 'Yeni şifre en az 4 karakter olmalı.'; render(); return; }
+    if(p1 !== p2){ state.changePasswordError = 'Yeni şifreler eşleşmiyor.'; render(); return; }
+    const cp = getCurrentPersonnel();
+    const username = state.isAdmin ? 'admin' : sicilToUsername(cp.id);
+    state.changePasswordBusy = true; state.changePasswordError = null; render();
+    const oldHash = await sha256Hex(oldPw);
+    const cred = await findCredential(username);
+    const currentKnownHash = cred ? cred.hash : await sha256Hex(state.isAdmin ? CONFIG.adminPassword : DEFAULT_PERSONNEL_PASSWORD);
+    if(oldHash !== currentKnownHash){
+      state.changePasswordBusy = false;
+      state.changePasswordError = 'Mevcut şifre hatalı.';
+      render(); return;
+    }
+    const newHash = await sha256Hex(p1);
+    const ok = await saveCredential(username, oldHash, newHash);
+    state.changePasswordBusy = false;
+    if(!ok){ state.changePasswordError = 'Şifre güncellenemedi, tekrar deneyin.'; render(); return; }
+    if(state.isAdmin){
+      state.adminPasswordHash = newHash;
+      try{ sessionStorage.setItem('sop-sinav-admin-hash', newHash); }catch(e){}
+    }
+    state.showChangePassword = false;
+    showToast('Şifreniz güncellendi.');
     render();
   };
 
