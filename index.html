@@ -946,7 +946,6 @@ const PERSONNEL_SEED = [
   { id:'00008625', name:'KAĞAN US', dept:'ÇORLU İNŞAAT PROJE', title:'İNŞAAT DUVAR USTASI' },
   { id:'00008626', name:'KÜRŞAD HAKAN US', dept:'ÇORLU İNŞAAT PROJE', title:'İNŞAAT BOYA USTASI' },
   { id:'00008627', name:'ÜMİT PAMUKCU', dept:'ÇORLU İNŞAAT PROJE', title:'İNŞAAT KALIP USTASI' },
-  { id:'00012747', name:'MEHMET AKİF UZUN', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'TEKNİK BAKIM MÜHENDİSİ' },
   { id:'00011790', name:'NASIF YILDIZ', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'YARDIMCI TESİSLER TEKNİSYENİ' },
   { id:'00006973', name:'TARIK GÖÇER', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER FORMENİ' },
   { id:'00007285', name:'MEHMET ÇABUKER', dept:'ÇORLU YARDIMCI İŞLETMELER', title:'KIDEMLİ YARDIMCI TESİSLER TEKNİSYENİ' },
@@ -964,137 +963,15 @@ const PERSONNEL_SEED = [
 
 const MEK = ['00006752','00008364','00009835','00009876','00009907','00010400','00010938','00004700','00013151']; // Mekanik Bakım
 const ELK = ['00010220','00000394','00007049','00008597','00008810','00010068','00010089']; // Elektrik Bakım
-const YT  = ['00012747','00011790','00006973','00007285','00007450','00007899']; // Yardımcı Tesisler
+const YT  = ['00011790','00006973','00007285','00007450','00007899']; // Yardımcı Tesisler
 const INS = ['00008625','00008626','00008627']; // İnşaat Proje
 const METAL = ['00010938']; // Metal İşleri Teknisyeni (Sinan Tıknas) - kaynak/demir işleri SOP'ları
 const TORNA = ['00012517']; // Torna Tesviye Elemanı (Hakan Alpkuş) - torna ile ilgili SOP'lar için ayrılmış, henüz atanmış SOP yok
-const ASSIGNMENT_SEED_VERSION = 12;
+const ASSIGNMENT_SEED_VERSION = 13;
 const LIBRARY_SEED_VERSION = 2; // SOP_SEED tamamen yenilendiğinde artırılır (eski katalog silinir)
+const REMOVED_PERSONNEL_IDS = ['00012747']; // Mehmet Akif Uzun - personel listesinden çıkarıldı
 const SOP_ASSIGNMENT_SEED = {
-  'YT1SOP01': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP02': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP03': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP04': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP05': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP06': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP07': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP08': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP09': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP10': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP11': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP12': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP13': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP14': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP21': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP23': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP24': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP26': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP27': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP28': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP29': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP31': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP32': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP33': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP34': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP35': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP36': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP37': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP38': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP39': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP40': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP41': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP42': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP43': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP44': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP45': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP46': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP47': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP48': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP49': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP50': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP51': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP52': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP53': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP54': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP55': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP56': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP57': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP58': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP59': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP60': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP66': { deadline:'2026-10-15', personnelIds: YT },
-  'YT1SOP67': { deadline:'2026-10-15', personnelIds: YT },
-  'I1SOP1': { deadline:'2026-10-15', personnelIds: INS },
-  'I1SOP2': { deadline:'2026-10-15', personnelIds: INS },
-  'I1SOP3': { deadline:'2026-10-15', personnelIds: INS },
-  'I1SOP4': { deadline:'2026-10-15', personnelIds: INS },
-  'I1SOP5': { deadline:'2026-10-15', personnelIds: INS },
-  'I1SOP6': { deadline:'2026-10-15', personnelIds: INS },
-  'EB2SOP1': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB2SOP2': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB2SOP3': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB2SOP4': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP1': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP10': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP11': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP12': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP13': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP14': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP15': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP16': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP17': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP18': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP19': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP2': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP22': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP23': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP24': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP25': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP26': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP27': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP28': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP29': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP3': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP30': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP31': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP4': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP5': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP6': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP7': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP8': { deadline:'2026-10-15', personnelIds: ELK },
-  'EB3SOP9': { deadline:'2026-10-15', personnelIds: ELK },
-  'MB3SOP1': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP10': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP11': { deadline:'2026-10-15', personnelIds: METAL },
-  'MB3SOP12': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP13': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP14': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP15': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP16': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP17': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP18': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP19': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP2': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP20': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP21': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP3': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP4': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP5': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP6': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP7': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP8': { deadline:'2026-10-15', personnelIds: MEK },
-  'MB3SOP9': { deadline:'2026-10-15', personnelIds: MEK },
-  'EMB3SOP1': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP10': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP11': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP2': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP3': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP4': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP5': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP6': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP7': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP8': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
-  'EMB3SOP9': { deadline:'2026-10-15', personnelIds: [...MEK, ...ELK] },
+  'MB3SOP11': { deadline:'2026-10-15', personnelIds: METAL }, // kaynak/demir işleri - sadece metal işleri teknisyeni; diğer tüm SOP atamaları aylık kota mekanizmasınca (applyMonthlyQuota) kademeli olarak yapılır
 };
 
 /* ---------------- Question banks (statik - API gerektirmez) ----------------
@@ -2663,6 +2540,81 @@ function showToast(msg, type){
   setTimeout(()=>{ state.toast=null; render(); }, 3200);
 }
 
+/* ---------------- Aylık SOP sınav görevi (quota) ----------------
+   Her personele, bulunduğu departmanla ilgili SOP havuzundan, ay başına 5 adet
+   olacak şekilde kademeli görev eklenir: bu ay 5, gelecek ay 5 daha (kümülatif).
+   Başlangıç tarihinden itibaren geçen ay sayısına göre her sayfa yüklemesinde
+   hesaplanır; bir kez eklenen parti bir daha yeniden yazılmaz (admin'in elle
+   yaptığı sonraki değişiklikleri bozmaz), yalnızca YENİ vadesi gelen partiler eklenir. */
+const MONTHLY_QUOTA_START = '2026-09-05';
+const MONTHLY_QUOTA_SIZE = 5;
+
+function naturalCodeCompare(a, b){
+  // Kod önekleri de rakam içerebildiği için (YT1SOP, EB2SOP, MB3SOP, EMB3SOP gibi),
+  // ayraç harf/rakam sınırında değil, EN SONDAKİ rakam bloğunun başında yapılır.
+  const ma = a.match(/^(.*?)(\d+)$/), mb = b.match(/^(.*?)(\d+)$/);
+  if(ma && mb && ma[1]===mb[1]) return parseInt(ma[2],10) - parseInt(mb[2],10);
+  return a.localeCompare(b);
+}
+function monthlyPool(prefixes, excludeIds){
+  excludeIds = excludeIds || [];
+  return SOP_SEED
+    .filter(s => prefixes.some(p => s.id.startsWith(p)) && !excludeIds.includes(s.id))
+    .map(s => s.id)
+    .sort(naturalCodeCompare);
+}
+function addMonthsYmd(ymd, n){
+  const [y,m,d] = ymd.split('-').map(Number);
+  const dt = new Date(y, (m-1)+n, d);
+  return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+}
+function monthsElapsedSince(ymd){
+  const [y,m,d] = ymd.split('-').map(Number);
+  const start = new Date(y, m-1, d);
+  const now = new Date();
+  let months = (now.getFullYear()-start.getFullYear())*12 + (now.getMonth()-start.getMonth());
+  if(now.getDate() < start.getDate()) months -= 1;
+  return Math.max(0, months);
+}
+async function applyMonthlyQuota(sopAssignments){
+  const pools = {
+    YT: monthlyPool(['YT1SOP']),
+    INS: monthlyPool(['I1SOP']),
+    // Kendi branşının SOP'ları önce, ortak (hem elektrik hem mekanik) SOP'lar sonra gelecek
+    // şekilde sıralanır - aksi halde alfabetik sıralamada "EMB3SOP" harfleri "MB3SOP"tan önce
+    // geldiği için mekanik personelin kotası tamamen ortak SOP'larla dolabiliyordu.
+    ELK: monthlyPool(['EB2SOP','EB3SOP']).concat(monthlyPool(['EMB3SOP'])),
+    MEK: monthlyPool(['MB3SOP'], ['MB3SOP11']).concat(monthlyPool(['EMB3SOP'])),
+  };
+  const groupPersonnel = { YT, INS, ELK, MEK };
+  const currentBatches = monthsElapsedSince(MONTHLY_QUOTA_START) + 1; // bu ay dahil en az 1 parti
+  let appliedBatches = await storGet('monthly-quota-batches'); if(!appliedBatches) appliedBatches = 0;
+  if(currentBatches <= appliedBatches) return sopAssignments;
+
+  Object.keys(pools).forEach(grp => {
+    const pool = pools[grp];
+    const personnelIds = groupPersonnel[grp];
+    const fromIdx = appliedBatches * MONTHLY_QUOTA_SIZE;
+    const toIdx = Math.min(pool.length, currentBatches * MONTHLY_QUOTA_SIZE);
+    for(let i = fromIdx; i < toIdx; i++){
+      const sopId = pool[i];
+      const batchIdx = Math.floor(i / MONTHLY_QUOTA_SIZE);
+      const deadline = addMonthsYmd(MONTHLY_QUOTA_START, batchIdx + 1);
+      const existing = sopAssignments[sopId];
+      if(!existing){
+        sopAssignments[sopId] = { deadline, personnelIds: [...personnelIds] };
+      }else{
+        const merged = new Set(existing.personnelIds);
+        personnelIds.forEach(id => merged.add(id));
+        sopAssignments[sopId] = { deadline: existing.deadline, personnelIds: Array.from(merged) };
+      }
+    }
+  });
+  await storSet('sop-assignments', sopAssignments);
+  await storSet('monthly-quota-batches', currentBatches);
+  return sopAssignments;
+}
+
 async function boot(){
   state.loading = true; render();
   let sops = await storGet('sop-library');
@@ -2700,7 +2652,11 @@ async function boot(){
   }else{
     const existingPIds = new Set(personnel.map(p=>p.id));
     const newP = PERSONNEL_SEED.filter(p=>!existingPIds.has(p.id));
-    if(newP.length){ personnel = personnel.concat(newP); await storSet('personnel', personnel); }
+    if(newP.length){ personnel = personnel.concat(newP); }
+    if(personnel.some(p=>REMOVED_PERSONNEL_IDS.includes(p.id))){
+      personnel = personnel.filter(p=>!REMOVED_PERSONNEL_IDS.includes(p.id));
+    }
+    await storSet('personnel', personnel);
   }
   let sopAssignments = await storGet('sop-assignments'); if(!sopAssignments) sopAssignments = {};
   // Atama şablonu (departman bazlı) versiyonlanır: önceki bir sürümden düşükse, buradaki
@@ -2708,12 +2664,20 @@ async function boot(){
   // elle yapacağı değişiklikleri etkilemez - yalnızca geçmiş hatalı/varsayılan atamaları düzeltir.
   let seedVersion = await storGet('assignment-seed-version'); if(!seedVersion) seedVersion = 0;
   if(seedVersion < ASSIGNMENT_SEED_VERSION){
+    // v13'ten itibaren genel atamalar artık toplu/tek seferlik değil, aylık kota
+    // mekanizmasıyla (applyMonthlyQuota) kademeli yapılıyor. Bu yüzden sürüm
+    // yükseltmesinde eski toplu atamalar tamamen temizlenip yalnızca SOP_ASSIGNMENT_SEED'teki
+    // özel (örn. MB3SOP11 -> metal işleri teknisyeni) atamalarla başlanır; aylık kota bundan
+    // sonraki adımda üstüne ekleme yapar. Admin'in bundan SONRA elle yapacağı değişiklikleri etkilemez.
+    sopAssignments = {};
     Object.entries(SOP_ASSIGNMENT_SEED).forEach(([sopId, seedAssign]) => {
       sopAssignments[sopId] = seedAssign;
     });
     await storSet('sop-assignments', sopAssignments);
     await storSet('assignment-seed-version', ASSIGNMENT_SEED_VERSION);
+    await storSet('monthly-quota-batches', 0); // atamalar sıfırlandı, kota partileri baştan uygulansın
   }
+  sopAssignments = await applyMonthlyQuota(sopAssignments);
 
   state.sops = sops; state.exams = exams; state.results = results;
   state.personnel = personnel; state.sopAssignments = sopAssignments;
@@ -3407,6 +3371,88 @@ function getComplianceRows(){
   return rows;
 }
 
+/* ---------------- Uyum grafikleri (haftalık aktivite / aylık uyum oranı) ---------------- */
+function startOfWeekTs(d){
+  const dt = new Date(d); const day = (dt.getDay()+6)%7; // Pazartesi=0
+  dt.setHours(0,0,0,0); dt.setDate(dt.getDate()-day);
+  return dt;
+}
+function buildWeeklyActivityData(rows, weeks){
+  weeks = weeks || 8;
+  const now = new Date();
+  const buckets = [];
+  for(let i = weeks-1; i >= 0; i--){
+    const start = startOfWeekTs(now); start.setDate(start.getDate() - 7*i);
+    const end = new Date(start); end.setDate(end.getDate()+7);
+    const count = rows.filter(r => r.completedAt && r.completedAt >= start.getTime() && r.completedAt < end.getTime()).length;
+    buckets.push({ label: String(start.getDate()).padStart(2,'0')+'.'+String(start.getMonth()+1).padStart(2,'0'), count });
+  }
+  return buckets;
+}
+const TR_MONTHS_SHORT = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+function buildMonthlyComplianceData(rows, months){
+  months = months || 6;
+  const now = new Date();
+  const buckets = [];
+  for(let i = months-1; i >= 0; i--){
+    const y = now.getFullYear(), m = now.getMonth() - i;
+    const start = new Date(y, m, 1).getTime();
+    const end = new Date(y, m+1, 1).getTime();
+    const inMonth = rows.filter(r => {
+      if(!r.deadline) return false;
+      const dts = new Date(r.deadline+'T23:59:59').getTime();
+      return dts >= start && dts < end;
+    });
+    const total = inMonth.length;
+    const onTime = inMonth.filter(r => r.status==='zamaninda' || r.status==='tamamlandi').length;
+    const pct = total ? Math.round(onTime/total*100) : null;
+    const label = TR_MONTHS_SHORT[((m%12)+12)%12] + ' ' + String(new Date(y,m,1).getFullYear()).slice(2);
+    buckets.push({ label, pct, total });
+  }
+  return buckets;
+}
+function renderBarChartSVG(buckets, opts){
+  const w = 640, h = 170, padL = 8, padR = 8, padT = 22, padB = 26;
+  const innerW = w - padL - padR, innerH = h - padT - padB;
+  const values = buckets.map(b => (opts.value(b)==null ? 0 : opts.value(b)));
+  const maxV = opts.maxValue!=null ? opts.maxValue : Math.max(1, ...values);
+  const bw = innerW / buckets.length;
+  const bars = buckets.map((b,i) => {
+    const v = opts.value(b);
+    const vv = v==null ? 0 : v;
+    const bh = maxV ? (vv/maxV)*innerH : 0;
+    const x = padL + i*bw + bw*0.18;
+    const bwid = bw*0.64;
+    const y = padT + innerH - bh;
+    const color = opts.color ? opts.color(b) : 'var(--blue)';
+    const valueLabel = v==null ? '—' : (opts.suffix ? v+opts.suffix : String(v));
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bwid.toFixed(1)}" height="${Math.max(bh,1).toFixed(1)}" rx="3" fill="${color}"/>
+      <text x="${(x+bwid/2).toFixed(1)}" y="${(y-5).toFixed(1)}" font-size="10.5" fill="var(--text-1)" text-anchor="middle" font-family="var(--font-mono)">${valueLabel}</text>
+      <text x="${(x+bwid/2).toFixed(1)}" y="${h-9}" font-size="10" fill="var(--text-2)" text-anchor="middle">${escapeHtml(b.label)}</text>`;
+  }).join('');
+  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%; height:auto; display:block;">${bars}</svg>`;
+}
+function renderComplianceCharts(filtered){
+  const weekly = buildWeeklyActivityData(filtered, 8);
+  const monthly = buildMonthlyComplianceData(filtered, 6);
+  const weeklySvg = renderBarChartSVG(weekly, { value:b=>b.count, color:()=>'var(--blue)' });
+  const monthlySvg = renderBarChartSVG(monthly, {
+    value:b=>b.pct, suffix:'%', maxValue:100,
+    color:b=> b.pct==null ? 'var(--line)' : (b.pct>=80 ? 'var(--green)' : (b.pct>=50 ? 'var(--amber)' : 'var(--red)'))
+  });
+  return `
+    <div style="display:grid; grid-template-columns:1fr; gap:14px; margin-bottom:18px;">
+      <div class="panel" style="padding:16px;">
+        <div style="font-family:var(--font-display); font-size:14px; letter-spacing:.02em; margin-bottom:8px; color:var(--text-1);">Haftalık Sınav Aktivitesi <span style="color:var(--text-2); font-family:var(--font-body); font-size:11.5px;">(tamamlanan sınav sayısı, son 8 hafta)</span></div>
+        ${weeklySvg}
+      </div>
+      <div class="panel" style="padding:16px;">
+        <div style="font-family:var(--font-display); font-size:14px; letter-spacing:.02em; margin-bottom:8px; color:var(--text-1);">Aylık Uyum Oranı <span style="color:var(--text-2); font-family:var(--font-body); font-size:11.5px;">(vadesi o ay olan atamalardan zamanında tamamlanma yüzdesi, son 6 ay)</span></div>
+        ${monthlySvg}
+      </div>
+    </div>`;
+}
+
 function renderCompliance(){
   const rows = getComplianceRows();
   let filtered = state.complianceFilter==='all' ? rows : rows.filter(r=>r.sopId===state.complianceFilter);
@@ -3443,6 +3489,8 @@ function renderCompliance(){
       <div class="stat"><div class="v" style="color:var(--red);">${lateOrOverdue}</div><div class="k">Geç / Gecikmede</div></div>
       <div class="stat"><div class="v" style="color:var(--text-2);">${pending}</div><div class="k">Bekliyor</div></div>
     </div>
+
+    ${renderComplianceCharts(filtered)}
 
     <div style="margin-bottom:16px; display:flex; gap:10px; flex-wrap:wrap;">
       <select id="compliance-person-filter" style="max-width:280px;">
