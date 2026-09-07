@@ -2729,14 +2729,17 @@ function render(){
 }
 
 function renderBottomNav(){
-  const items = [
+  const currentPersonnel = getCurrentPersonnel();
+  const restrictedNav = !state.isAdmin && currentPersonnel; // sadece personel girişliyse admin sekmeleri gizlenir
+  const allItems = [
     {v:'library', label:'SOP\'lar', icon:ICONS.library},
-    {v:'generate', label:'Sınav Oluştur', icon:ICONS.generate},
+    {v:'generate', label:'Sınav Oluştur', icon:ICONS.generate, adminOnly:true},
     {v:'take', label:'Sınava Gir', icon:ICONS.take},
     {v:'results', label:'Sonuçlar', icon:ICONS.results},
-    {v:'personnel', label:'Personel', icon:ICONS.users},
-    {v:'compliance', label:'Uyum', icon:ICONS.target},
+    {v:'personnel', label:'Personel', icon:ICONS.users, adminOnly:true},
+    {v:'compliance', label:'Uyum', icon:ICONS.target, adminOnly:true},
   ];
+  const items = restrictedNav ? allItems.filter(it=>!it.adminOnly) : allItems;
   return `
   <div class="bottomnav">
     ${items.map(it => `
@@ -3781,6 +3784,7 @@ function bindEvents(){
       if(cred.hash === enteredHash){
         state.currentPersonnelId = person.id; state.showPersonnelLogin=false; state.personnelLoginError=null;
         try{ sessionStorage.setItem('sop-sinav-personnel-id', person.id); }catch(e){}
+        if(state.view==='generate' || state.view==='personnel' || state.view==='compliance') state.view='library';
         showToast(`Hoş geldiniz, ${person.name}.`);
       }else{
         state.personnelLoginError = 'Kullanıcı adı veya şifre hatalı.';
@@ -3829,6 +3833,7 @@ function bindEvents(){
     }else{
       state.currentPersonnelId = state.pendingLogin.personnelId;
       try{ sessionStorage.setItem('sop-sinav-personnel-id', state.pendingLogin.personnelId); }catch(e){}
+      if(state.view==='generate' || state.view==='personnel' || state.view==='compliance') state.view='library';
       const person = state.personnel.find(p=>p.id===state.pendingLogin.personnelId);
       showToast(`Şifreniz belirlendi. Hoş geldiniz, ${person?person.name:''}.`);
     }
