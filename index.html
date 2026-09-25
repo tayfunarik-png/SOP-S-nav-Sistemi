@@ -2515,6 +2515,7 @@ function uid(n){ n = n || 10; const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=
 
 /* ---------------- App state ---------------- */
 const state = {
+  authGateChoice: null, // null | 'personnel' | 'admin' - ilk giriş ekranındaki seçim
   view:'library',
   sops: [],
   exams: [], // artık kullanılmıyor (geriye dönük uyumluluk için tutuluyor)
@@ -2748,6 +2749,18 @@ function pickExamQuestions(sop){
 /* ---------------- Render: shell ---------------- */
 function render(){
   const app = document.getElementById('app');
+  const authed = state.isAdmin || !!getCurrentPersonnel();
+  if(!authed){
+    // Giriş yapılmadan sistemin hiçbir ekranı (SOP kütüphanesi dahil) görünmez -
+    // ilk açılışta personel/yönetici seçimi ve giriş formunu içeren tam ekran kapı gösterilir.
+    app.innerHTML = `
+      ${renderAuthGate()}
+      ${state.pendingLogin ? renderForcePasswordChangeModal() : ''}
+      ${state.toast ? `<div class="toast ${state.toast.type==='err'?'err':'ok'}">${state.toast.msg}</div>` : ''}
+    `;
+    bindEvents();
+    return;
+  }
   app.innerHTML = `
     ${renderSidebar()}
     <div class="main">
@@ -2762,6 +2775,59 @@ function render(){
     ${state.toast ? `<div class="toast ${state.toast.type==='err'?'err':'ok'}">${state.toast.msg}</div>` : ''}
   `;
   bindEvents();
+}
+
+function renderAuthGate(){
+  const choice = state.authGateChoice;
+  let body = '';
+  if(choice === 'personnel'){
+    body = `
+      <div class="panel-title">Personel Girişi</div>
+      <div class="panel-sub">Kullanıcı adınız sicil numaranızın başındaki sıfırlar olmadan halidir (örn. 00006752 → 6752).</div>
+      <div class="field">
+        <label class="field-label">Kullanıcı Adı</label>
+        <input type="text" id="personnel-id-input" placeholder="Örn. 6752" inputmode="numeric" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Şifre</label>
+        <input type="password" id="personnel-password-input" placeholder="Şifre" autocomplete="off"/>
+      </div>
+      ${state.personnelLoginError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.personnelLoginError)}</div>` : ''}
+      <div style="display:flex; gap:10px;">
+        <button class="btn primary" data-personnel-login-submit ${state.pendingLoginBusy?'disabled':''}>${state.pendingLoginBusy?'Kontrol ediliyor...':'Giriş Yap'}</button>
+        <button class="btn ghost" data-gate-back>Geri</button>
+      </div>`;
+  }else if(choice === 'admin'){
+    body = `
+      <div class="panel-title">Yönetici Girişi</div>
+      <div class="panel-sub">Yönetici şifrenizi girin.</div>
+      <div class="field">
+        <input type="password" id="admin-password-input" placeholder="Şifre" autocomplete="off"/>
+      </div>
+      ${state.adminLoginError ? `<div style="color:var(--red); font-size:12.5px; margin-bottom:14px;">${escapeHtml(state.adminLoginError)}</div>` : ''}
+      <div style="display:flex; gap:10px;">
+        <button class="btn primary" data-admin-login-submit ${state.pendingLoginBusy?'disabled':''}>${state.pendingLoginBusy?'Kontrol ediliyor...':'Giriş Yap'}</button>
+        <button class="btn ghost" data-gate-back>Geri</button>
+      </div>`;
+  }else{
+    body = `
+      <div class="panel-title">Giriş Türünü Seçin</div>
+      <div class="panel-sub">Devam etmek için personel veya yönetici olarak giriş yapın.</div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:6px;">
+        <button class="btn primary block" data-gate-choose-personnel>${ICONS.users||''} Personel Girişi</button>
+        <button class="btn ghost block" data-gate-choose-admin>${ICONS.lock||''} Yönetici Girişi</button>
+      </div>`;
+  }
+  return `
+  <div style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:var(--bg, #0b0d10); z-index:500; padding:20px;">
+    <div class="panel" style="max-width:360px; width:100%;">
+      <div style="text-align:center; margin-bottom:18px;">
+        <div style="font-family:var(--font-display); font-size:15px; letter-spacing:.03em; color:var(--text-1);">SOP Sınav Sistemi</div>
+        <div style="font-size:12px; color:var(--text-2); margin-top:2px;">Teknik Bakım Eğitimi</div>
+      </div>
+      ${body}
+    </div>
+  </div>`;
 }
 
 function renderBottomNav(){
@@ -3755,6 +3821,14 @@ function bindEvents(){
     URL.revokeObjectURL(url);
   };
 
+  // giriş kapısı (auth gate) - ilk açılışta personel/yönetici seçimi
+  const gateChoosePersonnel = document.querySelector('[data-gate-choose-personnel]');
+  if(gateChoosePersonnel) gateChoosePersonnel.onclick = () => { state.authGateChoice='personnel'; state.personnelLoginError=null; render(); };
+  const gateChooseAdmin = document.querySelector('[data-gate-choose-admin]');
+  if(gateChooseAdmin) gateChooseAdmin.onclick = () => { state.authGateChoice='admin'; state.adminLoginError=null; render(); };
+  const gateBack = document.querySelector('[data-gate-back]');
+  if(gateBack) gateBack.onclick = () => { state.authGateChoice=null; state.personnelLoginError=null; state.adminLoginError=null; render(); };
+
   // admin: giriş/çıkış
   // yönetici: giriş/çıkış
   const adminLoginOpen = document.querySelector('[data-admin-login-open]');
@@ -3799,6 +3873,7 @@ function bindEvents(){
   if(adminLogout) adminLogout.onclick = (e) => {
     e.preventDefault();
     state.isAdmin = false; state.adminPasswordHash = null;
+    state.authGateChoice = null;
     try{ sessionStorage.removeItem('sop-sinav-admin'); sessionStorage.removeItem('sop-sinav-admin-hash'); }catch(err){}
     render();
   };
@@ -3851,6 +3926,7 @@ function bindEvents(){
   if(personnelLogout) personnelLogout.onclick = (e) => {
     e.preventDefault();
     state.currentPersonnelId = null;
+    state.authGateChoice = null;
     try{ sessionStorage.removeItem('sop-sinav-personnel-id'); }catch(err){}
     if(state.view==='generate' || state.view==='personnel' || state.view==='compliance') state.view='library';
     render();
