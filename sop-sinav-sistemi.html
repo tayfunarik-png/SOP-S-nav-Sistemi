@@ -3190,28 +3190,6 @@ function renderTake(){
     `;
   }
 
-  if(state.takeStage === 'name'){
-    const sop = state.sops.find(s=>s.id===state.takeSopId);
-    if(!sop) return '';
-    const bankSize = (QUESTION_BANKS[sop.id]||[]).length;
-    return `
-      <div class="backlink" data-back-take-list>${ICONS.back} SOP listesine dön</div>
-      <div class="panel" style="max-width:480px;">
-        <div class="panel-title">${escapeHtml(sop.title)}</div>
-        <div class="panel-sub">${Math.min(10,bankSize)} soruluk sınava başlamadan önce bilgilerinizi girin. Sorular her denemede rastgele seçilir.</div>
-        <div class="field">
-          <label class="field-label">Ad Soyad</label>
-          <input type="text" id="taker-name" placeholder="Adınız Soyadınız" value="${escapeAttr(state.takerName)}"/>
-        </div>
-        <div class="field">
-          <label class="field-label">Departman / Vardiya (opsiyonel)</label>
-          <input type="text" id="taker-dept" placeholder="Örn. Bakım - A Vardiyası" value="${escapeAttr(state.takerDept)}"/>
-        </div>
-        <button class="btn primary block" data-begin-quiz>Sınavı Başlat</button>
-      </div>
-    `;
-  }
-
   if(state.takeStage === 'quiz'){
     const sop = state.sops.find(s=>s.id===state.takeSopId);
     const qs = state.currentQuizQuestions;
@@ -3710,8 +3688,16 @@ function bindEvents(){
     if(!QUESTION_BANKS[sop.id] || QUESTION_BANKS[sop.id].length < 5){
       state.genError = 'Bu SOP için henüz soru havuzu hazırlanmadı.'; render(); return;
     }
-    state.takeSopId = sop.id; state.takerName=''; state.takerDept='';
-    state.view='take'; state.takeStage='name';
+    let questions;
+    try{ questions = pickExamQuestions(sop); }
+    catch(err){ showToast(err.message, 'err'); return; }
+    const currentPersonnel = getCurrentPersonnel();
+    state.takeSopId = sop.id;
+    state.takerName = currentPersonnel ? currentPersonnel.name : 'Yönetici Önizleme';
+    state.takerDept = currentPersonnel ? (currentPersonnel.dept||'') : '';
+    state.currentQuizQuestions = questions;
+    state.answers = []; state.currentQ = 0;
+    state.view='take'; state.takeStage='quiz';
     render();
   };
 
@@ -3743,20 +3729,6 @@ function bindEvents(){
   if(backTakeList) backTakeList.onclick = () => {
     state.takeStage='list'; state.takeSopId=null; state.answers=[]; state.currentQ=0; state.takerName=''; state.takerDept=''; state.currentQuizQuestions=[];
     render();
-  };
-  const beginQuiz = document.querySelector('[data-begin-quiz]');
-  if(beginQuiz) beginQuiz.onclick = () => {
-    const name = document.getElementById('taker-name').value.trim();
-    const dept = document.getElementById('taker-dept').value.trim();
-    if(!name){ showToast('Lütfen ad soyad girin.', 'err'); return; }
-    const sop = state.sops.find(s=>s.id===state.takeSopId);
-    let questions;
-    try{ questions = pickExamQuestions(sop); }
-    catch(err){ showToast(err.message, 'err'); return; }
-    state.takerName = name; state.takerDept = dept;
-    state.currentQuizQuestions = questions;
-    state.answers = []; state.currentQ = 0;
-    state.takeStage='quiz'; render();
   };
   document.querySelectorAll('[data-select-opt]').forEach(el=>{
     el.onclick = () => {
